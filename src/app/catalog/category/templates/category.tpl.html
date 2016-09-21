@@ -1,0 +1,7 @@
+<article>
+    <ordercloud-category-list categorylist="category.categories.Items"></ordercloud-category-list>
+    <ordercloud-product-list productlist="category.products.Items"></ordercloud-product-list>
+    <div class="well well-lg text-center" ng-if="category.categories.Items.length === 0 && category.products.Items.length === 0">
+        <b>The selected category has no assigned categories or products that are visible to you.</b>
+    </div>
+</article>

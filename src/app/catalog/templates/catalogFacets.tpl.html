@@ -1,0 +1,14 @@
+<div class="facet-list-container" ng-if="facetList">
+    <h4 class=facet-list>Refine by</h4>
+    <div ng-repeat="(facetName, facet) in facetList" class="facet-list text-capitalize">
+        <b>{{facetName}}</b>
+        <fieldset class="facet-values" ng-repeat="(facetKey, facetSelected) in facet">
+            <label>
+                <input type="checkbox" ng-model="facetList[facetName][facetKey]"> {{facetKey}}
+            </label>
+        </fieldset>
+    </div>
+</div>
+
+
+

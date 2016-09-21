@@ -1,0 +1,72 @@
+<article id="COMPONENT_Cart" class="container-fluid">
+    <h3 class="page-header">Shopping Cart</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <ng-pluralize count="cart.lineItems.Meta.TotalCount" when="{
+							'1': '1 Item in Your Cart',
+							'other': '{} Items in Your Cart'
+						}"></ng-pluralize>
+            </h3>
+        </div>
+        <div style="max-height:750px; overflow-y:auto;" ordercloud-infinite-scroll controlleras="cart">
+            <table class="table table-hover">
+                <colgroup>
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                    <col>
+                    <col style="width:75px;">
+                    <col style="width:75px;">
+                </colgroup>
+                <tbody>
+                    <tr ng-repeat="lineItem in cart.lineItems.Items track by $index">
+                        <td>
+                            <form name="{{'lineitem_' + $index + '_quantity'}}" ng-submit="cart.updateQuantity(cart.order, lineItem)" class="form-group">
+                                <div ng-form="lineitem_quantity">
+                                    <input tabindex="{{$index + 1}}" ng-change="cart.updateQuantity(cart.order, lineItem)" type="number" min="{{lineItem.Product.StandardPriceSchedule.MinQuantity}}" max="{{lineItem.Product.StandardPriceSchedule.MaxQuantity}}" required="true" class="form-control text-center" ng-model="lineItem.Quantity">
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <figure style="width: 100px;">
+                                <img ng-if="lineItem.Product.xp.image" class="img-responsive" ng-src="{{lineItem.Product.xp.image.URL}}" alt="Product Image">
+                            </figure>
+                        </td>
+                        <td>
+                            <a href="#">{{lineItem.Product.Name}}</a><br>
+                            <small class="text-muted">{{lineItem.ProductID}}</small>
+                        </td>
+                        <td>
+                            <small class="text-success">{{lineItem.LineTotal | currency}}</small>
+                        </td>
+                        <td>
+                            <div class="btn-group-vertical">
+                                <button ng-if="lineItem.Specs.length" class="btn btn-default" ui-sref="catalog.lineitem({lineitemid: lineItem.ID, specformid: lineItem.Product.xp.specform})">
+                                    <i class="fa fa-edit text-warning"></i>
+                                </button>
+                                <button ng-click="cart.removeItem(cart.order, lineItem)" class="btn btn-default">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <h4>Subtotal: <span class="text-success pull-right">{{cart.order.Subtotal | currency}}</span></h4>
+            <div ng-if="cart.promotions.Items.length">
+                <h5 ng-repeat="promotion in cart.promotions.Items">
+                    <span class="pull-right">{{promotion.Name}} ({{promotion.Amount | currency}}) <ordercloud-remove-promotion order="cart.order" promotion="promotion"></ordercloud-remove-promotion></span>
+                    <div class="clearfix"></div>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 pull-right">
+            <ordercloud-promotion-input order="cart.order" orderpromotions="cart.promotions"></ordercloud-promotion-input>
+        </div>
+    </div>
+    <button type="button" ui-sref="checkout" class="btn btn-lg btn-success pull-right">Checkout</button>
+</article>

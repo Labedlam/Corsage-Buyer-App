@@ -1,0 +1,10 @@
+<div class="col-xs-12">
+    <div class="row" ng-repeat="spec in product.item.Specs | orderBy:'ListOrder' track by $index">
+        <label>{{spec.Name || spec.ID}}</label>
+        <input ng-if="spec.Options.length === 0" ng-required="spec.Required" class="form-control" ng-model="spec.Value" type="text">
+        <!--<select ng-if="spec.Options.length > 0" ng-required="spec.Required" class="form-control" ng-model="spec.OptionID" ng-options="option.ID as option.Value for option in spec.Options">-->
+            <!--<option ng-if="!spec.Required" value=""> </option>-->
+        <!--</select>-->
+        <spec-select-field ng-if="spec.Options.length > 0" spec="spec"></spec-select-field>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<article class="row form-group" ng-form="lineitem_spec_form" id="product_view">
+    <form name="lineitemEdit" ng-submit="product.UpdateLineItem()">
+        <div class="col-md-6" ng-if="product.item.xp.image">
+            <!--PRODUCT IMAGE-->
+            <img class="img-responsive" ng-src="{{product.item.xp.image.URL}}" alt="Product Image">
+            <div class="input-group" style="margin-top: 20px;">
+                <input required="true" min="{{product.item.StandardPriceSchedule.MinQuantity}}" max="{{product.item.StandardPriceSchedule.MaxQuantity}}" class="form-control text-center" type="number" ng-model="product.item.Quantity">
+            <span class="input-group-btn">
+                <button ng-disabled="lineitem_spec_form.$invalid" class="btn btn-success" type="submit">Save Changes</button>
+            </span>
+            </div>
+        </div>
+        <div ng-class="{'col-md-6': product.item.xp.image, 'col-md-12': !product.item.xp.image}">
+            <div ui-view="view"></div>
+        </div>
+    </form>
+</article>

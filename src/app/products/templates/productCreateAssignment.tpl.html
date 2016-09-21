@@ -1,0 +1,109 @@
+<div class="well well-lg text-center" ng-if="(!((productCreateAssignment.priceSchedules | filter:{OrderType:'Replenishment'}).length) && !((productCreateAssignment.priceSchedules | filter:{OrderType:'Standard'}).length))">
+	<b>The selected buyer does not have any Standard or Replenishment price schedules.</b><br>
+	<b>If you have included the Price Schedules component you can create them there.</b>
+</div>
+
+<div ng-if="(productCreateAssignment.priceSchedules | filter:{OrderType:'Replenishment'}).length || (productCreateAssignment.priceSchedules | filter:{OrderType:'Standard'}).length">
+	<h3>Choose the assignee(s)</h3>
+	<p class="text-muted">You can assign a product to a specific UserGroup or to the entire Buyer Company.  UserGroup assignments will take precedent over Buyer assignments.</p>
+	<div class="row" >
+		<div class="col-sm-6">
+			<div class="form-group">
+				<button class="btn btn-block btn-default" ng-class="{active: productCreateAssignment.assignBuyer}" ng-click="productCreateAssignment.assignBuyer = !productCreateAssignment.assignBuyer">
+					<i class="fa" ng-class="{'fa-square-o':!productCreateAssignment.assignBuyer, 'fa-check-square-o':productCreateAssignment.assignBuyer}"></i> Assign at the Buyer Level
+				</button>
+			</div>
+			<div uib-collapse="productCreateAssignment.assignBuyer">
+				<ordercloud-search servicename="UserGroups" controlleras="productCreateAssignment"></ordercloud-search>
+				<div class="well well-lg text-center" ng-if="!productCreateAssignment.list.Items.length">
+					<b><i class="fa fa-search"></i> No UserGroups match your search</b>
+				</div>
+				<section class="table-fixed-header" ng-if="productCreateAssignment.list.Items.length">
+					<div class="table-header-bg"></div>
+					<div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" controlleras="productCreateAssignment" style="max-height:160px;">
+						<table class="table table-hover">
+							<colgroup>
+								<col class="action-column"/>
+							</colgroup>
+							<thead>
+							<tr>
+								<th>
+								</th>
+								<th>
+									<div>ID</div>
+								</th>
+								<th>
+									<div>Name</div>
+								</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="group in productCreateAssignment.list.Items track by $index">
+								<td class="text-center">
+									<input type="checkbox" ng-model="group.selected">
+								</td>
+								<td>{{group.ID}}</td>
+								<td>{{group.Name}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+		</div>
+		<div class="col-sm-6" uib-collapse="productCreateAssignment.assignBuyer" ng-if="productCreateAssignment.list.Items.length  || (!productCreateAssignment.list.Items.length && productCreateAssignment.groupSearchTerm)">
+			<div class="well well-lg text-center" ng-if="!(productCreateAssignment.list.Items | filter:{selected:true}).length">
+				<b>No User Group(s) Selected</b>
+			</div>
+			<section class="table-fixed-header"  ng-if="(productCreateAssignment.list.Items | filter:{selected:true}).length">
+				<div class="table-header-bg"></div>
+				<div class="table-container" style="max-height:160px;">
+					<table class="table table-hover">
+						<colgroup>
+							<col class="action-column"/>
+						</colgroup>
+						<thead>
+						<tr>
+							<th>
+								ID<div>ID</div>
+							</th>
+							<th>
+								Name<div>Name</div>
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="group in productCreateAssignment.list.Items | filter:{selected:true} track by $index">
+							<td>{{group.ID}}</td>
+							<td>{{group.Name}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+	</div>
+	<h3>Choose the price schedule(s)</h3>
+	<p class="text-muted">Each product assignment can have one Standard and/or one Replenishment price schedule. You must choose at least one.</p>
+	<div class="row">
+		<div class="col-sm-6" ng-show="(productCreateAssignment.priceSchedules | filter:{OrderType:'Standard'}).length">
+			<h4>Standard Price Schedules</h4>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="priceSchedule in productCreateAssignment.priceSchedules | filter:{OrderType:'Standard'} track by $index" ng-class="{active: priceSchedule.ID == productCreateAssignment.StandardPriceScheduleID}" ng-click="productCreateAssignment.toggleStandardPS(priceSchedule.ID)">
+					{{priceSchedule.ID}}
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-6" ng-show="(productCreateAssignment.priceSchedules | filter:{OrderType:'Replenishment'}).length">
+			<h4>Replenishment Price Schedules</h4>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="priceSchedule in productCreateAssignment.priceSchedules | filter:{OrderType:'Replenishment'} track by $index" ng-class="{active: priceSchedule.ID == productCreateAssignment.ReplenishmentPriceScheduleID}" ng-click="productCreateAssignment.toggleReplenishmentPS(priceSchedule.ID)">
+					{{priceSchedule.ID}}
+				</li>
+			</ul>
+		</div>
+	</div>
+	<button type="button" class="btn btn-default" ui-sref="^.assignments({productid:productCreateAssignment.model.ProductID})">Cancel</button>
+	<button type="button" class="btn btn-primary" ng-click="productCreateAssignment.submit()" ng-disabled="!(((productCreateAssignment.list.Items | filter:{selected:true}).length || productCreateAssignment.assignBuyer) && (productCreateAssignment.StandardPriceScheduleID || productCreateAssignment.ReplenishmentPriceScheduleID))">Save Assignment</button>
+</div>
+
