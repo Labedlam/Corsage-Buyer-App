@@ -1,0 +1,61 @@
+<article id="COMPONENT_ExpressCheckout" class="container-fluid">
+    <h3 class="page-header">
+        Express Checkout
+    </h3>
+    <form name="expressCheckoutForm" ng-submit="expressCheckout.submitOrder()" novalidate>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Billing Address</b></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <select id="billing_address" ng-required="true" name="BillingAddress" ng-change="expressCheckout.saveBillAddress();" ng-model="expressCheckout.currentOrder.BillingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1) for address in expressCheckout.billingAddresses"></select>
+                </div>
+                <div>
+                    <p ng-if="expressCheckout.currentOrder.BillingAddress" id="address_paragraph">{{expressCheckout.currentOrder.BillingAddress | address: 'full'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Shipping Address</b></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <select id="shipping_address" ng-required="true" name="ShippingAddress" ng-change="expressCheckout.saveShipAddress();" ng-model="expressCheckout.currentOrder.ShippingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1) for address in expressCheckout.shippingAddresses"></select>
+                </div>
+                <div>
+                    <p ng-if="expressCheckout.currentOrder.ShippingAddressID" id="address_paragraph">{{expressCheckout.currentOrder.lineItems[0].ShippingAddress | address: 'full'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Payment Information</b></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="payment_method">Payment Method</label>
+                    <select id="payment_method" required="true" ng-change="expressCheckout.setPaymentMethod(expressCheckout.currentOrder)" class="form-control" ng-model="expressCheckout.orderPayments[0].Type" ng-options="paymentMethod.Value as paymentMethod.Display for paymentMethod in expressCheckout.paymentMethods"></select>
+                    <div ng-if="expressCheckout.orderPayments[0].Type == 'CreditCard'">
+                        <label for="credit_card">Credit Card</label>
+                        <select id="credit_card" ng-required="expressCheckout.orderPayments[0].Type == 'CreditCard'" ng-change="expressCheckout.setCreditCard(expressCheckout.currentOrder)" class="form-control" ng-model="expressCheckout.orderPayments[0].CreditCardID" ng-options="creditCard.ID as ('XXXX-XXXX-XXXX-' + creditCard.PartialAccountNumber) for creditCard in expressCheckout.creditCards.Items"></select>
+                        </br>
+                        <p ng-if="expressCheckout.creditCardDetails.CardholderName">Cardholder Name: {{expressCheckout.creditCardDetails.CardholderName}}</p>
+                        <p ng-if="expressCheckout.creditCardDetails.PartialAccountNumber"><i class="fa fa-cc-visa fa-2x"></i> ending in {{expressCheckout.creditCardDetails.PartialAccountNumber}}</p>
+                    </div>
+                    <div ng-if="expressCheckout.orderPayments[0].Type == 'SpendingAccount'">
+                        <label for="spending_account">Spending Account</label>
+                        <select id="spending_account" ng-required="expressCheckout.orderPayments[0].Type == 'SpendingAccount'" ng-change="expressCheckout.setSpendingAccount(expressCheckout.currentOrder)" class="form-control" ng-model="expressCheckout.orderPayments[0].SpendingAccountID" ng-options="spendingAccount.ID as spendingAccount.Name for spendingAccount in expressCheckout.spendingAccounts.Items"></select>
+                    </div>
+                    <div ng-if="expressCheckout.orderPayments[0].Type == 'PurchaseOrder'">
+                        <label for="poNumber">PO Number</label>
+                        <div class="input-group">
+                            <input id="poNumber" class="form-control" type="text" ng-model="expressCheckout.orderPayments[0].xp.PONumber"/>
+                            <span class="input-group-btn"><button type="button" class="btn btn-success" ng-click="expressCheckout.savePONumber(expressCheckout.currentOrder)"><i class="fa fa-plus"></i> </button></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ordercloud-confirmation-lineitems order="expressCheckout.currentOrder"></ordercloud-confirmation-lineitems>
+        <div class="form-group pull-right">
+            <button class="btn btn-default" ui-sref="catalog">Continue Shopping</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="expressCheckoutForm.$invalid">Submit Order</button>
+        </div>
+    </form>
+</article>

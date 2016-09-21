@@ -1,0 +1,17 @@
+<article id="CategoryList">
+    <h3 ng-if="categorylist.length > 0" class="page-header">
+        {{categorylist.length > 1 ? 'Categories' : 'Category'}}
+    </h3>
+    <div class="category-list row">
+        <div class="category-list-item col-md-3" ng-repeat="category in categorylist">
+            <div class="thumbnail" ui-sref="catalog.category({categoryid: category.ID})">
+                <figure ng-if="category.xp.image">
+                    <img class="img-responsive" ng-src="{{category.xp.image.URL}}" alt="Category Image">
+                </figure>
+                <div class="caption">
+                    <h4 class="text-center">{{category.Name || category.ID}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

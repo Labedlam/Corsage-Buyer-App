@@ -1,0 +1,4 @@
+<select ng-if="spec.Options.length > 0" ng-required="spec.Required" class="form-control" ng-model="spec.OptionID" ng-options="option.ID as option.Value for option in spec.Options">
+    <option value=""> </option>
+</select>
+<input ng-if="showField" type="text" ng-model="spec.Value" class="form-control" ng-required="spec.Required">

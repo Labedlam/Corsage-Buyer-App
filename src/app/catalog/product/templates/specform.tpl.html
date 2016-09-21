@@ -1,0 +1,5 @@
+<fieldset class="form-group" ng-repeat="spec in product.item.Specs | orderBy:'ListOrder' track by $index">
+    <label>{{spec.Name || spec.ID}}</label>
+    <input ng-if="spec.Options.length === 0" ng-required="spec.Required" class="form-control" ng-model="spec.Value" type="text">
+    <spec-select-field ng-if="spec.Options.length > 0" spec="spec"></spec-select-field>
+</fieldset>

@@ -1,0 +1,13 @@
+<fieldset class="form-group">
+    <div class="input-group">
+        <input type="number" ng-required="true" class="form-control text-center" min="{{product.StandardPriceSchedule.MinQuantity}}" max="{{product.StandardPriceSchedule.MaxQuantity}}" ng-model="product.item.Quantity" ng-if="!product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
+        <select ng-required="true" ng-if="product.StandardPriceSchedule.RestrictedQuantity" class="form-control text-center" ng-model="product.item.Quantity" ng-options="priceBreak.Quantity as priceBreak.Quantity for priceBreak in product.StandardPriceSchedule.PriceBreaks"></select>
+        <span class="input-group-btn">
+            <button ng-disabled="$parent[formname].$invalid" class="btn btn-success" type="submit">
+                <span ng-if="orderInput.price" class="badge">{{orderInput.price | currency}}</span>
+                <i class="fa fa-plus-circle"></i>
+                Add To Cart
+            </button>
+        </span>
+    </div>
+</fieldset>
