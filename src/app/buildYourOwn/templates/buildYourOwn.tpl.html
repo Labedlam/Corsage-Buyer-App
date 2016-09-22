@@ -5,13 +5,13 @@
     <li>Dress Color:</li>
     <li>Flower Type</li>
     <li>Wristlet Style</li>
-    <li>Personailty</li>
+    <li>Personality</li>
     <li>Matching Boutonniere</li>
 </ol>
 
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-    <!--Type-->
+    <!--Select Type-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
             <h4 class="panel-title">
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <!--Base Flower-->
+    <!--Select Base Flower-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingTwo">
             <h4 class="panel-title">
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <!--Flower color-->
+    <!--Select Flower color-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingThree">
             <h4 class="panel-title">
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <!--Ribbon Color-->
+    <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingFour">
             <h4 class="panel-title">
@@ -76,28 +76,30 @@
             </div>
         </div>
     </div>
-    <!--Fastener-->
+    <!--Select Fastener(For Wristlet ONLY))-->
     <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingFive">
+        <div class="panel-heading" role="tab" id="nestedOne-headingFive">
             <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
-                   aria-expanded="false" aria-controls="collapseFive">
-                    * Select Fastener
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                   href="#nestedOne-collapseFive"
+                   aria-expanded="false" aria-controls="nestedOne-collapseFive">
+                    Select Fastener
                 </a>
             </h4>
         </div>
-        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+        <div id="nestedOne-collapseFive" class="panel-collapse collapse" role="tabpanel"
+             aria-labelledby="nestedOne-headingFive">
             <div class="panel-body">
-                color swatches
+                BODY
             </div>
         </div>
     </div>
-    <!--AddOns-->
+    <!--Choose Optional Add-Ons-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingSix">
             <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix"
-                   aria-expanded="false" aria-controls="collapseSix">
+                   aria-expanded="false" aria-controls="collapseSixe">
                     Chose Optional Add-Ons
                 </a>
             </h4>
@@ -130,7 +132,7 @@
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
                                    href="#nestedOne-collapseTwo"
                                    aria-expanded="false" aria-controls="nestedOne-collapseOne">
-                                    Ribbon
+                                    Ribbon Tails Color
                                 </a>
                             </h4>
                         </div>
@@ -183,7 +185,7 @@
             </div>
         </div>
     </div>
-    <!--Embellishments-->
+    <!--Choose Optional Embellishments-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingSeven">
             <h4 class="panel-title">
@@ -254,7 +256,7 @@
             </div>
         </div>
     </div>
-    <!--Floral Accessories-->
+    <!--Choose Optional Floral Accessories-->
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingEight">
             <h4 class="panel-title">
@@ -267,7 +269,7 @@
         <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
             <div class="panel-body">
                 <!--Floral Accessories NESTED ACCORDIAN-->
-                <div class="panel-group" id="nestedThree">
+                <div class="panel-group" id="nestedEight">
 
                     <!--START NECKLACES-->
                     <div class="panel panel-default">
@@ -595,5 +597,37 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<!--&lt;!&ndash;Fastener&ndash;&gt;-->
+<!--<div class="panel panel-default">-->
+    <!--<div class="panel-heading" role="tab" id="headingFive">-->
+        <!--<h4 class="panel-title">-->
+            <!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"-->
+               <!--aria-expanded="false" aria-controls="collapseFive">-->
+                <!--* Select Fastener-->
+            <!--</a>-->
+        <!--</h4>-->
+    <!--</div>-->
+    <!--<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">-->
+        <!--<div class="panel-body">-->
+            <!--color swatches-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;Floral Accents&ndash;&gt;-->
+<!--<div class="panel panel-default">-->
+    <!--<div class="panel-heading" role="tab" id="headingSix">-->
+        <!--<h4 class="panel-title">-->
+            <!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix"-->
+               <!--aria-expanded="false" aria-controls="collapseSix">-->
+                <!--* Select Fastener-->
+            <!--</a>-->
+        <!--</h4>-->
+    <!--</div>-->
+    <!--<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">-->
+        <!--<div class="panel-body">-->
+            <!--color swatches-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
