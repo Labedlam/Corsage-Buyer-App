@@ -1,5 +1,280 @@
 <h1>Build Your Own Corsage/Boutonniere</h1>
+<h2>Design Recommendations</h2>
+<h3>When ordering formal flowers, consider the folllowing</h3>
+<ol>
+    <li>Dress Color:</li>
+    <li>Flower Type</li>
+    <li>Wristlet Style</li>
+    <li>Personailty</li>
+    <li>Matching Boutonniere</li>
+</ol>
 
-<div ng-repeat="category in buildYourOwn.categories.Items">
-    <button >{{category.Name}}</button>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <!--type-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                   aria-expanded="true" aria-controls="collapseOne">
+                    * Select Type
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <div ng-repeat="category in buildYourOwn.categories.Items">
+                    <button>{{category.Name}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Base Flower-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                   aria-expanded="false" aria-controls="collapseTwo">
+                    * Select Base Flower
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+            </div>
+        </div>
+    </div>
+    <!--Flower color-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+                   aria-expanded="false" aria-controls="collapseThree">
+                    * Select Flower Color
+                </a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="panel-body">
+                color swatches
+            </div>
+        </div>
+    </div>
+    <!--Ribbon Color-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingFour">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+                   aria-expanded="false" aria-controls="collapseFour">
+                    * Select Ribbon Color
+                </a>
+            </h4>
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+            <div class="panel-body">
+                color swatches
+            </div>
+        </div>
+    </div>
+    <!--Fastener-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingFive">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
+                    * Select Fastener
+                </a>
+            </h4>
+        </div>
+        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                color swatches
+            </div>
+        </div>
+    </div>
+    <!--AddOns-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingSix">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix"
+                   aria-expanded="false" aria-controls="collapseSix">
+                    Chose additional add-ons
+                </a>
+            </h4>
+        </div>
+        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+            <div class="panel-body">
+                <!--nested-->
+                <div class="panel-group" id="nested">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="nested-headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                   href="#nested-collapseOne"
+                                   aria-expanded="false" aria-controls="nested-collapseOne">
+                                    Floral Accents
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nested-collapseOne" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="nested-headingOne">
+                            <div class="panel-body">
+                                BODY
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="nested-headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                       href="#nested-collapseTwo"
+                                       aria-expanded="false" aria-controls="nested-collapseOne">
+                                        Ribbon
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="nested-collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="nested-headingTwo">
+                                <div class="panel-body">
+                                    BODY
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="nested-headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                       href="#nested-collapseThree"
+                                       aria-expanded="false" aria-controls="nested-collapseThree">
+                                        Fastener
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="nested-collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="nested-headingThree">
+                                <div class="panel-body">
+                                    BODY
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="nested-headingFour">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                       href="#nested-collapseFour"
+                                       aria-expanded="false" aria-controls="nested-collapseFour">
+                                        Ribbon Tail Color
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="nested-collapseFour" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="nested-headingFour">
+                                <div class="panel-body">
+                                    BODY
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    <!--Embellishments-->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingSix">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix"
+                   aria-expanded="false" aria-controls="collapseSix">
+                    Chose additional add-ons
+                </a>
+            </h4>
+        </div>
+        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+            <div class="panel-body">
+                <!--nested-->
+                <div class="panel-group" id="nested">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="nested-headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                   href="#nested-collapseOne"
+                                   aria-expanded="false" aria-controls="nested-collapseOne">
+                                    Floral Accents
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nested-collapseOne" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="nested-headingOne">
+                            <div class="panel-body">
+                                BODY
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="nested-headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                   href="#nested-collapseTwo"
+                                   aria-expanded="false" aria-controls="nested-collapseOne">
+                                    Ribbon
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nested-collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="nested-headingTwo">
+                            <div class="panel-body">
+                                BODY
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="nested-headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                   href="#nested-collapseThree"
+                                   aria-expanded="false" aria-controls="nested-collapseThree">
+                                    Fastener
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nested-collapseThree" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="nested-headingThree">
+                            <div class="panel-body">
+                                BODY
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="nested-headingFour">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
+                                   href="#nested-collapseFour"
+                                   aria-expanded="false" aria-controls="nested-collapseFour">
+                                    Ribbon Tail Color
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nested-collapseFour" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="nested-headingFour">
+                            <div class="panel-body">
+                                BODY
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
