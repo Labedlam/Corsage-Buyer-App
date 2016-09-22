@@ -48,17 +48,20 @@ function BuildYourOwnController (OrderCloud, Catalog) {
     vm.itemCreated = {};
     //categories under type
     vm.typeCategories;
+
+    vm.showRibbonColor = true;
     //Could I make the type selection them button's instead of categories making unnecessary calls?
     // pass in the id of category to get  product type.
     //set product to selected array, so that it can be displayed
     vm.typeSelected = function (category) {
-
+console.log(category);
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
             .then(function (data) {
                 console.log("product", data);
                 vm.producttypeSelected = true;
                 vm.itemCreated.type = category.Name;
                 vm.typeCategories = data.Items;
+                vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage' ].indexOf(category.Name) > -1;
                 OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
                     .then(function (data) {
                         console.log("second call", data.Items);
