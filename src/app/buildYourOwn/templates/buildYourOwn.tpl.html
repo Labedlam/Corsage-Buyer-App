@@ -24,10 +24,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                        <span role="button" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne"
                            aria-expanded="true" aria-controls="collapseOne">
                             * Select Type
-                        </a>
+                        </span>
                     </h4>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -44,11 +44,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingTwo">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseTwo"
                                href="#collapseTwo"
                                aria-expanded="false" aria-controls="collapseTwo">
                                 * Select Base Flower
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -63,11 +63,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingThree">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseThree"
                                href="#collapseThree"
                                aria-expanded="false" aria-controls="collapseThree">
                                 * Select Flower Color
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
@@ -78,14 +78,15 @@
                     </div>
                 </div>
                 <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
-                <div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Pin-On Corsage'">
+                <div class="panel panel-default"
+                     ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Pin-On Corsage'">
                     <div class="panel-heading" role="tab" id="headingFour">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFour"
                                href="#collapseFour"
                                aria-expanded="false" aria-controls="collapseFour">
                                 * Select Ribbon Color
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
@@ -97,17 +98,17 @@
                 </div>
                 <!--Select Fastener(For Wristlet ONLY))-->
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="nestedOne-headingFive">
+                    <div class="panel-heading" role="tab" id="headingFive">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#nested"
-                               href="#nestedOne-collapseFive"
-                               aria-expanded="false" aria-controls="nestedOne-collapseFive">
+                            <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFive"
+                               href="#collapseFive"
+                               aria-expanded="false" aria-controls="collapseFive">
                                 Select Fastener
-                            </a>
+                            </span>
                         </h4>
                     </div>
-                    <div id="nestedOne-collapseFive" class="panel-collapse collapse" role="tabpanel"
-                         aria-labelledby="nestedOne-headingFive">
+                    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel"
+                         aria-labelledby="headingFive">
                         <div class="panel-body">
                             BODY
                         </div>
@@ -118,11 +119,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingSix">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseSix"
                                href="#collapseSix"
                                aria-expanded="false" aria-controls="collapseSixe">
                                 Chose Optional Add-Ons
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
@@ -132,12 +133,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedOne-headingOne">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedOne-collapseOne"
                                                aria-expanded="false" aria-controls="nestedOne-collapseOne">
                                                 Floral Accents
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedOne-collapseOne" class="panel-collapse collapse" role="tabpanel"
@@ -151,12 +152,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedOne-headingTwo">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedOne-collapseTwo"
                                                aria-expanded="false" aria-controls="nestedOne-collapseOne">
                                                 Ribbon Tails Color
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedOne-collapseTwo" class="panel-collapse collapse" role="tabpanel"
@@ -170,12 +171,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedOne-headingThree">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedOne-collapseThree"
                                                aria-expanded="false" aria-controls="nestedOne-collapseThree">
                                                 Fastener
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedOne-collapseThree" class="panel-collapse collapse" role="tabpanel"
@@ -189,12 +190,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedOne-headingFour">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedOne-collapseFour"
                                                aria-expanded="false" aria-controls="nestedOne-collapseFour">
                                                 Ribbon Tail Color
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedOne-collapseFour" class="panel-collapse collapse" role="tabpanel"
@@ -214,11 +215,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingSeven">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
                                href="#collapseSeven"
                                aria-expanded="false" aria-controls="collapseSeven">
                                 Chose Optional Embellishments
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel"
@@ -229,12 +230,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedTwo-headingOne">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedTwo-collapseOne"
                                                aria-expanded="false" aria-controls="nestedTwo-collapseOne">
                                                 Gems
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedTwo-collapseOne" class="panel-collapse collapse" role="tabpanel"
@@ -248,12 +249,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedTwo-headingTwo">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedTwo-collapseTwo"
                                                aria-expanded="false" aria-controls="nestedTwo-collapseTwo">
                                                 Feathers
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedTwo-collapseTwo" class="panel-collapse collapse" role="tabpanel"
@@ -267,12 +268,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedTwo-headingThree">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedTwo-collapseThree"
                                                aria-expanded="false" aria-controls="nestedTwo-collapseThree">
                                                 Glam
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedTwo-collapseThree" class="panel-collapse collapse" role="tabpanel"
@@ -290,11 +291,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingEight">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                            <span class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
                                href="#collapseEight"
                                aria-expanded="false" aria-controls="collapseEight">
                                 Choose Optional Floral Accessories
-                            </a>
+                            </span>
                         </h4>
                     </div>
                     <div id="collapseEight" class="panel-collapse collapse" role="tabpanel"
@@ -320,33 +321,13 @@
                                          aria-labelledby="nestedThree-headingOne">
                                         <div class="panel-body">
                                             <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
-                                                <li role="necklaces" class="active"><a href="#greenOrchid"
-                                                                                       aria-controls="greenOrchid"
-                                                                                       role="tab"
-                                                                                       data-toggle="tab">Red Carpet
-                                                    Necklace,
-                                                    Green Orchid</a></li>
-                                                <li role="necklaces"><a href="#whiteOrchid" aria-controls="whiteOrchid"
-                                                                        role="tab" data-toggle="tab">Red Carpet
-                                                    Necklace,
-                                                    White
-                                                    Orchid</a></li>
-                                                <li role="necklaces"><a href="#pinkOrchid" aria-controls="pinkOrchid"
-                                                                        role="tab"
-                                                                        data-toggle="tab">Red Carpet Necklace, Pink
-                                                    Orchid</a>
-                                                </li>
-                                                <li role="necklaces"><a href="#hollywood" aria-controls="hollywood"
-                                                                        role="tab"
-                                                                        data-toggle="tab">Hollywood Necklace</a></li>
-                                                <li role="necklaces"><a href="#fairytale" aria-controls="fairytale"
-                                                                        role="tab"
-                                                                        data-toggle="tab">Fairytale Necklace</a></li>
-                                                <li role="necklaces"><a href="#allNight" aria-controls="allNight"
-                                                                        role="tab"
-                                                                        data-toggle="tab">All Night Necklace</a></li>
-                                                <li role="necklaces"><a href="#royal" aria-controls="royal" role="tab"
-                                                                        data-toggle="tab">Royal Necklace</a></li>
+                                                <li role="necklaces" class="active"><a href="#greenOrchid" aria-controls="greenOrchid" role="tab" data-toggle="tab">Red Carpet Necklace, Green Orchid</a></li>
+                                                <li role="necklaces"><a href="#whiteOrchid" aria-controls="whiteOrchid" role="tab" data-toggle="tab">Red Carpet Necklace,White Orchid</a></li>
+                                                <li role="necklaces"><a href="#pinkOrchid" aria-controls="pinkOrchid" role="tab" data-toggle="tab">Red Carpet Necklace, Pink Orchid</a></li>
+                                                <li role="necklaces"><a href="#hollywood" aria-controls="hollywood" role="tab" data-toggle="tab">Hollywood Necklace</a></li>
+                                                <li role="necklaces"><a href="#fairytale" aria-controls="fairytale" role="tab" data-toggle="tab">Fairytale Necklace</a></li>
+                                                <li role="necklaces"><a href="#allNight" aria-controls="allNight" role="tab" data-toggle="tab">All Night Necklace</a></li>
+                                                <li role="necklaces"><a href="#royal" aria-controls="royal" role="tab" data-toggle="tab">Royal Necklace</a></li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active" id="greenOrchid">
@@ -412,12 +393,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedThree-headingTwo">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedThree-collapseTwo"
                                                aria-expanded="false" aria-controls="nestedThree-collapseTwo">
                                                 Hair Combs
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <!--START TABBED HAIR COMB TYPES-->
@@ -495,12 +476,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedThree-headingThree">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedThree-collapseThree"
                                                aria-expanded="false" aria-controls="nestedThree-collapseThree">
                                                 Accessory Clips
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <!--START TABBED ACCESSORY CLIP TYPES-->
@@ -508,26 +489,10 @@
                                          aria-labelledby="nestedThree-headingThree">
                                         <div class="panel-body">
                                             <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
-                                                <li role="accessoryClips" class="active"><a
-                                                        href="#masqueradeAccessoryClip"
-                                                        aria-controls="masqueradeAccessoryClip"
-                                                        role="tab" data-toggle="tab">Masquerade
-                                                    Accessory Clip</a></li>
-                                                <li role="accessoryClips"><a href="#carnivalAccessoryClip"
-                                                                             aria-controls="carnivalAccessoryClip"
-                                                                             role="tab"
-                                                                             data-toggle="tab">Carnival Accessory
-                                                    Clip</a>
-                                                </li>
-                                                <li role="accessoryClips"><a href="#royalAccessoryClip"
-                                                                             aria-controls="royalAccessoryClip"
-                                                                             role="tab"
-                                                                             data-toggle="tab">Royal Accessory Clip</a>
-                                                </li>
-                                                <li role="accessoryClips"><a href="#daisyDelightAccessoryClip"
-                                                                             aria-controls="daisyDelightAccessoryClip"
-                                                                             role="tab" data-toggle="tab">Daisy Delight
-                                                    Accessory Clip</a></li>
+                                                <li role="accessoryClips" class="active"><a href="#masqueradeAccessoryClip" aria-controls="masqueradeAccessoryClip" role="tab" data-toggle="tab">Masquerade Accessory Clip</a></li>
+                                                <li role="accessoryClips"><a href="#carnivalAccessoryClip" aria-controls="carnivalAccessoryClip" role="tab" data-toggle="tab">Carnival Accessory Clip</a></li>
+                                                <li role="accessoryClips"><a href="#royalAccessoryClip" aria-controls="royalAccessoryClip" role="tab" data-toggle="tab">Royal Accessory Clip</a></li>
+                                                <li role="accessoryClips"><a href="#daisyDelightAccessoryClip" aria-controls="daisyDelightAccessoryClip" role="tab" data-toggle="tab">Daisy Delight Accessory Clip</a></li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div role="tabpanel" class="tab-pane active"
@@ -573,12 +538,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedThree-headingFour">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedThree-collapseFour"
                                                aria-expanded="false" aria-controls="nestedThree-collapseFour">
                                                 Rings
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <!--START TABBED RING TYPES-->
@@ -685,12 +650,12 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="nestedThree-headingFive">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                            <span class="collapsed" role="button" data-toggle="collapse"
                                                data-parent="#nested"
                                                href="#nestedThree-collapseFive"
                                                aria-expanded="false" aria-controls="nestedThree-collapseFive">
                                                 Floral Crowns
-                                            </a>
+                                            </span>
                                         </h4>
                                     </div>
                                     <div id="nestedThree-collapseFive" class="panel-collapse collapse" role="tabpanel"
@@ -708,9 +673,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
         <!--Cart-->
@@ -727,7 +690,6 @@
                         <button class="btn btn-success">Add to Cart</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
