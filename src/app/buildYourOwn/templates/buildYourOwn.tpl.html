@@ -59,6 +59,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!--Select Flower color-->
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingThree">
@@ -72,11 +73,12 @@
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
                          aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            color swatches
+                        <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.flowerOptions">
+                            <button ng-click="">{{flower.Name}}</button>
                         </div>
                     </div>
                 </div>
+
                 <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
                 <div class="panel panel-default"
                      ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Pin-On Corsage'">
@@ -96,8 +98,9 @@
                         </div>
                     </div>
                 </div>
+
                 <!--Select Fastener(For Wristlet ONLY))-->
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Boutonierre'">
                     <div class="panel-heading" role="tab" id="headingFive">
                         <h4 class="panel-title">
                             <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFive"
@@ -211,6 +214,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!--Choose Optional Embellishments-->
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingSeven">
@@ -287,6 +291,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!--Choose Optional Floral Accessories-->
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingEight">
@@ -673,6 +678,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
