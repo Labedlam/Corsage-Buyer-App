@@ -32,9 +32,11 @@
                         </h4>
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body row">
-                            <div class="col-lg-2 col-md-2" ng-repeat="category in buildYourOwn.categories.Items">
-                                <button ng-click="buildYourOwn.typeSelected(category)">{{category.Name}}</button>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2" ng-repeat="category in buildYourOwn.categories.Items">
+                                    <button ng-click="buildYourOwn.typeSelected(category)">{{category.Name}}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -53,9 +55,11 @@
                             </h4>
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-body row">
-                                <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.flowerOptions">
-                                    <button ng-click="">{{flower.Name}}</button>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.flowerOptions">
+                                        <button ng-click="">{{flower.Name}}</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
