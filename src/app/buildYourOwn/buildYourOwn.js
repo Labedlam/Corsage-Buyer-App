@@ -37,10 +37,11 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     // based off selection show the required options
     // every time you select an option populate the next required or available options
     //TODO: Create reset functionality
-    vm.requirementsMetForMVP = false;
+
 
     var vm = this;
     vm.categories = Catalog;
+    vm.requirementsMetForMVP = false;
 
 
 
