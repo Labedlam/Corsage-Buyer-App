@@ -85,9 +85,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
                         vm.flowerOptions = data.Items;
                         $('#collapseOne').collapse();
                         $('#collapseTwo').collapse();
-                        $('#collapseThree').collapse();
-                        $('#collapseFour').collapse();
-                        $('#collapseFive').collapse();
                     });
                 // $('#headingOne').collapse();
                 //what happens when there is no returned items? setup so there should be.... possible room for improvement
@@ -139,7 +136,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.ribbonColor = ribbon.Name;
         vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
-            .then(function (data) {
+                .then(function (data) {
                 vm.fastenerOption = data.Items;
             });
 
@@ -155,7 +152,25 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
         vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
-        console.log(vm.typeCategories);
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: vm.typeCategories[3].ID}, 1)
+            .then(function (data) {
+                OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
+                    .then(function(data){
+                        vm.optionalRibbonSelected = data.Items;
+                    })
+            });
+    };
+
+    vm.addOnRibbonSelected = function (addOnRibbon){
+        var model = {
+            price: addOnRibbon.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "addOnRibbons"
+        };
+
+        vm.optionalRibbon == undefined || vm.optionalRibbon == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.optionalRibbon = true;
+        vm.itemCreated.optionalRibbonChoice = addOnRibbon.Name;
+        vm.itemCreated.optionalRibbonPrice = addOnRibbon.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: vm.typeCategories[3].ID}, 1)
             .then(function (data) {
                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
@@ -174,7 +189,28 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.floralAccentSelected == undefined || vm.floralAccentSelected == false ? addPriceToTotal(model) : replacePrice(model);
         vm.floralAccentSelected = true;
         vm.itemCreated.floralAccentChoice = floralAccent.Name;
-        vm.itemCreated.floralAccentChoice = floralAccent.StandardPriceSchedule.PriceBreaks[0].Price;
+        vm.itemCreated.floralAccentPrice = floralAccent.StandardPriceSchedule.PriceBreaks[0].Price;
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
+            .then(function (data) {
+                //OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
+                    //.then(function(data){
+                        vm.gemsOptions = data.Items;
+                    //})
+            });
+
+    };
+
+    vm.gemsSelected = function (gems) {
+        var model = {
+            price: gems.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "gems"
+        };
+
+        vm.gemOptionSelected == undefined || vm.gemOptionSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.gemOptionSelected = true;
+        vm.itemCreated.gemOptionChoice = gems.Name;
+        vm.itemCreated.gemOptionPrice = gems.Price;
+
     };
 
 

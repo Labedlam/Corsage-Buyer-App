@@ -166,12 +166,36 @@
                                                       data-parent="#nested"
                                                       href="#nestedOne-collapseOne"
                                                       aria-expanded="false" aria-controls="nestedOne-collapseOne">
-                                                    Floral Accents
+                                                    Ribbon
                                                 </span>
                                             </h4>
                                         </div>
                                         <div id="nestedOne-collapseOne" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedOne-headingOne">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="addOnRibbon in buildYourOwn.optionalRibbonSelected">
+                                                        <button ng-click="buildYourOwn.addOnRibbonSelected(addOnRibbon)">
+                                                            {{addOnRibbon.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="nestedOne-headingTwo">
+                                            <h4 class="panel-title">
+                                                <span class="collapsed" role="button" data-toggle="collapse"
+                                                      data-parent="#nested"
+                                                      href="#nestedOne-collapseTwo"
+                                                      aria-expanded="false" aria-controls="nestedOne-collapseTwo">
+                                                    Floral Accents
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <div id="nestedOne-collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                             aria-labelledby="nestedOne-headingTwo">
                                             <div class="panel-body">
                                                 <div class="row">
                                                     <div class="col-md-2" ng-repeat="floralAccent in buildYourOwn.floralAccentOption">
@@ -185,38 +209,18 @@
                                     </div>
 
                                     <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedOne-headingTwo">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedOne-collapseTwo"
-                                                      aria-expanded="false" aria-controls="nestedOne-collapseOne">
-                                                    Ribbon Tails Color
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedOne-collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="nestedOne-headingTwo">
-                                            <div class="panel-body">
-                                                BODY
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="nestedOne-headingThree">
                                             <h4 class="panel-title">
                                                 <span class="collapsed" role="button" data-toggle="collapse"
                                                       data-parent="#nested"
                                                       href="#nestedOne-collapseThree"
                                                       aria-expanded="false" aria-controls="nestedOne-collapseThree">
-                                                    Fastener
+                                                    Ribbon Tails Color
                                                 </span>
                                             </h4>
                                         </div>
-                                        <div id="nestedOne-collapseThree" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedOne-headingThree">
+                                        <div id="nestedOne-collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                             aria-labelledby="nestedOne-headingTwo">
                                             <div class="panel-body">
                                                 BODY
                                             </div>
@@ -230,11 +234,12 @@
                                                       data-parent="#nested"
                                                       href="#nestedOne-collapseFour"
                                                       aria-expanded="false" aria-controls="nestedOne-collapseFour">
-                                                    Ribbon
+                                                    Fastener
                                                 </span>
                                             </h4>
                                         </div>
-                                        <div id="nestedOne-collapseFour" class="panel-collapse collapse" role="tabpanel"
+                                        <div id="nestedOne-collapseFour" class="panel-collapse collapse"
+                                             role="tabpanel"
                                              aria-labelledby="nestedOne-headingFour">
                                             <div class="panel-body">
                                                 BODY
@@ -275,7 +280,13 @@
                                         <div id="nestedTwo-collapseOne" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedTwo-headingOne">
                                             <div class="panel-body">
-                                                BODY
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="gems in buildYourOwn.gemsOptions">
+                                                        <button ng-click="buildYourOwn.gemsSelected(gems)">
+                                                            {{gems.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -778,6 +789,14 @@
                             <div ng-if="buildYourOwn.itemCreated.fastenerChoice">Fastener Choice:
                                 {{buildYourOwn.itemCreated.fastenerChoice}}
                                 {{buildYourOwn.itemCreated.fastenerPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.optionalRibbonChoice">Additional Ribbon:
+                                {{buildYourOwn.itemCreated.optionalRibbonChoice}}
+                                {{buildYourOwn.itemCreated.optionalRibbonPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.floralAccentChoice">Floral Accent Choice:
+                                {{buildYourOwn.itemCreated.floralAccentChoice}}
+                                {{buildYourOwn.itemCreated.floralAccentPrice | currency}}
                             </div>
 
                             <hr>
