@@ -58,6 +58,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     vm.flowerSelected;
     vm.ribbonSelected;
     vm.fastenerSelected;
+    vm.floralAccentSelected;
     //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
     vm.showRibbonColor = true;
 
@@ -122,7 +123,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
             .then(function (data) {
-                console.log(data);
                 vm.ribbonChoice = data.Items;
             });
 
@@ -140,7 +140,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
             .then(function (data) {
-                console.log(data);
                 vm.fastenerOption = data.Items;
             });
 
@@ -156,6 +155,26 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
         vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
+        console.log(vm.typeCategories);
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: vm.typeCategories[3].ID}, 1)
+            .then(function (data) {
+                OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
+                    .then(function(data){
+                        vm.floralAccentOption = data.Items;
+                    })
+            });
+    };
+
+    vm.addOnFloralAccentSelected = function (floralAccent) {
+        var model = {
+            price: floralAccent.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "floralAccents"
+        };
+
+        vm.floralAccentSelected == undefined || vm.floralAccentSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.floralAccentSelected = true;
+        vm.itemCreated.floralAccentChoice = floralAccent.Name;
+        vm.itemCreated.floralAccentChoice = floralAccent.StandardPriceSchedule.PriceBreaks[0].Price;
     };
 
 

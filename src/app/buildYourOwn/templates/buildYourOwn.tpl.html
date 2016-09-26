@@ -173,7 +173,13 @@
                                         <div id="nestedOne-collapseOne" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedOne-headingOne">
                                             <div class="panel-body">
-                                                BODY
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="floralAccent in buildYourOwn.floralAccentOption">
+                                                        <button ng-click="buildYourOwn.addOnFloralAccentSelected(floralAccent)">
+                                                            {{floralAccent.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -224,7 +230,7 @@
                                                       data-parent="#nested"
                                                       href="#nestedOne-collapseFour"
                                                       aria-expanded="false" aria-controls="nestedOne-collapseFour">
-                                                    Ribbon Tail Color
+                                                    Ribbon
                                                 </span>
                                             </h4>
                                         </div>
