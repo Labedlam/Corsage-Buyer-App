@@ -36,14 +36,11 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
-    //TODO: Create reset functionality
 
 
     var vm = this;
     vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
-
-
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -51,10 +48,10 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     vm.typeCategories;
     //Price Array to hold the cost of all options selected
     vm.itemCreated.price = [];
-
-    //type of Corsagage/boutonniere Selected
-    vm.producttypeSelected = false;
+    //store all the possible options
+    vm.selectionOptions =
     // Varaibles to indicated whether a specific option has been selected or not
+    vm.productTypeSelected;
     vm.flowerSelected;
     vm.ribbonSelected;
     vm.fastenerSelected;
@@ -69,31 +66,43 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
      Functions for each specific Choice Made available to the User----------
      These functions are triggered when User Clicks/Selects and Option
  --------------------------------------------------------------------*/
-    vm.typeSelected = function (category) {
 
-        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
-        //if they change type clear the previously selected data
-            .then(function (data) {
-                vm.producttypeSelected = true;
-                vm.itemCreated.type = category.Name;
-                vm.typeCategories = data.Items;
-                vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
-                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
-                    .then(function (data) {
 
-                        vm.flowerOptions = data.Items;
-                        $('#collapseOne').collapse();
-                        $('#collapseTwo').collapse();
-                        $('#collapseThree').collapse();
-                        $('#collapseFour').collapse();
-                        $('#collapseFive').collapse();
-                    });
-                // $('#headingOne').collapse();
-                //what happens when there is no returned items? setup so there should be.... possible room for improvement
-            })
-            .catch(function () {
+vm.typeSelected = function (category) {
+        //check to see whether productTypeSelected has been selected or not, if it changes category reset the itemCreatedObject
+        if (vm.productTypeSelected) {
+            //check if if product type has been set to true
+            console.log("hello the product type has been selected and set");
+            vm.itemCreated.type == category.Name ? vm.producttypeSelected = true : resetFinalBuild( category);
 
-            });
+        }
+        else {
+            OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
+            //if they change type clear the previously selected data
+                .then(function (data) {
+                    vm.productTypeSelected = true;
+                    vm.itemCreated.type = category.Name;
+                    vm.typeCategories = data.Items;
+                    vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
+
+                    OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
+                        .then(function (data) {
+
+                            vm.flowerOptions = data.Items;
+                            $('#collapseOne').collapse();
+                            $('#collapseTwo').collapse();
+                            $('#collapseThree').collapse();
+                            $('#collapseFour').collapse();
+                            $('#collapseFive').collapse();
+                        });
+                    // $('#headingOne').collapse();
+                    //what happens when there is no returned items? setup so there should be.... possible room for improvement
+                })
+                .catch(function () {
+
+                });
+        }
+
     };
 
     vm.baseFlowerSelected = function (flower) {
@@ -104,8 +113,10 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
 
                 vm.flowerColorChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
                 // $('#collapseTwo').collapse();
                 $('#collapseThree').collapse();
+
 
             })
     };
@@ -124,6 +135,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 console.log(data);
                 vm.ribbonChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
 
     };
@@ -142,6 +154,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 console.log(data);
                 vm.fastenerOption = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
 
     };
@@ -156,6 +169,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
         vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
+        checkRequirementsofType( vm.itemCreated);
     };
 
 
@@ -178,6 +192,48 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.totalPrice = totalPriceSum();
 
     };
+
+    //TODO: Create reset functionality
+    // resets Final Create Your Own Product
+    function resetFinalBuild(typeSelected){
+        console.log("Im reseting this built object");
+        vm.itemCreated = {
+            type: typeSelected.Name,
+            price : []
+        }
+    }
+
+
+/*-----------Check requirements--------------------------------------------
+     Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
+     it should be invoked when a required option is selected
+--------------------------------------------------------------------*/
+    function checkRequirementsofType(finalObject){
+        switch (finalObject.type){
+            case "Wristlet Corsage":
+                // check if specific requirements exist
+                //  add once updated functionality is merged
+                if( finalObject.baseFlower && finalObject.flowerColor && finalObject.fastenerChoice){
+                    vm.requirementsMetForMVP = true;
+                }else {
+                    vm.requirementsMetForMVP = false;
+                };
+                console.log(" you have picked wristlet");
+                break;
+            case "Pin-On Corsage" :
+
+                console.log(" PIN ON");
+                break;
+            case "Boutonierre":
+                onsole.log(" PIN ON");
+                break;
+            default:
+                vm.requirementsMetForMVP = false;
+        }
+    }
+
+
+
 
 /*-----------Helper Functions--------------------------------------------
      Function  that abstract work for other functions----------
