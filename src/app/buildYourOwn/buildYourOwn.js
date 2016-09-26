@@ -36,14 +36,11 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
-    //TODO: Create reset functionality
 
 
     var vm = this;
     vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
-
-
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -52,13 +49,17 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     //Price Array to hold the cost of all options selected
     vm.itemCreated.price = [];
 
-    //type of Corsagage/boutonniere Selected
-    vm.producttypeSelected = false;
-    // Varaibles to indicated whether a specific option has been selected or not
-    vm.flowerSelected;
-    vm.ribbonSelected;
-    vm.fastenerSelected;
-    vm.floralAccentSelected;
+    //store all the possible options
+    vm.selectionOptions ={};
+
+    // keeping intial producttype selection trigger seperate from rest because I reset all of the triggers except this one
+    vm.productTypeSelected;
+    //store all the selected Options triggers ( triggers in this context identify whether the selected option has been clicked/selected or not)
+    vm.selectedOptionsTriggers = {};
+    vm.selectedOptionsTriggers.flowerSelected;
+    vm.selectedOptionsTriggers.ribbonSelected;
+    vm.selectedOptionsTriggers.fastenerSelected;
+    vm.selectedOptionsTriggers.floralAccentSelected;
     //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
     vm.showRibbonColor = true;
 
@@ -70,29 +71,22 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
      Functions for each specific Choice Made available to the User----------
      These functions are triggered when User Clicks/Selects and Option
  --------------------------------------------------------------------*/
+
+
+
     vm.typeSelected = function (category) {
+        //check to see whether productTypeSelected has been selected or not, if it changes category reset the itemCreatedObject
+        if (vm.productTypeSelected) {
+            //check if if product type has been set to true
+            console.log("hello the product type has been selected and set");
+            vm.itemCreated.type == category.Name ? vm.productTypeSelected = true : resetFinalBuild(category);
 
-        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
-        //if they change type clear the previously selected data
-            .then(function (data) {
-                vm.producttypeSelected = true;
-                vm.itemCreated.type = category.Name;
-                vm.typeCategories = data.Items;
-                vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
-                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
-                    .then(function (data) {
-
-                        vm.flowerOptions = data.Items;
-                        $('#collapseOne').collapse();
-                        $('#collapseTwo').collapse();
-                    });
-                // $('#headingOne').collapse();
-                //what happens when there is no returned items? setup so there should be.... possible room for improvement
-            })
-            .catch(function () {
-
-            });
+        }
+        else {
+           setCategories(category)
+        }
     };
+
 
     vm.baseFlowerSelected = function (flower) {
         //when a new flower is added or replaced . it needs to get replaced in the array
@@ -101,9 +95,11 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
             .then(function (data) {
 
-                vm.flowerColorChoice = data.Items;
+                vm.selectionOptions.flowerColorChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
                 // $('#collapseTwo').collapse();
                 $('#collapseThree').collapse();
+
 
             })
     };
@@ -114,13 +110,15 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             category: "flowerColor"
         };
 
-        vm.flowerSelected == undefined || vm.flowerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.flowerSelected = true;
+        vm.selectedOptionsTriggers.flowerSelected == undefined || vm.selectedOptionsTriggers.flowerSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.selectedOptionsTriggers.flowerSelected = true;
         vm.itemCreated.flowerColor = flowerColor.Name;
         vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
             .then(function (data) {
-                vm.ribbonChoice = data.Items;
+                console.log(data);
+                vm.selectionOptions.ribbonChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
 
     };
@@ -131,15 +129,16 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             category: "ribbon"
         };
 
-        vm.ribbonSelected == undefined || vm.ribbonSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.ribbonSelected = true;
+        vm.selectedOptionsTriggers.ribbonSelected == undefined || vm.selectedOptionsTriggers.ribbonSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.selectedOptionsTriggers.ribbonSelected = true;
         vm.itemCreated.ribbonColor = ribbon.Name;
         vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
-                .then(function (data) {
-                vm.fastenerOption = data.Items;
+            .then(function (data) {
+                console.log(data);
+                vm.selectionOptions.fastenerOption = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
-
     };
 
     vm.fastenerOptionSelected = function (fastener) {
@@ -148,8 +147,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             category: "fasteners"
         };
 
-        vm.fastenerSelected == undefined || vm.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.fastenerSelected = true;
+        vm.selectedOptionsTriggers.fastenerSelected == undefined || vm.selectedOptionsTriggers.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.selectedOptionsTriggers.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
         vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: vm.typeCategories[3].ID}, 1)
@@ -211,10 +210,41 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.gemOptionChoice = gems.Name;
         vm.itemCreated.gemOptionPrice = gems.Price;
 
+        checkRequirementsofType( vm.itemCreated);
     };
 
 
-    /* ------------------------------------------*/
+/* ------------------------------------------*/
+
+    // Sets up the categories associated with selected product type
+    function setCategories(category){
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
+        //if they change type clear the previously selected data
+            .then(function (data) {
+                vm.productTypeSelected = true;
+                vm.itemCreated.type = category.Name;
+                vm.typeCategories = data.Items;
+                vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
+                console.log("here are your categories",vm.typeCategories);
+
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
+                    .then(function (data) {
+
+                        vm.selectionOptions.flowerOptions = data.Items;
+                        $('#collapseOne').collapse();
+                        $('#collapseTwo').collapse();
+                        $('#collapseThree').collapse();
+                        $('#collapseFour').collapse();
+                        $('#collapseFive').collapse();
+                    });
+                // $('#headingOne').collapse();
+                //what happens when there is no returned items? setup so there should be.... possible room for improvement
+            })
+            .catch(function () {
+
+            });
+    }
+
     // triggers whenever a Variable_ Selected Option is Clicked for the first time
     function addPriceToTotal(modelOfProduct) {
         var array = vm.itemCreated.price;
@@ -225,6 +255,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
 
     //this is to be used when Variable_Selected has already been triggered/selected
     function replacePrice(model) {
+        console.log("I should be getting hit in replace")
         //find index of item in the array so that it can be replace by the new model/option/product selected
         var existingItemIndex = _.findIndex(vm.itemCreated.price, function (product) {
             return product.category == model.category
@@ -232,7 +263,55 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.price[existingItemIndex] = model;
         vm.itemCreated.totalPrice = totalPriceSum();
 
-    };
+    }
+
+    // resets Final Create Your Own Product
+    function resetFinalBuild(typeSelected){
+        console.log("Im reseting this built object");
+        vm.itemCreated = {
+            type: typeSelected.Name,
+            price : []
+        };
+        vm.selectionOptions ={};
+        // go throught the selected Options triggers and set them all to false
+        setTriggersToFalse(vm.selectedOptionsTriggers);
+        setCategories(typeSelected);
+        vm.requirementsMetForMVP = false;
+    }
+
+    /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
+    it should be invoked when a required option is selected*/
+    function checkRequirementsofType(finalObject){
+        switch (finalObject.type){
+            case "Wristlet Corsage":
+                // check if specific requirements exist
+                //  add once updated functionality is merged
+                if( finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor && finalObject.fastenerChoice){
+                    vm.requirementsMetForMVP = true;
+                }else {
+                    vm.requirementsMetForMVP = false;
+                };
+                break;
+            case "Pin-On Corsage" :
+                if( finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor){
+                    vm.requirementsMetForMVP = true;
+                }else {
+                    vm.requirementsMetForMVP = false;
+                };
+                break;
+            case "Boutonierre":
+                if( finalObject.baseFlower && finalObject.flowerColor){
+                    vm.requirementsMetForMVP = true;
+                }else {
+                    vm.requirementsMetForMVP = false;
+                };
+
+                break;
+            default:
+                vm.requirementsMetForMVP = false;
+        }
+    }
+
 
 /*-----------Helper Functions--------------------------------------------
      Function  that abstract work for other functions----------
@@ -248,6 +327,13 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             return a + b
         });
 
+    }
+
+    // takes an object that only has boolean values and sets them all to false
+    function setTriggersToFalse(selectedOptionsTriggers){
+        for( var key in selectedOptionsTriggers ) {
+            selectedOptionsTriggers[key] = false;
+        }
     }
 
 }
