@@ -88,8 +88,8 @@
                              aria-labelledby="headingThree">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div ng-repeat="flowerColor in buildYourOwn.flowerColorChoice">
-                                        <button  ng-click="buildYourOwn.flowerColorSelected(flowerColor)">
+                                    <div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.flowerColorChoice">
+                                        <button ng-click="buildYourOwn.flowerColorSelected(flowerColor)">
                                             {{flowerColor.Name}}
                                         </button>
                                     </div>
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <!--Select Fastener(For Wristlet ONLY))-->
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'">
                         <div class="panel-heading" role="tab" id="headingFive">
                             <h4 class="panel-title">
                                 <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFive"
@@ -134,7 +134,11 @@
                         <div id="collapseFive" class="panel-collapse collapse" role="tabpanel"
                              aria-labelledby="headingFive">
                             <div class="panel-body">
-                                BODY
+                                <div class="row">
+                                    <div class="col-md-2" ng-repeat="fastener in buildYourOwn.fastenerOption">
+                                        <button ng-click="buildYourOwn.fastenerOptionSelected(fastener)">{{fastener.Name}}</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -764,6 +768,10 @@
                             <div ng-if="buildYourOwn.itemCreated.ribbonColor">Ribbon Color:
                                 {{buildYourOwn.itemCreated.ribbonColor}}
                                 {{buildYourOwn.itemCreated.ribbonPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.fastenerChoice">Fastener Choice:
+                                {{buildYourOwn.itemCreated.fastenerChoice}}
+                                {{buildYourOwn.itemCreated.fastenerPrice | currency}}
                             </div>
 
                             <hr>

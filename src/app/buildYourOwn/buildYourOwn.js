@@ -57,6 +57,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     // Varaibles to indicated whether a specific option has been selected or not
     vm.flowerSelected;
     vm.ribbonSelected;
+    vm.fastenerSelected;
     //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
     vm.showRibbonColor = true;
 
@@ -83,6 +84,9 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
                         vm.flowerOptions = data.Items;
                         $('#collapseOne').collapse();
                         $('#collapseTwo').collapse();
+                        $('#collapseThree').collapse();
+                        $('#collapseFour').collapse();
+                        $('#collapseFive').collapse();
                     });
                 // $('#headingOne').collapse();
                 //what happens when there is no returned items? setup so there should be.... possible room for improvement
@@ -134,8 +138,24 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.ribbonSelected = true;
         vm.itemCreated.ribbonColor = ribbon.Name;
         vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
+        OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
+            .then(function (data) {
+                console.log(data);
+                vm.fastenerOption = data.Items;
+            });
 
+    };
 
+    vm.fastenerOptionSelected = function (fastener) {
+        var model = {
+            price: fastener.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "fasteners"
+        };
+
+        vm.fastenerSelected == undefined || vm.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.fastenerSelected = true;
+        vm.itemCreated.fastenerChoice = fastener.Name;
+        vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
     };
 
 
