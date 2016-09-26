@@ -154,7 +154,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     };
 
 
-    /* ------------------------------------------*/
+/* ------------------------------------------*/
+
     // Sets up the categories associated with selected product type
     function setCategories(category){
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
@@ -204,7 +205,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
 
     };
 
-
     // resets Final Create Your Own Product
     function resetFinalBuild(typeSelected){
         console.log("Im reseting this built object");
@@ -219,13 +219,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.requirementsMetForMVP = false;
     }
 
-
-
-
-/*-----------Check requirements--------------------------------------------
-     Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
-     it should be invoked when a required option is selected
---------------------------------------------------------------------*/
+    /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
+    it should be invoked when a required option is selected*/
     function checkRequirementsofType(finalObject){
         switch (finalObject.type){
             case "Wristlet Corsage":
@@ -256,8 +251,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
                 vm.requirementsMetForMVP = false;
         }
     }
-
-
 
 
 /*-----------Helper Functions--------------------------------------------
