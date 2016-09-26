@@ -60,6 +60,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
     vm.selectedOptionsTriggers.ribbonSelected;
     vm.selectedOptionsTriggers.fastenerSelected;
     vm.selectedOptionsTriggers.floralAccentSelected;
+    vm.selectedOptionsTriggers.optionalRibbon;
+    vm.selectedOptionsTriggers.gemOptionSelected;
     //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
     vm.showRibbonColor = true;
 
@@ -155,7 +157,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
                     .then(function(data){
-                        vm.optionalRibbonSelected = data.Items;
+                        vm.selectionOptions.optionalRibbonSelected = data.Items;
+                        checkRequirementsofType( vm.itemCreated);
                     })
             });
     };
@@ -174,7 +177,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
                     .then(function(data){
-                        vm.floralAccentOption = data.Items;
+                        vm.selectionOptions.floralAccentOption = data.Items;
+                        checkRequirementsofType( vm.itemCreated);
                     })
             });
     };
@@ -193,7 +197,8 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 //OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
                     //.then(function(data){
-                        vm.gemsOptions = data.Items;
+                        vm.selectionOptions.gemsOptions = data.Items;
+                        checkRequirementsofType( vm.itemCreated);
                     //})
             });
 
@@ -209,8 +214,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.gemOptionSelected = true;
         vm.itemCreated.gemOptionChoice = gems.Name;
         vm.itemCreated.gemOptionPrice = gems.Price;
-
-        checkRequirementsofType( vm.itemCreated);
     };
 
 

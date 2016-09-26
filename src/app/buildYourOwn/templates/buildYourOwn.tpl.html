@@ -174,7 +174,7 @@
                                              aria-labelledby="nestedOne-headingOne">
                                             <div class="panel-body">
                                                 <div class="row">
-                                                    <div class="col-md-2" ng-repeat="addOnRibbon in buildYourOwn.optionalRibbonSelected">
+                                                    <div class="col-md-2" ng-repeat="addOnRibbon in buildYourOwn.selectionOptions.optionalRibbonSelected">
                                                         <button ng-click="buildYourOwn.addOnRibbonSelected(addOnRibbon)">
                                                             {{addOnRibbon.Name}}
                                                         </button>
@@ -198,7 +198,7 @@
                                              aria-labelledby="nestedOne-headingTwo">
                                             <div class="panel-body">
                                                 <div class="row">
-                                                    <div class="col-md-2" ng-repeat="floralAccent in buildYourOwn.floralAccentOption">
+                                                    <div class="col-md-2" ng-repeat="floralAccent in buildYourOwn.selectionOptions.floralAccentOption">
                                                         <button ng-click="buildYourOwn.addOnFloralAccentSelected(floralAccent)">
                                                             {{floralAccent.Name}}
                                                         </button>
@@ -281,7 +281,7 @@
                                              aria-labelledby="nestedTwo-headingOne">
                                             <div class="panel-body">
                                                 <div class="row">
-                                                    <div class="col-md-2" ng-repeat="gems in buildYourOwn.gemsOptions">
+                                                    <div class="col-md-2" ng-repeat="gems in buildYourOwn.selectionOptions.gemsOptions">
                                                         <button ng-click="buildYourOwn.gemsSelected(gems)">
                                                             {{gems.Name}}
                                                         </button>
