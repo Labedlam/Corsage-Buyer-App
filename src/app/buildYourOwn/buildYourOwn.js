@@ -104,8 +104,10 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
 
                 vm.flowerColorChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
                 // $('#collapseTwo').collapse();
                 $('#collapseThree').collapse();
+
 
             })
     };
@@ -124,6 +126,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 console.log(data);
                 vm.ribbonChoice = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
 
     };
@@ -142,6 +145,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             .then(function (data) {
                 console.log(data);
                 vm.fastenerOption = data.Items;
+                checkRequirementsofType( vm.itemCreated);
             });
 
     };
@@ -151,7 +155,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             price: fastener.StandardPriceSchedule.PriceBreaks[0].Price,
             category: "fasteners"
         };
-
+        
         vm.fastenerSelected == undefined || vm.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
         vm.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
@@ -178,6 +182,39 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.totalPrice = totalPriceSum();
 
     };
+
+
+
+/*-----------Check requirements--------------------------------------------
+     Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
+     it should be invoked when a required option is selected
+--------------------------------------------------------------------*/
+    function checkRequirementsofType(finalObject){
+        switch (finalObject.type){
+            case "Wristlet Corsage":
+                // check if specific requirements exist
+                //  add once updated functionality is merged
+                if( finalObject.baseFlower && finalObject.flowerColor /*&& finalObject.fastenerChoice*/){
+                    vm.requirementsMetForMVP = true;
+                }else {
+                    vm.requirementsMetForMVP = false;
+                };
+                console.log(" you have picked wristlet");
+                break;
+            case "Pin-On Corsage" :
+
+                console.log(" PIN ON");
+                break;
+            case "Boutonierre":
+                onsole.log(" PIN ON");
+                break;
+            default:
+                vm.requirementsMetForMVP = false;
+        }
+    }
+
+
+
 
 /*-----------Helper Functions--------------------------------------------
      Function  that abstract work for other functions----------
