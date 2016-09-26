@@ -54,7 +54,7 @@
                     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                         <div class="panel-body row">
                             <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.flowerOptions">
-                                <button ng-click="">{{flower.Name}}</button>
+                                <button ng-click="buildYourOwn.baseFlowerSelected(flower)">{{flower.Name}}</button>
                             </div>
                         </div>
                     </div>
@@ -72,13 +72,15 @@
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
                          aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            color swatches
+                        <div class="panel-body row">
+                            <div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.flowerColorChoice">
+                                <button ng-click="buildYourOwn.flowerColorSelected(flowerColor)">{{flowerColor.Name}}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
-                <div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Pin-On Corsage'">
+                <div class="panel panel-default" ng-if="buildYourOwn.showRibbonColor">
                     <div class="panel-heading" role="tab" id="headingFour">
                         <h4 class="panel-title">
                             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
@@ -91,7 +93,11 @@
                     <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
                          aria-labelledby="headingFour">
                         <div class="panel-body">
-                            color swatches
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2" ng-repeat="ribbon in buildYourOwn.ribbonChoice">
+                                    <button ng-click="buildYourOwn.ribbonColorSelected(ribbon)">{{ribbon.Name}}</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -719,11 +725,18 @@
                 <div class="panel panel-default">
                     <div class="panel-heading"><h3>Selections thus far</h3></div>
                     <div class="panel-body">
-                        <div ng-if="buildYourOwn.itemCreated.type">Type : {{buildYourOwn.itemCreated.type}}</div>
-                    </div>
+                        <div ng-if="buildYourOwn.itemCreated.type">Type: {{buildYourOwn.itemCreated.type}}</div>
+                        <div ng-if="buildYourOwn.itemCreated.baseFlower">Base Flower: {{buildYourOwn.itemCreated.baseFlower}}</div>
+                        <div ng-if="buildYourOwn.itemCreated.flowerColor">Flower Color: {{buildYourOwn.itemCreated.flowerColor}}
+                        {{buildYourOwn.itemCreated.flowerPrice | currency}}
+                        </div>
+                        <div ng-if="buildYourOwn.itemCreated.ribbonColor">Ribbon Color: {{buildYourOwn.itemCreated.ribbonColor}}
+                        {{buildYourOwn.itemCreated.ribbonPrice | currency}}</div>
+
                     <hr>
                     <div>
-                        <p>Total </p>
+                        <p>Total: </p>
+                        <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice | currency}}</div>
                         <button class="btn btn-success">Add to Cart</button>
                     </div>
                 </div>
