@@ -65,7 +65,7 @@
                              aria-labelledby="headingTwo">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.flowerOptions">
+                                    <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.selectionOptions.flowerOptions">
                                         <button ng-click="buildYourOwn.baseFlowerSelected(flower)">{{flower.Name}}</button>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                              aria-labelledby="headingThree">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.flowerColorChoice">
+                                    <div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.selectionOptions.flowerColorChoice">
                                         <button ng-click="buildYourOwn.flowerColorSelected(flowerColor)">
                                             {{flowerColor.Name}}
                                         </button>
@@ -99,7 +99,7 @@
                     </div>
                     <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
                     <div class="panel panel-default"
-                         ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'|| buildYourOwn.itemCreated.type == 'Pin-On Corsage'">
+                         ng-if="buildYourOwn.showRibbonColor">
                         <div class="panel-heading" role="tab" id="headingFour">
                             <h4 class="panel-title">
                                 <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFour"
@@ -113,7 +113,7 @@
                              aria-labelledby="headingFour">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-2" ng-repeat="ribbon in buildYourOwn.ribbonChoice">
+                                    <div class="col-md-2" ng-repeat="ribbon in buildYourOwn.selectionOptions.ribbonChoice">
                                         <button ng-click="buildYourOwn.ribbonColorSelected(ribbon)">{{ribbon.Name}}</button>
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                              aria-labelledby="headingFive">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-2" ng-repeat="fastener in buildYourOwn.fastenerOption">
+                                    <div class="col-md-2" ng-repeat="fastener in buildYourOwn.selectionOptions.fastenerOption">
                                         <button ng-click="buildYourOwn.fastenerOptionSelected(fastener)">{{fastener.Name}}</button>
                                     </div>
                                 </div>
