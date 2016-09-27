@@ -331,7 +331,13 @@
                                              role="tabpanel"
                                              aria-labelledby="nestedTwo-headingThree">
                                             <div class="panel-body">
-                                                BODY
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="glam in buildYourOwn.selectionOptions.glamOptions">
+                                                        <button ng-click="buildYourOwn.glamSelected(glam)">
+                                                        {{glam.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -355,22 +361,215 @@
                             <div class="panel-body">
                                 <!--Floral Accessories NESTED ACCORDIAN-->
                                 <div class="panel-group" id="nestedEight">
-                                    <!--START NECKLACES-->
+                                    <!--START ACCESSORY CLIPS-->
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="nestedThree-headingOne">
                                             <h4 class="panel-title">
+                                                <span class="collapsed" role="button" data-toggle="collapse"
+                                                      data-parent="#nested"
+                                                      href="#nestedThree-collapseOne"
+                                                      aria-expanded="false" aria-controls="nestedThree-collapseOne">
+                                                    Accessory Clips
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <!--START TABBED ACCESSORY CLIP TYPES-->
+                                        <div id="nestedThree-collapseOne" class="panel-collapse collapse"
+                                             role="tabpanel"
+                                             aria-labelledby="nestedThree-headingOne">
+                                            <div class="panel-body">
+                                                <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
+                                                    <li role="accessoryClips" class="active"><a
+                                                            href="#masqueradeAccessoryClip"
+                                                            aria-controls="masqueradeAccessoryClip" role="tab"
+                                                            data-toggle="tab">Masquerade Accessory Clip</a></li>
+                                                    <li role="accessoryClips"><a href="#carnivalAccessoryClip"
+                                                                                 aria-controls="carnivalAccessoryClip"
+                                                                                 role="tab" data-toggle="tab">Carnival
+                                                        Accessory Clip</a></li>
+                                                    <li role="accessoryClips"><a href="#royalAccessoryClip"
+                                                                                 aria-controls="royalAccessoryClip"
+                                                                                 role="tab" data-toggle="tab">Royal
+                                                        Accessory Clip</a></li>
+                                                    <li role="accessoryClips"><a href="#daisyDelightAccessoryClip"
+                                                                                 aria-controls="daisyDelightAccessoryClip"
+                                                                                 role="tab" data-toggle="tab">Daisy
+                                                        Delight Accessory Clip</a></li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div role="tabpanel" class="tab-pane active"
+                                                         id="masqueradeAccessoryClip">
+                                                        <div class="row">
+                                                            <div class="col-md-2" ng-repeat="masqueradeClip in buildYourOwn.selectionOptions.masqueradeClipOption">
+                                                                <button ng-click="buildYourOwn.masqueradeClipSelected(masqueradeClip)">
+                                                                    {{masqueradeClip.Name}}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="carnivalAccessoryClip">
+                                                        <div>
+                                                            <p>PINK1</p>
+                                                            <p>WHITE1</p>
+                                                            <p>RED1</p>
+                                                            <p>HOT PINK1</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="royalAccessoryClip">
+                                                        <div>
+                                                            <p>PINK2</p>
+                                                            <p>WHITE2</p>
+                                                            <p>RED2</p>
+                                                            <p>HOT PINK2</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane"
+                                                         id="daisyDelightAccessoryClip">
+                                                        <div>
+                                                            <p>WHITE</p>
+                                                            <p>MAGENTA</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--END TABBED ACCESSORY CLIP TYPES-->
+                                    </div>
+                                    <!--END ACCESSORY CLIPS-->
+
+                                    <!--START FLORAL CROWNS-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="nestedThree-headingTwo">
+                                            <h4 class="panel-title">
+                                                <span class="collapsed" role="button" data-toggle="collapse"
+                                                      data-parent="#nested"
+                                                      href="#nestedThree-collapseTwo"
+                                                      aria-expanded="false" aria-controls="nestedThree-collapseTwo">
+                                                    Floral Crowns
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <div id="nestedThree-collapseTwo" class="panel-collapse collapse"
+                                             role="tabpanel"
+                                             aria-labelledby="nestedThree-headingTwo">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="crowns in buildYourOwn.selectionOptions.crownOptions">
+                                                        <button ng-click="buildYourOwn.flowerCrownSelected(crowns)">
+                                                            {{crowns.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--END FLORAL CROWNS-->
+
+                                    <!--START HAIR COMBS-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="nestedThree-headingThree">
+                                            <h4 class="panel-title">
+                                                <span class="collapsed" role="button" data-toggle="collapse"
+                                                      data-parent="#nested"
+                                                      href="#nestedThree-collapseThree"
+                                                      aria-expanded="false" aria-controls="nestedThree-collapseThree">
+                                                    Hair Combs
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <!--START TABBED HAIR COMB TYPES-->
+                                        <div id="nestedThree-collapseThree" class="panel-collapse collapse"
+                                             role="tabpanel"
+                                             aria-labelledby="nestedThree-headingThree">
+                                            <div class="panel-body">
+                                                <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
+                                                    <li role="hairCombs" class="active"><a href="#royalHairComb"
+                                                                                           aria-controls="royalHairComb"
+                                                                                           role="tab"
+                                                                                           data-toggle="tab">Royal Hair
+                                                        Comb</a>
+                                                    </li>
+                                                    <li role="hairCombs"><a href="#masqueradeHairComb"
+                                                                            aria-controls="masqueradeHairComb"
+                                                                            role="tab"
+                                                                            data-toggle="tab">Masquerade Hair Comb</a>
+                                                    </li>
+                                                    <li role="hairCombs"><a href="#hollywoodHairComb"
+                                                                            aria-controls="hollywoodHairComb" role="tab"
+                                                                            data-toggle="tab">Hollywood Hair Comb</a>
+                                                    </li>
+                                                    <li role="hairCombs"><a href="#allNightHairClip"
+                                                                            aria-controls="allNightHairClip" role="tab"
+                                                                            data-toggle="tab">All Night Hair Clip</a>
+                                                    </li>
+                                                    <li role="hairCombs"><a href="#daisyDelightHairComb"
+                                                                            aria-controls="daisyDelightHairComb"
+                                                                            role="tab"
+                                                                            data-toggle="tab">Daisy Delight Hair
+                                                        Comb</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div role="tabpanel" class="tab-pane active" id="royalHairComb">
+                                                        <div>
+                                                            <p>PINK</p>
+                                                            <p>WHITE</p>
+                                                            <p>RED</p>
+                                                            <p>HOT PINK</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="masqueradeHairComb">
+                                                        <div>
+                                                            <p>PINK1</p>
+                                                            <p>WHITE1</p>
+                                                            <p>RED1</p>
+                                                            <p>HOT PINK1</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="hollywoodHairComb">
+                                                        <div>
+                                                            <p>PINK2</p>
+                                                            <p>WHITE2</p>
+                                                            <p>RED2</p>
+                                                            <p>HOT PINK2</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="allNightHairClip">
+                                                        <div>
+                                                            <p>WHITE</p>
+                                                            <p>MAGENTA</p>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane" id="daisyDelightHairComb">
+                                                        <div>
+                                                            <p>PINK3</p>
+                                                            <p>WHITE3</p>
+                                                            <p>GREEN3</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--END TABBED HAIR COMB TYPES-->
+                                    </div>
+                                    <!--END HAIR COMBS-->
+
+                                    <!--START NECKLACES-->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="nestedThree-headingFour">
+                                            <h4 class="panel-title">
                                                 <a class="collapsed" role="button" data-toggle="collapse"
                                                    data-parent="#nested"
-                                                   href="#nestedThree-collapseOne"
-                                                   aria-expanded="false" aria-controls="nestedThree-collapseOne">
+                                                   href="#nestedThree-collapseFour"
+                                                   aria-expanded="false" aria-controls="nestedThree-collapseFour">
                                                     Necklaces
                                                 </a>
                                             </h4>
                                         </div>
                                         <!--START TABBED NECKLACE TYPES-->
-                                        <div id="nestedThree-collapseOne" class="panel-collapse collapse"
+                                        <div id="nestedThree-collapseFour" class="panel-collapse collapse"
                                              role="tabpanel"
-                                             aria-labelledby="nestedThree-headingOne">
+                                             aria-labelledby="nestedThree-headingFour">
                                             <div class="panel-body">
                                                 <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
                                                     <li role="necklaces" class="active"><a href="#greenOrchid"
@@ -457,189 +656,22 @@
                                     </div>
                                     <!--END NECKLACES-->
 
-
-                                    <!--START HAIR COMBS-->
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedThree-headingTwo">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedThree-collapseTwo"
-                                                      aria-expanded="false" aria-controls="nestedThree-collapseTwo">
-                                                    Hair Combs
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <!--START TABBED HAIR COMB TYPES-->
-                                        <div id="nestedThree-collapseTwo" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedThree-headingTwo">
-                                            <div class="panel-body">
-                                                <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
-                                                    <li role="hairCombs" class="active"><a href="#royalHairComb"
-                                                                                           aria-controls="royalHairComb"
-                                                                                           role="tab"
-                                                                                           data-toggle="tab">Royal Hair
-                                                        Comb</a>
-                                                    </li>
-                                                    <li role="hairCombs"><a href="#masqueradeHairComb"
-                                                                            aria-controls="masqueradeHairComb"
-                                                                            role="tab"
-                                                                            data-toggle="tab">Masquerade Hair Comb</a>
-                                                    </li>
-                                                    <li role="hairCombs"><a href="#hollywoodHairComb"
-                                                                            aria-controls="hollywoodHairComb" role="tab"
-                                                                            data-toggle="tab">Hollywood Hair Comb</a>
-                                                    </li>
-                                                    <li role="hairCombs"><a href="#allNightHairClip"
-                                                                            aria-controls="allNightHairClip" role="tab"
-                                                                            data-toggle="tab">All Night Hair Clip</a>
-                                                    </li>
-                                                    <li role="hairCombs"><a href="#daisyDelightHairComb"
-                                                                            aria-controls="daisyDelightHairComb"
-                                                                            role="tab"
-                                                                            data-toggle="tab">Daisy Delight Hair
-                                                        Comb</a>
-                                                    </li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div role="tabpanel" class="tab-pane active" id="royalHairComb">
-                                                        <div>
-                                                            <p>PINK</p>
-                                                            <p>WHITE</p>
-                                                            <p>RED</p>
-                                                            <p>HOT PINK</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="masqueradeHairComb">
-                                                        <div>
-                                                            <p>PINK1</p>
-                                                            <p>WHITE1</p>
-                                                            <p>RED1</p>
-                                                            <p>HOT PINK1</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="hollywoodHairComb">
-                                                        <div>
-                                                            <p>PINK2</p>
-                                                            <p>WHITE2</p>
-                                                            <p>RED2</p>
-                                                            <p>HOT PINK2</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="allNightHairClip">
-                                                        <div>
-                                                            <p>WHITE</p>
-                                                            <p>MAGENTA</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="daisyDelightHairComb">
-                                                        <div>
-                                                            <p>PINK3</p>
-                                                            <p>WHITE3</p>
-                                                            <p>GREEN3</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--END TABBED HAIR COMB TYPES-->
-                                    </div>
-                                    <!--END HAIR COMBS-->
-
-
-                                    <!--START ACCESSORY CLIPS-->
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedThree-headingThree">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedThree-collapseThree"
-                                                      aria-expanded="false" aria-controls="nestedThree-collapseThree">
-                                                    Accessory Clips
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <!--START TABBED ACCESSORY CLIP TYPES-->
-                                        <div id="nestedThree-collapseThree" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedThree-headingThree">
-                                            <div class="panel-body">
-                                                <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
-                                                    <li role="accessoryClips" class="active"><a
-                                                            href="#masqueradeAccessoryClip"
-                                                            aria-controls="masqueradeAccessoryClip" role="tab"
-                                                            data-toggle="tab">Masquerade Accessory Clip</a></li>
-                                                    <li role="accessoryClips"><a href="#carnivalAccessoryClip"
-                                                                                 aria-controls="carnivalAccessoryClip"
-                                                                                 role="tab" data-toggle="tab">Carnival
-                                                        Accessory Clip</a></li>
-                                                    <li role="accessoryClips"><a href="#royalAccessoryClip"
-                                                                                 aria-controls="royalAccessoryClip"
-                                                                                 role="tab" data-toggle="tab">Royal
-                                                        Accessory Clip</a></li>
-                                                    <li role="accessoryClips"><a href="#daisyDelightAccessoryClip"
-                                                                                 aria-controls="daisyDelightAccessoryClip"
-                                                                                 role="tab" data-toggle="tab">Daisy
-                                                        Delight Accessory Clip</a></li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div role="tabpanel" class="tab-pane active"
-                                                         id="masqueradeAccessoryClip">
-                                                        <div>
-                                                            <p>PINK</p>
-                                                            <p>WHITE</p>
-                                                            <p>RED</p>
-                                                            <p>HOT PINK</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="carnivalAccessoryClip">
-                                                        <div>
-                                                            <p>PINK1</p>
-                                                            <p>WHITE1</p>
-                                                            <p>RED1</p>
-                                                            <p>HOT PINK1</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane" id="royalAccessoryClip">
-                                                        <div>
-                                                            <p>PINK2</p>
-                                                            <p>WHITE2</p>
-                                                            <p>RED2</p>
-                                                            <p>HOT PINK2</p>
-                                                        </div>
-                                                    </div>
-                                                    <div role="tabpanel" class="tab-pane"
-                                                         id="daisyDelightAccessoryClip">
-                                                        <div>
-                                                            <p>WHITE</p>
-                                                            <p>MAGENTA</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--END TABBED ACCESSORY CLIP TYPES-->
-                                    </div>
-                                    <!--END ACCESSORY CLIPS-->
-
-
                                     <!--START RINGS-->
                                     <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedThree-headingFour">
+                                        <div class="panel-heading" role="tab" id="nestedThree-headingFive">
                                             <h4 class="panel-title">
                                                 <span class="collapsed" role="button" data-toggle="collapse"
                                                       data-parent="#nested"
-                                                      href="#nestedThree-collapseFour"
-                                                      aria-expanded="false" aria-controls="nestedThree-collapseFour">
+                                                      href="#nestedThree-collapseFive"
+                                                      aria-expanded="false" aria-controls="nestedThree-collapseFive">
                                                     Rings
                                                 </span>
                                             </h4>
                                         </div>
                                         <!--START TABBED RING TYPES-->
-                                        <div id="nestedThree-collapseFour" class="panel-collapse collapse"
+                                        <div id="nestedThree-collapseFive" class="panel-collapse collapse"
                                              role="tabpanel"
-                                             aria-labelledby="nestedThree-headingFour">
+                                             aria-labelledby="nestedThree-headingFive">
                                             <div class="panel-body">
                                                 <ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">
                                                     <li role="rings" class="active"><a href="#dendrobiumRing"
@@ -743,31 +775,6 @@
                                     </div>
                                     <!--END RINGS-->
 
-
-                                    <!--START FLORAL CROWNS-->
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedThree-headingFive">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedThree-collapseFive"
-                                                      aria-expanded="false" aria-controls="nestedThree-collapseFive">
-                                                    Floral Crowns
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedThree-collapseFive" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedThree-headingFive">
-                                            <div class="panel-body">
-                                                <div>
-                                                    <p>Floral Crown</p>
-                                                    <p>Floral Crown with Petite Roses</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--END FLORAL CROWNS-->
                                 </div>
                             </div>
                         </div>
@@ -811,6 +818,10 @@
                             <div ng-if="buildYourOwn.itemCreated.featherOptionChoice">Feather Choice:
                                 {{buildYourOwn.itemCreated.featherOptionChoice}}
                                 {{buildYourOwn.itemCreated.featherOptionPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.glamOptionChoice">Glam Choice:
+                                {{buildYourOwn.itemCreated.glamOptionChoice}}
+                                {{buildYourOwn.itemCreated.glamOptionPrice | currency}}
                             </div>
 
                             <hr>

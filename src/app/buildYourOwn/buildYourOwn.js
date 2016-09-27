@@ -195,7 +195,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.floralAccentPrice = floralAccent.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
             .then(function (data) {
-                console.log("here are your OTHER cats",{ParentID: data.Items[3].ID});
                 OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[3].ID}, 1)
                     .then(function(data){
                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
@@ -219,7 +218,6 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.gemOptionPrice = gems.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
             .then(function (data) {
-                console.log("here are your OTHER cats",{ParentID: data.Items[3].ID});
                 OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[3].ID}, 1)
                     .then(function(data){
                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
@@ -237,10 +235,86 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
             category: "feathers"
         };
 
-        vm.featherOptionSelected == undefined || vm.featherOptionSelected == flase ? addPriceToTotal(model) : replacePrice(model);
+        vm.featherOptionSelected == undefined || vm.featherOptionSelected == false ? addPriceToTotal(model) : replacePrice(model);
         vm.featherOptionSelected = true;
         vm.itemCreated.featherOptionChoice = feathers.Name;
         vm.itemCreated.featherOptionPrice = feathers.StandardPriceSchedule.PriceBreaks[0].Price;
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
+            .then(function (data) {
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[3].ID}, 1)
+                    .then(function(data){
+                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[2].ID)
+                            .then(function(data){
+                                vm.selectionOptions.glamOptions = data.Items;
+                                checkRequirementsofType( vm.itemCreated);
+                            })
+                    })
+            });
+    };
+
+    vm.glamSelected = function(glam) {
+        var model = {
+            price: glam.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "glam"
+        };
+
+        vm.glamOptionSelected == undefined || vm.glamOptionSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.glamOptionSelected = true;
+        vm.itemCreated.glamOptionChoice = glam.Name;
+        vm.itemCreated.glamOptionPrice = glam.StandardPriceSchedule.PriceBreaks[0].Price;
+
+
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
+            .then(function (data) {
+                console.log("this is thing 1", {ParentID: data.Items[4].ID});
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[4].ID}, 1)
+                    .then(function(data){
+                        console.log("this is thing 2", {ParentID: data.Items[0].ID});
+                        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
+                            .then(function(data) {
+                                OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
+                                    .then(function(data){
+                                        vm.selectionOptions.masqueradeClipOption = data.Items;
+                                        checkRequirementsofType( vm.itemCreated);
+                                    })
+                            })
+                    })
+            });
+    };
+
+    vm.masqueradeClipSelected = function (masqueradeClip) {
+        var model = {
+            price: masqueradeClip.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "accessoryClips"
+        };
+
+        vm.masqueradeClipOptionSelected == undefined || vm.masqueradeClipOptionSelected == false ? addPriceToTotal(model) : replace(model);
+        vm.masqueradeClipOptionSelected = true;
+        vm.itemCreated.masqueradeclipChoice = masqueradeClip.Name;
+        vm.itemCreated.masqueradeclipPrice  = masqueradeClip.StandardPriceSchedule.PriceBreaks[0].Price;
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
+            .then(function (data) {
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[4].ID}, 1)
+                    .then(function(data){
+                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
+                            .then(function(data){
+                                vm.selectionOptions.crownOptions = data.Items;
+                                checkRequirementsofType( vm.itemCreated);
+                            })
+                    })
+            });
+    };
+
+    vm.flowerCrownSelected = function(crowns) {
+        var model = {
+            price: crowns.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "flowerCrowns"
+        };
+
+        vm.crownOptionSelected == undefined || vm.crownOptionSelected == false ? addPriceToTotal(model) : replacePrice(model);
+        vm.crownOptionSelected = true;
+        vm.itemCreated.crownOptionChoice = crowns.Name;
+        vm.itemCreated.crownOptionPrice = crowns.StandardPriceSchedule.PriceBreaks[0].Price;
     };
 
 
