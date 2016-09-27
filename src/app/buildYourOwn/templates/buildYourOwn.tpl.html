@@ -305,7 +305,13 @@
                                         <div id="nestedTwo-collapseTwo" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedTwo-headingTwo">
                                             <div class="panel-body">
-                                                BODY
+                                                <div class="row">
+                                                    <div class="col-md-2" ng-repeat="feathers in buildYourOwn.selectionOptions.feathersOptions">
+                                                        <button ng-click="buildYourOwn.feathersSelected(feathers)">
+                                                            {{feathers.Name}}
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -797,6 +803,14 @@
                             <div ng-if="buildYourOwn.itemCreated.floralAccentChoice">Floral Accent Choice:
                                 {{buildYourOwn.itemCreated.floralAccentChoice}}
                                 {{buildYourOwn.itemCreated.floralAccentPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.gemOptionChoice">Gem Choice:
+                                {{buildYourOwn.itemCreated.gemOptionChoice}}
+                                {{buildYourOwn.itemCreated.gemOptionPrice | currency}}
+                            </div>
+                            <div ng-if="buildYourOwn.itemCreated.featherOptionChoice">Feather Choice:
+                                {{buildYourOwn.itemCreated.featherOptionChoice}}
+                                {{buildYourOwn.itemCreated.featherOptionPrice | currency}}
                             </div>
 
                             <hr>

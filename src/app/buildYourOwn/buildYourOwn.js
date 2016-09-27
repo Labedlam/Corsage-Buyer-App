@@ -195,13 +195,16 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.itemCreated.floralAccentPrice = floralAccent.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
             .then(function (data) {
-                //OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
-                    //.then(function(data){
-                        vm.selectionOptions.gemsOptions = data.Items;
-                        checkRequirementsofType( vm.itemCreated);
-                    //})
+                console.log("here are your OTHER cats",{ParentID: data.Items[3].ID});
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[3].ID}, 1)
+                    .then(function(data){
+                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[1].ID)
+                            .then(function(data){
+                                vm.selectionOptions.gemsOptions = data.Items;
+                                checkRequirementsofType( vm.itemCreated);
+                        })
+                    })
             });
-
     };
 
     vm.gemsSelected = function (gems) {
@@ -213,7 +216,31 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.gemOptionSelected == undefined || vm.gemOptionSelected == false ? addPriceToTotal(model) : replacePrice(model);
         vm.gemOptionSelected = true;
         vm.itemCreated.gemOptionChoice = gems.Name;
-        vm.itemCreated.gemOptionPrice = gems.Price;
+        vm.itemCreated.gemOptionPrice = gems.StandardPriceSchedule.PriceBreaks[0].Price;
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
+            .then(function (data) {
+                console.log("here are your OTHER cats",{ParentID: data.Items[3].ID});
+                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[3].ID}, 1)
+                    .then(function(data){
+                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
+                            .then(function(data){
+                                vm.selectionOptions.feathersOptions = data.Items;
+                                checkRequirementsofType( vm.itemCreated);
+                            })
+                    })
+            });
+    };
+
+    vm.feathersSelected = function(feathers) {
+        var model = {
+            price: feathers.StandardPriceSchedule.PriceBreaks[0].Price,
+            category: "feathers"
+        };
+
+        vm.featherOptionSelected == undefined || vm.featherOptionSelected == flase ? addPriceToTotal(model) : replacePrice(model);
+        vm.featherOptionSelected = true;
+        vm.itemCreated.featherOptionChoice = feathers.Name;
+        vm.itemCreated.featherOptionPrice = feathers.StandardPriceSchedule.PriceBreaks[0].Price;
     };
 
 
