@@ -153,6 +153,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
         vm.selectedOptionsTriggers.fastenerSelected = true;
         vm.itemCreated.fastenerChoice = fastener.Name;
         vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
+        vm.itemCreated.fastenerID = fastener.ID;
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: vm.typeCategories[3].ID}, 1)
             .then(function (data) {
                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, data.Items[0].ID)
