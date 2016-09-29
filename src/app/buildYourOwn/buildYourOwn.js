@@ -13,10 +13,206 @@ function productGeneratorConfig($stateProvider) {
             controller: 'BuildYourOwnCtrl',
             controllerAs: 'buildYourOwn',
             resolve: {
-                // Set the id of the category  into the first parameter into me.listCategories
-                Catalog: function ($q, OrderCloud) {
-                    return OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, null);
+                // Get list of categories , check to see if any products returned
+                getCorsageType: function(OrderCloud){
+                   return OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
                 },
+
+                WristletCorsage: function (OrderCloud,getCorsageType) {
+                    var choices={};
+                        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[0].ID}, 1)
+                            .then(function (data) {
+
+                                angular.forEach(data.Items, function (value, key) {
+
+                                    var name = value.Name.replace(/ /g, '');
+                                    choices[name] = {};
+                                    choices[name].ID = value.ID;
+
+                                    OrderCloud.Me.ListProducts( null, null, null, null, null, null, value.ID)
+                                        .then(function(data){
+                                            if (data.Items.length > 0){
+                                                var name = value.Name.replace(/ /g, '');
+                                                choices[name].Options = data.Items;
+
+                                            } else{
+
+                                                OrderCloud.Me.ListCategories( null, null, null, null, null, {ParentID: value.ID}, null)
+                                                    .then(function(data){
+                                                        var name=value.Name.replace(/ /g, '');
+                                                        choices[name].Options = [];
+
+                                                        angular.forEach(data.Items, function(value1,key1){
+                                                            var name1 = value1.Name.replace(/ /g, '');
+                                                            var availableOptions = {};
+
+                                                            availableOptions.Name = name1;
+                                                            availableOptions.ID = value1.ID;
+                                                            choices[name].Options.push(availableOptions);
+
+                                                            OrderCloud.Me.ListProducts(null, null, null, null, null, null, value1.ID)
+                                                                .then(function(data){
+                                                                    if(data.Items.length > 0){
+                                                                        var name2 = value1.Name.replace(/ /g, '');
+                                                                        // console.log( "here is choices",choices,key1,name2);
+                                                                        choices[name].Options[key1][name2] = data.Items;
+                                                                        // console.log("whats in this",choices[name].Options[key1]);
+
+                                                                    }else{
+                                                                        // console.log("there are no products associated with this ", value1.ID)
+                                                                    }
+
+                                                                });
+                                                        });
+
+                                                    });
+
+                                            }
+
+
+                                        })
+                                });
+                                choices.type = getCorsageType.Items[0].Name;
+                                choices.ID = getCorsageType.Items[0].ID;
+
+                            });
+                    return choices;
+                },
+                PinOnCorsage: function( OrderCloud, getCorsageType){
+                    var choices={};
+                    OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[1].ID}, 1)
+                        .then(function (data) {
+
+                            angular.forEach(data.Items, function (value, key) {
+
+                                var name = value.Name.replace(/ /g, '');
+                                choices[name] = {};
+                                choices[name].ID = value.ID;
+
+                                OrderCloud.Me.ListProducts( null, null, null, null, null, null, value.ID)
+                                    .then(function(data){
+                                        if (data.Items.length > 0){
+                                            var name = value.Name.replace(/ /g, '');
+                                            choices[name].Options = data.Items;
+
+                                        } else{
+
+                                            OrderCloud.Me.ListCategories( null, null, null, null, null, {ParentID: value.ID}, null)
+                                                .then(function(data){
+                                                    var name=value.Name.replace(/ /g, '');
+                                                    choices[name].Options = [];
+
+                                                    angular.forEach(data.Items, function(value1,key1){
+                                                        var name1 = value1.Name.replace(/ /g, '');
+                                                        var availableOptions = {};
+
+                                                        availableOptions.Name = name1;
+                                                        availableOptions.ID = value1.ID;
+                                                        choices[name].Options.push(availableOptions);
+
+                                                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, value1.ID)
+                                                            .then(function(data){
+                                                                console.log("data.Items",value1.Name,data.Items);
+                                                                if(data.Items.length > 0){
+                                                                    var name2 = value1.Name.replace(/ /g, '');
+                                                                    // console.log( "here is choices",choices,key1,name2);
+                                                                    choices[name].Options[key1][name2] = data.Items;
+                                                                    console.log("whats in this",choices[name].Options[key1]);
+
+                                                                }else{
+                                                                    // console.log("there are no products associated with this ", value1.ID)
+                                                                }
+
+                                                            });
+                                                    });
+
+                                                });
+
+                                        }
+
+
+                                    })
+                            });
+                            choices.type = getCorsageType.Items[1].Name;
+                            choices.ID = getCorsageType.Items[1].ID;
+                            console.log("PinOn",choices);
+
+                        });
+                    return choices;
+                },
+                Boutonierre: function(OrderCloud, getCorsageType){
+                    var choices={};
+                    OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[2].ID}, 1)
+                        .then(function (data) {
+
+                            angular.forEach(data.Items, function (value, key) {
+
+                                var name = value.Name.replace(/ /g, '');
+                                choices[name] = {};
+                                choices[name].ID = value.ID;
+
+                                OrderCloud.Me.ListProducts( null, null, null, null, null, null, value.ID)
+                                    .then(function(data){
+                                        if (data.Items.length > 0){
+                                            var name = value.Name.replace(/ /g, '');
+                                            choices[name].Options = data.Items;
+
+                                        } else{
+
+                                            OrderCloud.Me.ListCategories( null, null, null, null, null, {ParentID: value.ID}, null)
+                                                .then(function(data){
+                                                    var name=value.Name.replace(/ /g, '');
+                                                    choices[name].Options = [];
+
+                                                    angular.forEach(data.Items, function(value1,key1){
+                                                        var name1 = value1.Name.replace(/ /g, '');
+                                                        var availableOptions = {};
+
+                                                        availableOptions.Name = name1;
+                                                        availableOptions.ID = value1.ID;
+                                                        choices[name].Options.push(availableOptions);
+
+                                                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, value1.ID)
+                                                            .then(function(data){
+                                                                console.log("data.Items",value1.Name,data.Items);
+                                                                if(data.Items.length > 0){
+                                                                    var name2 = value1.Name.replace(/ /g, '');
+                                                                    // console.log( "here is choices",choices,key1,name2);
+                                                                    choices[name].Options[key1][name2] = data.Items;
+                                                                    console.log("whats in this",choices[name].Options[key1]);
+
+                                                                }else{
+                                                                    // console.log("there are no products associated with this ", value1.ID)
+                                                                }
+
+                                                            });
+                                                    });
+
+                                                });
+
+                                        }
+
+
+                                    })
+                            });
+                            choices.type = getCorsageType.Items[2].Name;
+                            choices.ID = getCorsageType.Items[2].ID;
+                            console.log("Bout",choices);
+
+                        });
+                    return choices;
+                },
+                Selection: function(WristletCorsage,PinOnCorsage, Boutonierre){
+                    console.log("WristletCorsage.Items",WristletCorsage);
+                  var selection = [];
+                    selection. push(WristletCorsage);
+                    selection. push(PinOnCorsage);
+                    selection. push(Boutonierre);
+                    console.log(selection);
+                    return selection
+
+                },
+
                 Order: function ($q, CurrentOrder) {
                     var dfd = $q.defer();
                     CurrentOrder.Get()
@@ -32,14 +228,14 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
+function BuildYourOwnController(OrderCloud,  Underscore) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
 
 
     var vm = this;
-    vm.categories = Catalog;
+    // vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
@@ -166,6 +362,7 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
                 vm.typeCategories = data.Items;
                 vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
                 console.log("here are your categories",vm.typeCategories);
+                setOptionalAddOn()
 
                 OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
                     .then(function (data) {
@@ -251,6 +448,34 @@ function BuildYourOwnController(OrderCloud, Catalog, Underscore) {
                 vm.requirementsMetForMVP = false;
         }
     }
+
+    // this function will check which product type is selected and set respective options
+    function setOptionalAddOn(){
+        //go through array find name with optional Add ON's , take id ,and pass get data
+
+        var addOn =_.findWhere(vm.typeCategories,{ Name: "Optional Add Ons"});
+        console.log("addon",addOn);
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: addOn.ID}, 1)
+            .then(function (data) {
+                console.log("We be data in the add On",data);
+                angular.forEach(data.Items, function(value, key){
+                    console.log("im key",value.ID, value);
+                     OrderCloud.Me.ListProducts(null, null, null, null, null, null , value.ID )
+
+                         .then(function(data){
+                             var name=value["ID"].replace(/\-/g, '');
+                             vm.selectionOptions["opAddOn" + name] =data.Items;
+                         });
+
+                })
+
+
+            });
+
+    }
+
+
+
 
 
 /*-----------Helper Functions--------------------------------------------
