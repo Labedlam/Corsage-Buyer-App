@@ -18,8 +18,10 @@ function productGeneratorConfig($stateProvider) {
                    return OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: 3}, 1)
                 },
 
-                WristletCorsage: function (OrderCloud,getCorsageType) {
+                WristletCorsage: function ($q, OrderCloud,getCorsageType) {
                     var choices={};
+                    var dfd=$q.defer();
+
                         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[0].ID}, 1)
                             .then(function (data) {
 
@@ -54,12 +56,12 @@ function productGeneratorConfig($stateProvider) {
                                                                 .then(function(data){
                                                                     if(data.Items.length > 0){
                                                                         var name2 = value1.Name.replace(/ /g, '');
-                                                                        // console.log( "here is choices",choices,key1,name2);
-                                                                        choices[name].Options[key1][name2] = data.Items;
-                                                                        // console.log("whats in this",choices[name].Options[key1]);
+
+                                                                        choices[name].Options[key1]["Options"] = data.Items;
+                                                                                dfd.resolve(choices);
 
                                                                     }else{
-                                                                        // console.log("there are no products associated with this ", value1.ID)
+
                                                                     }
 
                                                                 });
@@ -72,14 +74,49 @@ function productGeneratorConfig($stateProvider) {
 
                                         })
                                 });
-                                choices.type = getCorsageType.Items[0].Name;
+                                choices.Type = getCorsageType.Items[0].Name;
                                 choices.ID = getCorsageType.Items[0].ID;
 
                             });
-                    return choices;
+
+                    return dfd.promise;
+
                 },
-                PinOnCorsage: function( OrderCloud, getCorsageType){
+                formatWCorsage: function($q, WristletCorsage){
+                    var wristCorsage=WristletCorsage;
+                    wristCorsage.Options ={};
+                    wristCorsage.Options.Required =[];
+                    wristCorsage.Options.OptAddOn =[];
+                    var dfd = $q.defer();
+
+                    angular.forEach(wristCorsage.OptionalAddOns.Options, function(v,k){
+
+                        wristCorsage.Options.OptAddOn.push(wristCorsage.OptionalAddOns.Options[k]);
+
+
+                            dfd.resolve();
+                    });
+                    if (wristCorsage.Options.OptAddOn[0].Ribbon ){
+
+                        wristCorsage.Options.OptAddOn[0].Options = wristCorsage.Options.OptAddOn[0].Ribbon;
+
+                    }
+                    dfd.promise;
+
+
+
+                    wristCorsage.Options.OptAddOn.push(wristCorsage.Fastener);
+                    wristCorsage.Options.OptAddOn.push(wristCorsage.Ribbon);
+                    console.log("theformatted object",wristCorsage);
+
+                    // delete wristCorsage.OptionalAddOns, delete wristCorsage.Fastener, delete wristCorsage.Ribbon;
+                    // delete wristCorsage.OptionalAddOns
+
+
+                },
+                PinOnCorsage: function($q, OrderCloud, getCorsageType){
                     var choices={};
+                    var dfd = $q.defer();
                     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[1].ID}, 1)
                         .then(function (data) {
 
@@ -112,15 +149,16 @@ function productGeneratorConfig($stateProvider) {
 
                                                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, value1.ID)
                                                             .then(function(data){
-                                                                console.log("data.Items",value1.Name,data.Items);
-                                                                if(data.Items.length > 0){
-                                                                    var name2 = value1.Name.replace(/ /g, '');
-                                                                    // console.log( "here is choices",choices,key1,name2);
-                                                                    choices[name].Options[key1][name2] = data.Items;
-                                                                    console.log("whats in this",choices[name].Options[key1]);
 
+                                                                if(data.Items.length > 0){
+                                                                    var name2 = "Options";
+                                                                    //value1.Name.replace(/ /g, '');
+
+                                                                    choices[name].Options[key1][name2] = data.Items;
+
+                                                                    console.log("This is name",choices[name], name);
+                                                                    dfd.resolve(choices);
                                                                 }else{
-                                                                    // console.log("there are no products associated with this ", value1.ID)
                                                                 }
 
                                                             });
@@ -133,15 +171,16 @@ function productGeneratorConfig($stateProvider) {
 
                                     })
                             });
-                            choices.type = getCorsageType.Items[1].Name;
+                            choices.Type = getCorsageType.Items[1].Name;
                             choices.ID = getCorsageType.Items[1].ID;
-                            console.log("PinOn",choices);
 
                         });
-                    return choices;
+                    choices.Choices ={};
+                    return dfd.promise;
                 },
-                Boutonierre: function(OrderCloud, getCorsageType){
+                Boutonierre: function($q, OrderCloud, getCorsageType){
                     var choices={};
+                    var dfd = $q.defer();
                     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID:getCorsageType.Items[2].ID}, 1)
                         .then(function (data) {
 
@@ -174,15 +213,15 @@ function productGeneratorConfig($stateProvider) {
 
                                                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, value1.ID)
                                                             .then(function(data){
-                                                                console.log("data.Items",value1.Name,data.Items);
+
                                                                 if(data.Items.length > 0){
                                                                     var name2 = value1.Name.replace(/ /g, '');
-                                                                    // console.log( "here is choices",choices,key1,name2);
+
                                                                     choices[name].Options[key1][name2] = data.Items;
-                                                                    console.log("whats in this",choices[name].Options[key1]);
+                                                                    dfd.resolve(choices);
 
                                                                 }else{
-                                                                    // console.log("there are no products associated with this ", value1.ID)
+
                                                                 }
 
                                                             });
@@ -195,20 +234,20 @@ function productGeneratorConfig($stateProvider) {
 
                                     })
                             });
-                            choices.type = getCorsageType.Items[2].Name;
+                            choices.Type = getCorsageType.Items[2].Name;
                             choices.ID = getCorsageType.Items[2].ID;
-                            console.log("Bout",choices);
+
 
                         });
-                    return choices;
+                    return dfd.promise;
                 },
                 Selection: function(WristletCorsage,PinOnCorsage, Boutonierre){
-                    console.log("WristletCorsage.Items",WristletCorsage);
+
                   var selection = [];
                     selection. push(WristletCorsage);
                     selection. push(PinOnCorsage);
                     selection. push(Boutonierre);
-                    console.log(selection);
+
                     return selection
 
                 },
@@ -228,18 +267,19 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController(OrderCloud,  Underscore) {
+function BuildYourOwnController(OrderCloud, Selection, Underscore) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
 
 
     var vm = this;
-    // vm.categories = Catalog;
+     vm.categories = Selection;
     vm.requirementsMetForMVP = false;
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
+    vm.typeChosen;
     //categories under type
     vm.typeCategories;
     //Price Array to hold the cost of all options selected
@@ -268,34 +308,37 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
 
 
     vm.typeSelected = function (category) {
+        vm.typeChosen = category;
+        vm.flowerbase = category.BaseFlowerChoices.Options;
         //check to see whether productTypeSelected has been selected or not, if it changes category reset the itemCreatedObject
-        if (vm.productTypeSelected) {
+        // if (vm.productTypeSelected) {
             //check if if product type has been set to true
-            console.log("hello the product type has been selected and set");
-            vm.itemCreated.type == category.Name ? vm.productTypeSelected = true : resetFinalBuild(category);
-
-        }
-        else {
-           setCategories(category)
-        };
+        //     //vm.itemCreated.type == category.ID ? vm.productTypeSelected = true : resetFinalBuild(category);
+        //
+        // }
+        // else {
+        //    setCategories(category)
+        // };
 
     };
 
 
     vm.baseFlowerSelected = function (flower) {
         //when a new flower is added or replaced . it needs to get replaced in the array
-
+        console.log("hello", flower);
         vm.itemCreated.baseFlower = flower.Name;
-        OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
-            .then(function (data) {
 
-                vm.selectionOptions.flowerColorChoice = data.Items;
-                checkRequirementsofType( vm.itemCreated);
-                // $('#collapseTwo').collapse();
-                $('#collapseThree').collapse();
-
-
-            })
+        vm.selectionOptions.flowerColorChoice = flower.Options;
+        // OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
+        //     .then(function (data) {
+        //
+        //         vm.selectionOptions.flowerColorChoice = data.Items;
+        //         checkRequirementsofType( vm.itemCreated);
+        //         // $('#collapseTwo').collapse();
+        //         $('#collapseThree').collapse();
+        //
+        //
+        //     })
     };
 
     vm.flowerColorSelected = function (flowerColor) {
@@ -310,7 +353,6 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
         vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
             .then(function (data) {
-                console.log(data);
                 vm.selectionOptions.ribbonChoice = data.Items;
                 checkRequirementsofType( vm.itemCreated);
             });
@@ -329,7 +371,6 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
         vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
         OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
             .then(function (data) {
-                console.log(data);
                 vm.selectionOptions.fastenerOption = data.Items;
                 checkRequirementsofType( vm.itemCreated);
             });
@@ -361,8 +402,7 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
                 vm.itemCreated.type = category.Name;
                 vm.typeCategories = data.Items;
                 vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
-                console.log("here are your categories",vm.typeCategories);
-                setOptionalAddOn()
+                setOptionalAddOn();
 
                 OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
                     .then(function (data) {
@@ -392,7 +432,6 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
 
     //this is to be used when Variable_Selected has already been triggered/selected
     function replacePrice(model) {
-        console.log("I should be getting hit in replace")
         //find index of item in the array so that it can be replace by the new model/option/product selected
         var existingItemIndex = _.findIndex(vm.itemCreated.price, function (product) {
             return product.category == model.category
@@ -404,7 +443,6 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
 
     // resets Final Create Your Own Product
     function resetFinalBuild(typeSelected){
-        console.log("Im reseting this built object");
         vm.itemCreated = {
             type: typeSelected.Name,
             price : []
@@ -454,12 +492,9 @@ function BuildYourOwnController(OrderCloud,  Underscore) {
         //go through array find name with optional Add ON's , take id ,and pass get data
 
         var addOn =_.findWhere(vm.typeCategories,{ Name: "Optional Add Ons"});
-        console.log("addon",addOn);
         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: addOn.ID}, 1)
             .then(function (data) {
-                console.log("We be data in the add On",data);
                 angular.forEach(data.Items, function(value, key){
-                    console.log("im key",value.ID, value);
                      OrderCloud.Me.ListProducts(null, null, null, null, null, null , value.ID )
 
                          .then(function(data){
