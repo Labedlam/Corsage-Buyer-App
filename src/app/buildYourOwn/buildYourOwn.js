@@ -169,7 +169,7 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
         else {
             setCategories(category)
         }
-        ;
+
         //match category id with category id of type choices
 
         vm.typeChosen = _.findWhere(vm.typeChoices, {ParentID: category.ID});
@@ -288,10 +288,7 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
 
                         vm.selectionOptions.flowerOptions = data.Items;
                         $('#collapseOne').collapse();
-                        $('#collapseTwo').collapse();
-                        $('#collapseThree').collapse();
-                        $('#collapseFour').collapse();
-                        $('#collapseFive').collapse();
+
                     });
 
             })
