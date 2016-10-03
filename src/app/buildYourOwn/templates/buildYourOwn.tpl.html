@@ -48,10 +48,9 @@
                         </div>
                     </div>
                 </div>
-
                 <div ng-if="buildYourOwn.productTypeSelected == true">
                     <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
-                        <div class="panel-heading" role="tab" id="{{subcategory.ID}}">
+                        <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
                             <span role="button" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne"
                                   aria-expanded="true" aria-controls="collapseOne" >
@@ -64,10 +63,11 @@
                              aria-labelledby="headingOne">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" >
-                                        <button ng-click="buildYourOwn.typeSelected(category)">{{subcategory.Options.Name}}</button>
+                                    <div class="col-lg-2 col-md-2" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
+                                        <button ng-click="buildYourOwn.typeSelected(subcategory)">
+                                            {{subcategory.Name}}
+                                        </button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -143,13 +143,13 @@
                                             <div class="panel-body">
 
                                                 <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist"></ul>-->
-                                                <div class="tab-content">
+                                                <!--<div class="tab-content">
                                                     <div ng-repeat="product in subcategory" role="tabpanel" class="tab-pane active" id="{{subcategory.ID}}">
                                                         <div>
                                                             <p>{{product}}</p>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                                 <div ng-if="type.Products">
                                                     <button class="btn btn-default" ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
                                                         {{product.Name}}

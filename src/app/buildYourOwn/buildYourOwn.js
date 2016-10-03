@@ -114,7 +114,7 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories) {
+function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
@@ -137,7 +137,7 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
     //store selections that were made by user
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
-    // vm.selectionOptions = {};
+    vm.selectionOptions = {};
 
     // keeping intial producttype selection trigger seperate from rest because I reset all of the triggers except this one
     vm.productTypeSelected;
@@ -274,27 +274,68 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
 
     // Sets up the categories associated with selected product type
     function setCategories(category) {
-        OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: category.ID}, 1)
-        //if they change type clear the previously selected data
-            .then(function (data) {
+        var dfd = $q.defer();
+
+        OrderCloud.Me.ListCategories(null, null, null, null, null, {
+                ParentID: category.ID
+            }, 1)
+            //if they change type clear the previously selected data
+            .then(function(data) {
                 vm.productTypeSelected = true;
                 vm.itemCreated.type = category.Name;
                 vm.typeCategories = data.Items;
                 vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
                 console.log("here are your categories", vm.typeCategories);
 
-                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: data.Items[0].ID}, 1)
-                    .then(function (data) {
 
-                        vm.selectionOptions.flowerOptions = data.Items;
-                        $('#collapseOne').collapse();
+                angular.forEach(data.Items, function(){
 
-                    });
 
-            })
-            .catch(function () {
+                        OrderCloud.Me.ListCategories(null, null, null, null, null, {
+                                ParentID: data.Items[0].ID
+                            }, 1)
+                            .then(function(data) {
+                                angular.forEach(data.Items, function(value){
+                                    var selectionTypes = {};
+                                    selectionTypes.ID = value.ID;
+                                    selectionTypes.Name = value.Name;
+                                    OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
+                                        .then(function(data){
+                                            if (data.Items.length > 0){
+                                                selectionTypes.Products = data.Items;
+                                            } else {
+                                                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
+                                                    .then(function(data){
+                                                            selectionTypes.SubCategories = [];
 
+                                                            angular.forEach(data.Items, function(categoryvalue2) {
+                                                                var subcategoryType = {};
+                                                                subcategoryType.ID = categoryvalue2.ID;
+                                                                subcategoryType.Name = categoryvalue2.Name;
+                                                                selectionTypes.SubCategories.push(subcategoryType);
+                                                                OrderCloud.Me.ListProducts(null, null, null, null, null, categoryvalue2)
+                                                                    .then(function(data){
+                                                                        subcategoryType.Products = data.Items;
+                                                                        dfd.resolve();
+                                                                    });
+                                                            });
+                                                        }
+                                                    )
+                                            }
+                                        })
+                                });
+
+                                vm.selectionOptions.flowerOptions = data.Items;
+                                $('#collapseOne').collapse();
+
+                            })
+                            .catch(function() {
+                            });
+
+                    })
             });
+
+        return dfd.promise;
     }
 
     // triggers whenever a Variable_ Selected Option is Clicked for the first time
@@ -323,7 +364,9 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
             type: typeSelected.Name,
             price: []
         };
-        vm.selectionOptions = {};
+        vm.selectionOptions = {
+            flowerOptions: ""
+        };
         // go throught the selected Options triggers and set them all to false
         setTriggersToFalse(vm.selectedOptionsTriggers);
         setCategories(typeSelected);
