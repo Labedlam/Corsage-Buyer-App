@@ -354,7 +354,6 @@
                             <div class="panel-body">
                                 <!--Floral Accessories NESTED ACCORDIAN-->
                                 <div class="panel-group" id="nestedEight">
-                                    <!--START NECKLACES-->
                                     <div class="panel panel-default" ng-repeat="type in buildYourOwn.optionalFloralAcc.types">
                                         <div class="panel-heading" role="tab" id="nestedThree-headingOne">
                                             <h4 class="panel-title">
@@ -367,405 +366,36 @@
                                             </h4>
                                         </div>
                                         <!--START TABBED NECKLACE TYPES-->
-                                        <div id="{{type.ID}}" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedThree-headingOne">
+                                        <div id="{{type.ID}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="nestedThree-headingOne">
                                             <div class="panel-body">
-                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">-->
-                                                    <!--<li role="necklaces" class="active" ng-repeat="subcategory in type.SubCategories"><a href='#{{currentItem}}'-->
-                                                                                           <!--aria-controls="{{subcategory.ID}}"-->
-                                                                                           <!--role="tab" data-toggle="tab">{{subcategory.Name}}{{currentItem}}</a></li>-->
-                                                    <!--&lt;!&ndash;<li role="necklaces"><a href="#whiteOrchid"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;aria-controls="whiteOrchid" role="tab"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;data-toggle="tab">Red Carpet Necklace,White&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Orchid</a></li>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<li role="necklaces"><a href="#pinkOrchid"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;aria-controls="pinkOrchid" role="tab"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;data-toggle="tab">Red Carpet Necklace, Pink&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Orchid</a></li>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<li role="necklaces"><a href="#hollywood" aria-controls="hollywood"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;role="tab" data-toggle="tab">Hollywood&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Necklace</a></li>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<li role="neclaces"><a href="#fairytale" aria-controls="fairytale"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;role="tab" data-toggle="tab">Fairytale&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Necklace</a></li>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<li role="necklaces"><a href="#allNight" aria-controls="allNight"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;role="tab" data-toggle="tab">All Night&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Necklace</a></li>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<li role="necklaces"><a href="#royal" aria-controls="royal"&ndash;&gt;-->
-                                                                            <!--&lt;!&ndash;role="tab" data-toggle="tab">Royal&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;Necklace</a></li>&ndash;&gt;-->
-                                                <!--</ul>-->
-                                                <!--<div class="tab-content">-->
-                                                    <!--<div ng-repeat="product in subcategory" role="tabpanel" class="tab-pane active" id="{{subcategory.ID}}">-->
-                                                        <!--<div>-->
-                                                            <!--<p >{{product}}</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="whiteOrchid">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>PINK1</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE1</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>RED1</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>HOT PINK1</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="pinkOrchid">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>PINK2</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE2</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>RED2</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>HOT PINK2</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="hollywood">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>MAGENTA</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="fairytale">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>PINK3</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE3</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>GREEN3</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="allNight">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>PINK4</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE4</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>GREEN4</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;<div role="tabpanel" class="tab-pane" id="royal">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>PINK5</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>WHITE5</p>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<p>GREEN5</p>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                <!--</div>-->
-                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></div>
+
+                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist"></ul>-->
+                                                <div class="tab-content">
+                                                    <div ng-repeat="product in subcategory" role="tabpanel" class="tab-pane active" id="{{subcategory.ID}}">
+                                                        <div>
+                                                            <p>{{product}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-if="type.Products">
+                                                    <button class="btn btn-default" ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                                        {{product.Name}}
+                                                    </button>
+                                                </div>
 
                                                 <uib-tabset active="activePill" vertical="true" type="pills">
                                                     <uib-tab ng-repeat="subcategory in type.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{subcategory.Name}}">
-                                                        {{subcategory.Name}}<button  ng-repeat="product in subcategory.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></uib-tab>
+                                                            <!--{{subcategory.Name}}-->
+                                                        <button class="btn btn-default btn pull-right" ng-repeat="product in subcategory.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                                            {{product.Name}}
+                                                        </button>
+                                                    </uib-tab>
                                                     <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
                                                 </uib-tabset>
                                             </div>
                                         </div>
                                         <!--END TABBED NECKLACE TYPES-->
                                     </div>
-                                    <!--END NECKLACES-->
-
-                                    <!--&lt;!&ndash;START HAIR COMBS&ndash;&gt;-->
-                                    <!--<div class="panel panel-default">-->
-                                        <!--<div class="panel-heading" role="tab" id="nestedThree-headingTwo">-->
-                                            <!--<h4 class="panel-title">-->
-                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
-                                                      <!--data-parent="#nested"-->
-                                                      <!--href="#nestedThree-collapseTwo"-->
-                                                      <!--aria-expanded="false" aria-controls="nestedThree-collapseTwo">-->
-                                                    <!--Hair Combs-->
-                                                <!--</span>-->
-                                            <!--</h4>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;START TABBED HAIR COMB TYPES&ndash;&gt;-->
-                                        <!--<div id="nestedThree-collapseTwo" class="panel-collapse collapse"-->
-                                             <!--role="tabpanel"-->
-                                             <!--aria-labelledby="nestedThree-headingTwo">-->
-                                            <!--<div class="panel-body">-->
-                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">-->
-                                                    <!--<li role="hairCombs" class="active"><a href="#royalHairComb"-->
-                                                                                           <!--aria-controls="royalHairComb"-->
-                                                                                           <!--role="tab"-->
-                                                                                           <!--data-toggle="tab">Royal Hair-->
-                                                        <!--Comb</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="hairCombs"><a href="#masqueradeHairComb"-->
-                                                                            <!--aria-controls="masqueradeHairComb"-->
-                                                                            <!--role="tab"-->
-                                                                            <!--data-toggle="tab">Masquerade Hair Comb</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="hairCombs"><a href="#hollywoodHairComb"-->
-                                                                            <!--aria-controls="hollywoodHairComb" role="tab"-->
-                                                                            <!--data-toggle="tab">Hollywood Hair Comb</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="hairCombs"><a href="#allNightHairClip"-->
-                                                                            <!--aria-controls="allNightHairClip" role="tab"-->
-                                                                            <!--data-toggle="tab">All Night Hair Clip</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="hairCombs"><a href="#daisyDelightHairComb"-->
-                                                                            <!--aria-controls="daisyDelightHairComb"-->
-                                                                            <!--role="tab"-->
-                                                                            <!--data-toggle="tab">Daisy Delight Hair-->
-                                                        <!--Comb</a>-->
-                                                    <!--</li>-->
-                                                <!--</ul>-->
-                                                <!--<div class="tab-content">-->
-                                                    <!--<div role="tabpanel" class="tab-pane active" id="royalHairComb">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK</p>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>RED</p>-->
-                                                            <!--<p>HOT PINK</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="masqueradeHairComb">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK1</p>-->
-                                                            <!--<p>WHITE1</p>-->
-                                                            <!--<p>RED1</p>-->
-                                                            <!--<p>HOT PINK1</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="hollywoodHairComb">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK2</p>-->
-                                                            <!--<p>WHITE2</p>-->
-                                                            <!--<p>RED2</p>-->
-                                                            <!--<p>HOT PINK2</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="allNightHairClip">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="daisyDelightHairComb">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK3</p>-->
-                                                            <!--<p>WHITE3</p>-->
-                                                            <!--<p>GREEN3</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;END TABBED HAIR COMB TYPES&ndash;&gt;-->
-                                    <!--</div>-->
-                                    <!--&lt;!&ndash;END HAIR COMBS&ndash;&gt;-->
-
-                                    <!--&lt;!&ndash;START ACCESSORY CLIPS&ndash;&gt;-->
-                                    <!--<div class="panel panel-default">-->
-                                        <!--<div class="panel-heading" role="tab" id="nestedThree-headingThree">-->
-                                            <!--<h4 class="panel-title">-->
-                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
-                                                      <!--data-parent="#nested"-->
-                                                      <!--href="#nestedThree-collapseThree"-->
-                                                      <!--aria-expanded="false" aria-controls="nestedThree-collapseThree">-->
-                                                    <!--Accessory Clips-->
-                                                <!--</span>-->
-                                            <!--</h4>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;START TABBED ACCESSORY CLIP TYPES&ndash;&gt;-->
-                                        <!--<div id="nestedThree-collapseThree" class="panel-collapse collapse"-->
-                                             <!--role="tabpanel"-->
-                                             <!--aria-labelledby="nestedThree-headingThree">-->
-                                            <!--<div class="panel-body">-->
-                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">-->
-                                                    <!--<li role="accessoryClips" class="active"><a-->
-                                                            <!--href="#masqueradeAccessoryClip"-->
-                                                            <!--aria-controls="masqueradeAccessoryClip" role="tab"-->
-                                                            <!--data-toggle="tab">Masquerade Accessory Clip</a></li>-->
-                                                    <!--<li role="accessoryClips"><a href="#carnivalAccessoryClip"-->
-                                                                                 <!--aria-controls="carnivalAccessoryClip"-->
-                                                                                 <!--role="tab" data-toggle="tab">Carnival-->
-                                                        <!--Accessory Clip</a></li>-->
-                                                    <!--<li role="accessoryClips"><a href="#royalAccessoryClip"-->
-                                                                                 <!--aria-controls="royalAccessoryClip"-->
-                                                                                 <!--role="tab" data-toggle="tab">Royal-->
-                                                        <!--Accessory Clip</a></li>-->
-                                                    <!--<li role="accessoryClips"><a href="#daisyDelightAccessoryClip"-->
-                                                                                 <!--aria-controls="daisyDelightAccessoryClip"-->
-                                                                                 <!--role="tab" data-toggle="tab">Daisy-->
-                                                        <!--Delight Accessory Clip</a></li>-->
-                                                <!--</ul>-->
-                                                <!--<div class="tab-content">-->
-                                                    <!--<div role="tabpanel" class="tab-pane active"-->
-                                                         <!--id="masqueradeAccessoryClip">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK</p>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>RED</p>-->
-                                                            <!--<p>HOT PINK</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="carnivalAccessoryClip">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK1</p>-->
-                                                            <!--<p>WHITE1</p>-->
-                                                            <!--<p>RED1</p>-->
-                                                            <!--<p>HOT PINK1</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="royalAccessoryClip">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK2</p>-->
-                                                            <!--<p>WHITE2</p>-->
-                                                            <!--<p>RED2</p>-->
-                                                            <!--<p>HOT PINK2</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane"-->
-                                                         <!--id="daisyDelightAccessoryClip">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;END TABBED ACCESSORY CLIP TYPES&ndash;&gt;-->
-                                    <!--</div>-->
-                                    <!--&lt;!&ndash;END ACCESSORY CLIPS&ndash;&gt;-->
-
-                                    <!--&lt;!&ndash;START RINGS&ndash;&gt;-->
-                                    <!--<div class="panel panel-default">-->
-                                        <!--<div class="panel-heading" role="tab" id="nestedThree-headingFour">-->
-                                            <!--<h4 class="panel-title">-->
-                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
-                                                      <!--data-parent="#nested"-->
-                                                      <!--href="#nestedThree-collapseFour"-->
-                                                      <!--aria-expanded="false" aria-controls="nestedThree-collapseFour">-->
-                                                    <!--Rings-->
-                                                <!--</span>-->
-                                            <!--</h4>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;START TABBED RING TYPES&ndash;&gt;-->
-                                        <!--<div id="nestedThree-collapseFour" class="panel-collapse collapse"-->
-                                             <!--role="tabpanel"-->
-                                             <!--aria-labelledby="nestedThree-headingFour">-->
-                                            <!--<div class="panel-body">-->
-                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist">-->
-                                                    <!--<li role="rings" class="active"><a href="#dendrobiumRing"-->
-                                                                                       <!--aria-controls="dendrobiumRing"-->
-                                                                                       <!--role="tab"-->
-                                                                                       <!--data-toggle="tab">Dendrobium-->
-                                                        <!--Ring</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#redCarpetPinkOrchid"-->
-                                                                        <!--aria-controls="redCarpetPinkOrchid" role="tab"-->
-                                                                        <!--data-toggle="tab">Red Carpet Ring, Pink-->
-                                                        <!--Orchid</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#redCarpetWhiteOrchid"-->
-                                                                        <!--aria-controls="redCarpetWhiteOrchid" role="tab"-->
-                                                                        <!--data-toggle="tab">Red Carpet Ring, White-->
-                                                        <!--Orchid</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#redCarpetGreenOrchid"-->
-                                                                        <!--aria-controls="redCarpetGreenOrchid" role="tab"-->
-                                                                        <!--data-toggle="tab">Red Carpet Ring, Green-->
-                                                        <!--Orchid</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#carnivalRing"-->
-                                                                        <!--aria-controls="carnivalRing"-->
-                                                                        <!--role="tab"-->
-                                                                        <!--data-toggle="tab">Carnival Ring</a></li>-->
-                                                    <!--<li role="rings"><a href="#starryNightRing"-->
-                                                                        <!--aria-controls="starryNightRing"-->
-                                                                        <!--role="tab" data-toggle="tab">Starry Night-->
-                                                        <!--Ring</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#daisyDelightRing"-->
-                                                                        <!--aria-controls="daisyDelightRing"-->
-                                                                        <!--role="tab" data-toggle="tab">Daisy Delight-->
-                                                        <!--Ring</a>-->
-                                                    <!--</li>-->
-                                                    <!--<li role="rings"><a href="#royalRing" aria-controls="royalRing"-->
-                                                                        <!--role="tab"-->
-                                                                        <!--data-toggle="tab">Royal Ring</a></li>-->
-                                                <!--</ul>-->
-                                                <!--<div class="tab-content">-->
-                                                    <!--<div role="tabpanel" class="tab-pane active" id="dendrobiumRing">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK</p>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>RED</p>-->
-                                                            <!--<p>HOT PINK</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="redCarpetPinkOrchid">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK1</p>-->
-                                                            <!--<p>WHITE1</p>-->
-                                                            <!--<p>RED1</p>-->
-                                                            <!--<p>HOT PINK1</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="redCarpetWhiteOrchid">-->
-                                                        <!--<div>-->
-                                                            <!--<p>PINK2</p>-->
-                                                            <!--<p>WHITE2</p>-->
-                                                            <!--<p>RED2</p>-->
-                                                            <!--<p>HOT PINK2</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="redCarpetGreenOrchid">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="carnivalRing">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="starryNightRing">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="daisyDelightRing">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div role="tabpanel" class="tab-pane" id="royalRing">-->
-                                                        <!--<div>-->
-                                                            <!--<p>WHITE</p>-->
-                                                            <!--<p>MAGENTA</p>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;END TABBED RING TYPES&ndash;&gt;-->
-                                    <!--</div>-->
-                                    <!--&lt;!&ndash;END RINGS&ndash;&gt;-->
-
-                                    <!--&lt;!&ndash;START FLORAL CROWNS&ndash;&gt;-->
-                                    <!--<div class="panel panel-default">-->
-                                        <!--<div class="panel-heading" role="tab" id="nestedThree-headingFive">-->
-                                            <!--<h4 class="panel-title">-->
-                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
-                                                      <!--data-parent="#nested"-->
-                                                      <!--href="#nestedThree-collapseFive"-->
-                                                      <!--aria-expanded="false" aria-controls="nestedThree-collapseFive">-->
-                                                    <!--Floral Crowns-->
-                                                <!--</span>-->
-                                            <!--</h4>-->
-                                        <!--</div>-->
-                                        <!--<div id="nestedThree-collapseFive" class="panel-collapse collapse"-->
-                                             <!--role="tabpanel"-->
-                                             <!--aria-labelledby="nestedThree-headingFive">-->
-                                            <!--<div class="panel-body">-->
-                                                <!--<div>-->
-                                                    <!--<p>Floral Crown</p>-->
-                                                    <!--<p>Floral Crown with Petite Roses</p>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--&lt;!&ndash;END FLORAL CROWNS&ndash;&gt;-->
                                 </div>
                             </div>
                         </div>
