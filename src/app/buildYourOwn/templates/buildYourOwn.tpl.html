@@ -50,194 +50,216 @@
                 </div>
 
                 <div ng-if="buildYourOwn.productTypeSelected == true">
-                    <!--Select Base Flower-->
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
+                    <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
+                        <div class="panel-heading" role="tab" id="{{subcategory.ID}}">
                             <h4 class="panel-title">
-                                <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseTwo"
-                                      href="#collapseTwo"
-                                      aria-expanded="false" aria-controls="collapseTwo">
-                                    * Select Base Flower
-                                </span>
+                            <span role="button" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne"
+                                  aria-expanded="true" aria-controls="collapseOne" >
+                                {{subcategory.Name}}
+                            </span>
                             </h4>
                         </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                             aria-labelledby="headingTwo">
+
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                             aria-labelledby="headingOne">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.selectionOptions.flowerOptions">
-                                        <button ng-click="buildYourOwn.baseFlowerSelected(flower)">{{flower.Name}}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Select Flower color-->
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree">
-                            <h4 class="panel-title">
-                                <span class="collapsed" role="button" data-toggle="collapse"
-                                      data-target="#collapseThree"
-                                      href="#collapseThree"
-                                      aria-expanded="false" aria-controls="collapseThree">
-                                    * Select Flower Color
-                                </span>
-                            </h4>
-                        </div>
-                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-                             aria-labelledby="headingThree">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.selectionOptions.flowerColorChoice">
-                                        <button ng-click="buildYourOwn.flowerColorSelected(flowerColor)">
-                                            {{flowerColor.Name}}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Select Ribbon Color (For Wristlet and Corsage Only)-->
-                    <div class="panel panel-default"
-                         ng-if="buildYourOwn.showRibbonColor">
-                        <div class="panel-heading" role="tab" id="headingFour">
-                            <h4 class="panel-title">
-                                <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFour"
-                                      href="#collapseFour"
-                                      aria-expanded="false" aria-controls="collapseFour">
-                                    * Select Ribbon Color
-                                </span>
-                            </h4>
-                        </div>
-                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
-                             aria-labelledby="headingFour">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-2" ng-repeat="ribbon in buildYourOwn.selectionOptions.ribbonChoice">
-                                        <button ng-click="buildYourOwn.ribbonColorSelected(ribbon)">{{ribbon.Name}}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Select Fastener(For Wristlet ONLY))-->
-                    <div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'">
-                        <div class="panel-heading" role="tab" id="headingFive">
-                            <h4 class="panel-title">
-                                <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFive"
-                                      href="#collapseFive"
-                                      aria-expanded="false" aria-controls="collapseFive">
-                                    Select Fastener
-                                </span>
-                            </h4>
-                        </div>
-                        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel"
-                             aria-labelledby="headingFive">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-2" ng-repeat="fastener in buildYourOwn.selectionOptions.fastenerOption">
-                                        <button ng-click="buildYourOwn.fastenerOptionSelected(fastener)">{{fastener.Name}}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Choose Optional Add-Ons-->
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingSix">
-                            <h4 class="panel-title">
-                                <span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseSix"
-                                      href="#collapseSix"
-                                      aria-expanded="false" aria-controls="collapseSixe">
-                                    Chose Optional Add-Ons
-                                </span>
-                            </h4>
-                        </div>
-                        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel"
-                             aria-labelledby="headingSix">
-                            <div class="panel-body">
-                                <!--AddOns NESTED ACCORDIAN-->
-                                <div class="panel-group" id="nestedOne">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedOne-headingOne">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedOne-collapseOne"
-                                                      aria-expanded="false" aria-controls="nestedOne-collapseOne">
-                                                    Floral Accents
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedOne-collapseOne" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="nestedOne-headingOne">
-                                            <div class="panel-body">
-                                                BODY
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-2 col-md-2" >
+                                        <button ng-click="buildYourOwn.typeSelected(category)">{{subcategory.Options.Name}}</button>
                                     </div>
 
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedOne-headingTwo">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedOne-collapseTwo"
-                                                      aria-expanded="false" aria-controls="nestedOne-collapseOne">
-                                                    Ribbon Tails Color
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedOne-collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="nestedOne-headingTwo">
-                                            <div class="panel-body">
-                                                BODY
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedOne-headingThree">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedOne-collapseThree"
-                                                      aria-expanded="false" aria-controls="nestedOne-collapseThree">
-                                                    Fastener
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedOne-collapseThree" class="panel-collapse collapse"
-                                             role="tabpanel"
-                                             aria-labelledby="nestedOne-headingThree">
-                                            <div class="panel-body">
-                                                BODY
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="nestedOne-headingFour">
-                                            <h4 class="panel-title">
-                                                <span class="collapsed" role="button" data-toggle="collapse"
-                                                      data-parent="#nested"
-                                                      href="#nestedOne-collapseFour"
-                                                      aria-expanded="false" aria-controls="nestedOne-collapseFour">
-                                                    Ribbon Tail Color
-                                                </span>
-                                            </h4>
-                                        </div>
-                                        <div id="nestedOne-collapseFour" class="panel-collapse collapse" role="tabpanel"
-                                             aria-labelledby="nestedOne-headingFour">
-                                            <div class="panel-body">
-                                                BODY
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--&lt;!&ndash;Select Base Flower&ndash;&gt;-->
+                    <!--<div class="panel panel-default">-->
+                        <!--<div class="panel-heading" role="tab" id="headingTwo">-->
+                            <!--<h4 class="panel-title">-->
+                                <!--<span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseTwo"-->
+                                      <!--href="#collapseTwo"-->
+                                      <!--aria-expanded="false" aria-controls="collapseTwo">-->
+                                    <!--* Select Base Flower-->
+                                <!--</span>-->
+                            <!--</h4>-->
+                        <!--</div>-->
+                        <!--<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"-->
+                             <!--aria-labelledby="headingTwo">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-lg-2 col-md-2" ng-repeat="flower in buildYourOwn.selectionOptions.flowerOptions">-->
+                                        <!--<button ng-click="buildYourOwn.baseFlowerSelected(flower)">{{flower.Name}}</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;Select Flower color&ndash;&gt;-->
+                    <!--<div class="panel panel-default">-->
+                        <!--<div class="panel-heading" role="tab" id="headingThree">-->
+                            <!--<h4 class="panel-title">-->
+                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                      <!--data-target="#collapseThree"-->
+                                      <!--href="#collapseThree"-->
+                                      <!--aria-expanded="false" aria-controls="collapseThree">-->
+                                    <!--* Select Flower Color-->
+                                <!--</span>-->
+                            <!--</h4>-->
+                        <!--</div>-->
+                        <!--<div id="collapseThree" class="panel-collapse collapse" role="tabpanel"-->
+                             <!--aria-labelledby="headingThree">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-lg-2 col-md-2" ng-repeat="flowerColor in buildYourOwn.selectionOptions.flowerColorChoice">-->
+                                        <!--<button ng-click="buildYourOwn.flowerColorSelected(flowerColor)">-->
+                                            <!--{{flowerColor.Name}}-->
+                                        <!--</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;Select Ribbon Color (For Wristlet and Corsage Only)&ndash;&gt;-->
+                    <!--<div class="panel panel-default"-->
+                         <!--ng-if="buildYourOwn.showRibbonColor">-->
+                        <!--<div class="panel-heading" role="tab" id="headingFour">-->
+                            <!--<h4 class="panel-title">-->
+                                <!--<span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFour"-->
+                                      <!--href="#collapseFour"-->
+                                      <!--aria-expanded="false" aria-controls="collapseFour">-->
+                                    <!--* Select Ribbon Color-->
+                                <!--</span>-->
+                            <!--</h4>-->
+                        <!--</div>-->
+                        <!--<div id="collapseFour" class="panel-collapse collapse" role="tabpanel"-->
+                             <!--aria-labelledby="headingFour">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-2" ng-repeat="ribbon in buildYourOwn.selectionOptions.ribbonChoice">-->
+                                        <!--<button ng-click="buildYourOwn.ribbonColorSelected(ribbon)">{{ribbon.Name}}</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;Select Fastener(For Wristlet ONLY))&ndash;&gt;-->
+                    <!--<div class="panel panel-default" ng-if="buildYourOwn.itemCreated.type == 'Wristlet Corsage'">-->
+                        <!--<div class="panel-heading" role="tab" id="headingFive">-->
+                            <!--<h4 class="panel-title">-->
+                                <!--<span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseFive"-->
+                                      <!--href="#collapseFive"-->
+                                      <!--aria-expanded="false" aria-controls="collapseFive">-->
+                                    <!--Select Fastener-->
+                                <!--</span>-->
+                            <!--</h4>-->
+                        <!--</div>-->
+                        <!--<div id="collapseFive" class="panel-collapse collapse" role="tabpanel"-->
+                             <!--aria-labelledby="headingFive">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-2" ng-repeat="fastener in buildYourOwn.selectionOptions.fastenerOption">-->
+                                        <!--<button ng-click="buildYourOwn.fastenerOptionSelected(fastener)">{{fastener.Name}}</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;Choose Optional Add-Ons&ndash;&gt;-->
+                    <!--<div class="panel panel-default">-->
+                        <!--<div class="panel-heading" role="tab" id="headingSix">-->
+                            <!--<h4 class="panel-title">-->
+                                <!--<span class="collapsed" role="button" data-toggle="collapse" data-target="#collapseSix"-->
+                                      <!--href="#collapseSix"-->
+                                      <!--aria-expanded="false" aria-controls="collapseSixe">-->
+                                    <!--Chose Optional Add-Ons-->
+                                <!--</span>-->
+                            <!--</h4>-->
+                        <!--</div>-->
+                        <!--<div id="collapseSix" class="panel-collapse collapse" role="tabpanel"-->
+                             <!--aria-labelledby="headingSix">-->
+                            <!--<div class="panel-body">-->
+                                <!--&lt;!&ndash;AddOns NESTED ACCORDIAN&ndash;&gt;-->
+                                <!--<div class="panel-group" id="nestedOne">-->
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading" role="tab" id="nestedOne-headingOne">-->
+                                            <!--<h4 class="panel-title">-->
+                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                                      <!--data-parent="#nested"-->
+                                                      <!--href="#nestedOne-collapseOne"-->
+                                                      <!--aria-expanded="false" aria-controls="nestedOne-collapseOne">-->
+                                                    <!--Floral Accents-->
+                                                <!--</span>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                        <!--<div id="nestedOne-collapseOne" class="panel-collapse collapse" role="tabpanel"-->
+                                             <!--aria-labelledby="nestedOne-headingOne">-->
+                                            <!--<div class="panel-body">-->
+                                                <!--BODY-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading" role="tab" id="nestedOne-headingTwo">-->
+                                            <!--<h4 class="panel-title">-->
+                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                                      <!--data-parent="#nested"-->
+                                                      <!--href="#nestedOne-collapseTwo"-->
+                                                      <!--aria-expanded="false" aria-controls="nestedOne-collapseOne">-->
+                                                    <!--Ribbon Tails Color-->
+                                                <!--</span>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                        <!--<div id="nestedOne-collapseTwo" class="panel-collapse collapse" role="tabpanel"-->
+                                             <!--aria-labelledby="nestedOne-headingTwo">-->
+                                            <!--<div class="panel-body">-->
+                                                <!--BODY-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading" role="tab" id="nestedOne-headingThree">-->
+                                            <!--<h4 class="panel-title">-->
+                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                                      <!--data-parent="#nested"-->
+                                                      <!--href="#nestedOne-collapseThree"-->
+                                                      <!--aria-expanded="false" aria-controls="nestedOne-collapseThree">-->
+                                                    <!--Fastener-->
+                                                <!--</span>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                        <!--<div id="nestedOne-collapseThree" class="panel-collapse collapse"-->
+                                             <!--role="tabpanel"-->
+                                             <!--aria-labelledby="nestedOne-headingThree">-->
+                                            <!--<div class="panel-body">-->
+                                                <!--BODY-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="panel panel-default">-->
+                                        <!--<div class="panel-heading" role="tab" id="nestedOne-headingFour">-->
+                                            <!--<h4 class="panel-title">-->
+                                                <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                                      <!--data-parent="#nested"-->
+                                                      <!--href="#nestedOne-collapseFour"-->
+                                                      <!--aria-expanded="false" aria-controls="nestedOne-collapseFour">-->
+                                                    <!--Ribbon Tail Color-->
+                                                <!--</span>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                        <!--<div id="nestedOne-collapseFour" class="panel-collapse collapse" role="tabpanel"-->
+                                             <!--aria-labelledby="nestedOne-headingFour">-->
+                                            <!--<div class="panel-body">-->
+                                                <!--BODY-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <!--Choose Optional Embellishments-->
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingSeven">
@@ -268,7 +290,7 @@
                                         <div id="{{type.ID}}" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedTwo-headingOne">
                                             <div class="panel-body">
-                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products">{{product.Name}}</button></div>
+                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></div>
 
                                             </div>
                                         </div>
@@ -425,6 +447,7 @@
                                                     <!--&lt;!&ndash;</div>&ndash;&gt;-->
                                                 <!--</div>-->
                                                 <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></div>
+
                                                 <uib-tabset active="activePill" vertical="true" type="pills">
                                                     <uib-tab ng-repeat="subcategory in type.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{subcategory.Name}}">
                                                         {{subcategory.Name}}<button  ng-repeat="product in subcategory.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></uib-tab>
@@ -755,22 +778,22 @@
                     <div class="panel panel-default">
                         <div class="panel-heading"><h3>Selections thus far</h3></div>
                         <div class="panel-body">
-                            <div ng-if="buildYourOwn.itemCreated.type">Type: {{buildYourOwn.itemCreated.type}}</div>
-                            <div ng-if="buildYourOwn.itemCreated.baseFlower">Base Flower:
-                                {{buildYourOwn.itemCreated.baseFlower}}
-                            </div>
-                            <div ng-if="buildYourOwn.itemCreated.flowerColor">Flower Color:
-                                {{buildYourOwn.itemCreated.flowerColor}}
-                                {{buildYourOwn.itemCreated.flowerPrice | currency}}
-                            </div>
-                            <div ng-if="buildYourOwn.itemCreated.ribbonColor">Ribbon Color:
-                                {{buildYourOwn.itemCreated.ribbonColor}}
-                                {{buildYourOwn.itemCreated.ribbonPrice | currency}}
-                            </div>
-                            <div ng-if="buildYourOwn.itemCreated.fastenerChoice">Fastener Choice:
-                                {{buildYourOwn.itemCreated.fastenerChoice}}
-                                {{buildYourOwn.itemCreated.fastenerPrice | currency}}
-                            </div>
+                            <!--<div ng-if="buildYourOwn.itemCreated.type">Type: {{buildYourOwn.itemCreated.type}}</div>-->
+                            <!--<div ng-if="buildYourOwn.itemCreated.baseFlower">Base Flower:-->
+                                <!--{{buildYourOwn.itemCreated.baseFlower}}-->
+                            <!--</div>-->
+                            <!--<div ng-if="buildYourOwn.itemCreated.flowerColor">Flower Color:-->
+                                <!--{{buildYourOwn.itemCreated.flowerColor}}-->
+                                <!--{{buildYourOwn.itemCreated.flowerPrice | currency}}-->
+                            <!--</div>-->
+                            <!--<div ng-if="buildYourOwn.itemCreated.ribbonColor">Ribbon Color:-->
+                                <!--{{buildYourOwn.itemCreated.ribbonColor}}-->
+                                <!--{{buildYourOwn.itemCreated.ribbonPrice | currency}}-->
+                            <!--</div>-->
+                            <!--<div ng-if="buildYourOwn.itemCreated.fastenerChoice">Fastener Choice:-->
+                                <!--{{buildYourOwn.itemCreated.fastenerChoice}}-->
+                                <!--{{buildYourOwn.itemCreated.fastenerPrice | currency}}-->
+                            <!--</div>-->
                             <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
                                 {{selection.Type}}:{{selection.Name}}
                                 {{selection.Price | currency}}

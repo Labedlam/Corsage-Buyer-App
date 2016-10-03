@@ -131,13 +131,13 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
     //categories under type
-    vm.typeCategories;
+    // vm.typeCategories;
     //Price Array to hold the cost of all options selected
     vm.itemCreated.price = [];
     //store selections that were made by user
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
-    vm.selectionOptions = {};
+    // vm.selectionOptions = {};
 
     // keeping intial producttype selection trigger seperate from rest because I reset all of the triggers except this one
     vm.productTypeSelected;
@@ -170,7 +170,9 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
             setCategories(category)
         }
         ;
+        //match category id with category id of type choices
 
+        vm.typeChosen = _.findWhere(vm.typeChoices, {ParentID: category.ID});
     };
 
     vm.baseFlowerSelected = function (flower) {
@@ -255,10 +257,11 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
        if( checkIfChosenExists > -1){
            console.log("this type has been selected", categoryID);
             _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists],chosen);
-           // vm.itemCreated.totalPrice = totalPriceSum();
+           vm.itemCreated.totalPrice = totalPriceSum();
        }else{
 
            vm.itemCreated.selectionsMade.push(chosen);
+           vm.itemCreated.totalPrice = totalPriceSum();
        }
 
         //check to see if selection has been made
@@ -374,8 +377,8 @@ function BuildYourOwnController(OrderCloud, Catalog, SelectionCategories, Option
     // Takes an array of objects and sums up 1 key property on all the objects in the array
     // in this case it is price
     function totalPriceSum() {
-        var corsageTotal = vm.itemCreated.price.map(function (product) {
-            return product.price;
+        var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
+            return product.Price;
         });
         return corsageTotal.reduce(function (a, b) {
             return a + b
