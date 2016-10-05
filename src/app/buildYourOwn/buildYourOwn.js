@@ -162,7 +162,7 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
 
     vm.optionalFloralAcc.show = false;
     vm.optionalEmbellishments.show = false;
-
+    vm.productOptions = {};
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
     //store selections that were made by user
@@ -191,7 +191,7 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     // adds product chosen to cart
     vm.addSelection = function (selection, category, $index, productArray) {
         if (selection.Products) {
-            vm.productOptions = selection.Products;
+            vm.productOptions[category.ID] = selection.Products;
         } else{
             var chosen = {};
             chosen.Type = category.ID;
@@ -218,7 +218,7 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
                 vm.itemCreated.totalPrice = totalPriceSum();
                 $(link).collapse();
 
-                openNextAccordian($index);
+                // openNextAccordian($index);
                 checkRequirementsOfType(vm.itemCreated);
             }
 
