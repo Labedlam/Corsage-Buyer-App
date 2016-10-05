@@ -189,36 +189,43 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     };
 
     // adds product chosen to cart
-    vm.addSelection = function (selection, category, $index) {
+    vm.addSelection = function (selection, category, $index, productArray) {
+        if (selection.Products) {
+            vm.productOptions = selection.Products;
+        } else{
+            var chosen = {};
+            chosen.Type = category.ID;
+            chosen.ID = selection.ID;
+            chosen.Name = selection.Name;
+            chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
+            var link = '#' + category.ID;
+            // chosen.selected=
 
-        var chosen = {};
-        chosen.Type = category.ID;
-        chosen.ID = selection.ID;
-        chosen.Name = selection.Name;
-        chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
-        var link = '#' + category.ID;
-        // chosen.selected=
-
-        var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
-            return objectType.Type == category.ID
-        });
-        //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
-        if (checkIfChosenExists > -1) {
-            $(link).collapse();
-            _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
-            vm.itemCreated.totalPrice = totalPriceSum();
-            checkRequirementsOfType(vm.itemCreated);
+            var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
+                return objectType.Type == category.ID
+            });
+            //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
+            if (checkIfChosenExists > -1) {
+                $(link).collapse();
+                _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
+                vm.itemCreated.totalPrice = totalPriceSum();
+                checkRequirementsOfType(vm.itemCreated);
 
 
-        } else {
+            } else {
 
-            vm.itemCreated.selectionsMade.push(chosen);
-            vm.itemCreated.totalPrice = totalPriceSum();
-            $(link).collapse();
+                vm.itemCreated.selectionsMade.push(chosen);
+                vm.itemCreated.totalPrice = totalPriceSum();
+                $(link).collapse();
 
-            openNextAccordian($index);
-            checkRequirementsOfType(vm.itemCreated);
+                openNextAccordian($index);
+                checkRequirementsOfType(vm.itemCreated);
+            }
+
         }
+
+
+
 
     };
 
