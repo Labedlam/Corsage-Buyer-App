@@ -40,8 +40,20 @@
                          aria-labelledby="headingOne">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-lg-2 col-md-2" ng-repeat="type in buildYourOwn.categories.Items">
+                                <!--<div class="col-lg-2 col-md-2" ng-repeat="type in buildYourOwn.categories.Items">
                                     <button class="btn btn-default" ng-click="buildYourOwn.typeSelected(type)">{{type.Name}}</button>
+                                </div>-->
+
+                                <div class="col-md-4"
+                                     ng-repeat="type in buildYourOwn.categories.Items"
+                                     ng-click="buildYourOwn.typeSelected(type)">
+                                    <div class="thumbnail">
+                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=400&h=250" alt="...">
+                                        <div class="caption">
+                                            <h3>{{type.Name}}</h3>
+                                            <span>Price</span>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -62,31 +74,55 @@
                              aria-labelledby="headingOne">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-if="subcategory.Products" ng-repeat="choice in subcategory.Products">
-                                        <button class="btn btn-default" ng-click="buildYourOwn.addSelection(choice,subcategory, $parent.$index)">
-                                            {{choice.Name}}
-                                        </button>
 
+
+
+                                    <!--<uib-tabset active="activePill" vertical="false" type="pills" ng-if="subcategory.Name == 'Base Flower Choices'">-->
+                                        <!--<uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">-->
+                                            <!--<div class="col-sm-3">-->
+                                                <!--<button class="btn btn-default" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product,subcategory, $parent.$index)">-->
+                                                    <!--{{product.Name}}-->
+                                                <!--</button>-->
+                                            <!--</div>-->
+                                        <!--</uib-tab>-->
+                                    <!--</uib-tabset>-->
+
+
+                                    <div class="col-sm-6 col-md-2"
+                                         ng-if="subcategory.Name == 'Base Flower Choices'"
+                                         ng-repeat="choice in subcategory.SubCategories"
+                                         ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
+                                        <div class="thumbnail">
+                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
+                                            <div class="caption">
+                                                <h3>{{choice.Name}}</h3>
+                                                <span>Price</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12"
+                                         ng-if="subcategory.Name !== 'Base Flower Choices'"
+                                         ng-repeat="product in choice.Products">
+                                        <div class="thumbnail">
+                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
+                                            <div class="caption">
+                                                <h3>{{product.Name}}</h3>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <uib-tabset active="activePill" vertical="true" type="pills" ng-if="subcategory.Name == 'Base Flower Choices'">
-                                        <uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">
-                                            <!--{{subcategory.Name}}-->
-                                            <button class="btn btn-default btn pull-right" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product,subcategory, $parent.$index)">
-                                                {{product.Name}}
-                                            </button>
-                                        </uib-tab>
 
-                                    </uib-tabset>
 
-                                    <uib-tabset active="activePill" vertical="true" type="pills" ng-if="subcategory.Name !== 'Base Flower Choices'">
-                                        <uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">
-                                            <!--{{subcategory.Name}}-->
-                                            <button class="btn btn-default btn pull-right" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product, choice, $parent.$index, choice)">
-                                                {{product.Name}}
-                                            </button>
-                                        </uib-tab>
-                                    </uib-tabset>
+                                    <!--<uib-tabset active="activePill" vertical="true" type="pills" ng-if="subcategory.Name !== 'Base Flower Choices'">-->
+                                        <!--<uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">-->
+                                            <!--&lt;!&ndash;{{subcategory.Name}}&ndash;&gt;-->
+                                            <!--<button class="btn btn-default" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product, choice, $parent.$index, choice)">-->
+                                                <!--{{product.Name}}-->
+                                            <!--</button>-->
+                                        <!--</uib-tab>-->
+                                    <!--</uib-tabset>-->
                                 </div>
                             </div>
                         </div>
