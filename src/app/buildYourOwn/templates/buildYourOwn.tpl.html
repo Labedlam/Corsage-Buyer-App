@@ -154,7 +154,7 @@
                                         <div id="{{type.ID}}" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedTwo-headingOne">
                                             <div class="panel-body">
-                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type)">{{product.Name}}</button></div>
+                                                <div ng-if="type.Products"><button class="btn btn-default" ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type)">{{product.Name}}</button></div>
 
                                             </div>
                                         </div>
