@@ -40,40 +40,92 @@
                          aria-labelledby="headingOne">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-lg-2 col-md-2" ng-repeat="category in buildYourOwn.categories.Items">
-                                    <button ng-click="buildYourOwn.typeSelected(category)">{{category.Name}}</button>
+                                <div class="col-lg-2 col-md-2" ng-repeat="type in buildYourOwn.categories.Items">
+                                    <button class="btn btn-default" ng-click="buildYourOwn.typeSelected(type)">{{type.Name}}</button>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
-                <div ng-if="buildYourOwn.productTypeSelected == true">
-                    <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
+                <!--<div ng-if="buildYourOwn.productTypeSelected == true">-->
+                    <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options" ng-if="subcategory.show">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                            <span role="button" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne"
+                            <span  role="button" data-toggle="collapse" data-target="#{{subcategory.ID}}" ng-href="#{{subcategory.ID}}"
                                   aria-expanded="true" aria-controls="collapseOne" >
                                 {{subcategory.Name}}
                             </span>
                             </h4>
                         </div>
 
-                        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel"
+                        <div id="{{subcategory.ID}}" class="panel-collapse collapse in" role="tabpanel"
                              aria-labelledby="headingOne">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-lg-2 col-md-2" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
-                                        <button ng-click="buildYourOwn.typeSelected(subcategory)">
-                                            {{subcategory.Name}}
+                                    <div class="col-lg-2 col-md-2" ng-if="subcategory.Products" ng-repeat="choice in subcategory.Products">
+                                        <button class="btn btn-default" ng-click="buildYourOwn.addSelection(choice,subcategory, $parent.$index)">
+                                            {{choice.Name}}
                                         </button>
+
                                     </div>
+
+                                    <uib-tabset active="activePill" vertical="true" type="pills" ng-if="subcategory.Name == 'Base Flower Choices'">
+                                        <uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">
+                                            <!--{{subcategory.Name}}-->
+                                            <button class="btn btn-default btn pull-right" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product,subcategory, $parent.$index)">
+                                                {{product.Name}}
+                                            </button>
+                                        </uib-tab>
+                                        <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
+
+                                    </uib-tabset>
+
+                                    <uib-tabset active="activePill" vertical="true" type="pills" ng-if="subcategory.Name !== 'Base Flower Choices'">
+                                        <uib-tab ng-repeat="choice in subcategory.SubCategories" class="nav nav-pills nav-stacked col-md-3" index="$index" heading="{{choice.Name}}">
+                                            <!--{{subcategory.Name}}-->
+                                            <button class="btn btn-default btn pull-right" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product, choice, $parent.$index, choice)">
+                                                {{product.Name}}
+                                            </button>
+                                        </uib-tab>
+                                        <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
+                                    </uib-tabset>
+
+                                    <!--<div class="col-lg-2 col-md-2" ng-if='subcategory.Name !== "Base Flower Choices"'-->
+                                         <!--ng-repeat='choice1 in subcategory.SubCategories'>-->
+
+
+
+                                                <!--&lt;!&ndash;Embellishments NESTED ACCORDIAN&ndash;&gt;-->
+                                                <!--<div class="panel-group" id="nestedZZZ" ng-if='subcategory.Name !== "Base Flower Choices"'>-->
+                                                    <!--<div class="panel panel-default" ng-repeat="choice in subcategory.SubCategories">-->
+                                                        <!--<div class="panel-heading" role="tab" id="nestedTwo-headingOne">-->
+                                                            <!--<h4 class="panel-title">-->
+                                                    <!--<span class="collapsed" role="button" data-toggle="collapse"-->
+                                                          <!--data-parent="#nested"-->
+                                                          <!--ng-href="#{{choice.ID}}"-->
+                                                          <!--aria-expanded="false" aria-controls="nestedTwo-collapseOne">-->
+                                                        <!--{{choice.Name}}-->
+                                                    <!--</span>-->
+                                                            <!--</h4>-->
+                                                        <!--</div>-->
+                                                        <!--<div id="{{choice.ID}}" class="panel-collapse collapse" role="tabpanel"-->
+                                                             <!--aria-labelledby="nestedTwo-headingOne">-->
+                                                            <!--<div class="panel-body">-->
+                                                                <!--<div><button class="btn btn-default" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product,choice.ID)">{{product.Name}}</button></div>-->
+
+
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--Choose Optional Embellishments-->
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" ng-if="buildYourOwn.optionalEmbellishments.show">
                         <div class="panel-heading" role="tab" id="headingSeven">
                             <h4 class="panel-title">
                                 <span class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
@@ -102,7 +154,7 @@
                                         <div id="{{type.ID}}" class="panel-collapse collapse" role="tabpanel"
                                              aria-labelledby="nestedTwo-headingOne">
                                             <div class="panel-body">
-                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">{{product.Name}}</button></div>
+                                                <div ng-if="type.Products"><button ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type)">{{product.Name}}</button></div>
 
                                             </div>
                                         </div>
@@ -112,7 +164,7 @@
                         </div>
                     </div>
                     <!--Choose Optional Floral Accessories-->
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" ng-if="buildYourOwn.optionalFloralAcc.show">
                         <div class="panel-heading" role="tab" id="headingEight">
                             <h4 class="panel-title">
                                 <span class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
@@ -142,14 +194,6 @@
                                         <div id="{{type.ID}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="nestedThree-headingOne">
                                             <div class="panel-body">
 
-                                                <!--<ul class="nav nav-tabs nav-stacked col-md-3" roles="tablist"></ul>-->
-                                                <!--<div class="tab-content">
-                                                    <div ng-repeat="product in subcategory" role="tabpanel" class="tab-pane active" id="{{subcategory.ID}}">
-                                                        <div>
-                                                            <p>{{product}}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
                                                 <div ng-if="type.Products">
                                                     <button class="btn btn-default" ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
                                                         {{product.Name}}
@@ -174,12 +218,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
             <!--Cart-->
             <div class="col-md-4">
                 <div class="panel-group">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><h3>Selections thus far</h3></div>
+                        <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3></div>
                         <div class="panel-body">
                             <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
                                 {{selection.Type}}:{{selection.Name}}

@@ -19,16 +19,54 @@ function productGeneratorConfig($stateProvider) {
                 },
                 SelectionCategories: function ($q, OrderCloud, Catalog) {
                     var dfd = $q.defer();
-                    var types = [];
+                    var selections = {};
+                    selections.types = [];
+                    //go through each type (Wrislet Corsage, Pin on, BOut) and
                     angular.forEach(Catalog.Items, function (value, key) {
+
                         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
                             .then(function (data) {
                                 var selectionType = {};
-                                selectionType.Options = data.Items;
+                                selectionType.Options = [];
                                 selectionType.ParentID = value.ID;
-                                types.push(selectionType);
-                                dfd.resolve(types);
+                                selections.types.push(selectionType);
+                                //get the list of categories
+                                angular.forEach(data.Items, function (v, k) {
+                                    var Option = {};
+                                    Option.ID = v.ID;
+                                    Option.Name = v.Name;
+                                    selectionType.Options.push(Option);
+
+                                    OrderCloud.Me.ListProducts(null, null, null, null, null, null, v.ID)
+                                        .then(function (data) {
+                                            if (data.Items.length > 0) {
+                                                Option.Products = data.Items;
+
+                                            } else {
+                                                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: v.ID}, 1)
+                                                    .then(function (data) {
+                                                        Option.SubCategories = [];
+
+                                                        angular.forEach(data.Items, function (categoryvalue1, key1) {
+                                                            var subCategoryType = {};
+                                                            subCategoryType.ID = categoryvalue1.ID;
+                                                            subCategoryType.Name = categoryvalue1.Name;
+                                                            Option.SubCategories.push(subCategoryType);
+                                                            OrderCloud.Me.ListProducts(null, null, null, null, null, null, categoryvalue1.ID)
+                                                                .then(function (data) {
+                                                                    subCategoryType.Products = data.Items;
+                                                                    dfd.resolve(selections);
+                                                                });
+                                                        });
+                                                    });
+                                            }
+                                            ;
+                                        });
+
+                                });
+
                             });
+
                     });
                     return dfd.promise;
                 },
@@ -51,7 +89,6 @@ function productGeneratorConfig($stateProvider) {
                                         dfd.resolve(optionalEmbellishments);
                                     });
                             });
-                            console.log("OE", data);
 
                         });
                     return dfd.promise;
@@ -74,10 +111,8 @@ function productGeneratorConfig($stateProvider) {
                                             selectionTypes.Products = data.Items;
 
                                         } else {
-                                            console.log("this", value.Name, " has sub categories, which has products");
                                             OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
                                                 .then(function (data) {
-                                                    // console.log("this array being ran though after 2nd categoreis call", data.Items);
                                                     selectionTypes.SubCategories = [];
 
                                                     angular.forEach(data.Items, function (categoryvalue1, key1) {
@@ -92,8 +127,7 @@ function productGeneratorConfig($stateProvider) {
                                                             })
                                                     });
                                                 });
-                                        };
-                                        console.log(optionalFloralAccessories);
+                                        }
                                     });
                             });
                         });
@@ -123,17 +157,18 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
     vm.typeChoices = SelectionCategories;
-    console.log("Oe Resolve", OptionalEmbellishments);
-    console.log("OF Resolve", OptionalFloralAccessories);
     vm.optionalEmbellishments = OptionalEmbellishments;
     vm.optionalFloralAcc = OptionalFloralAccessories;
+
+    vm.optionalFloralAcc.show = false;
+    vm.optionalEmbellishments.show = false;
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
     //categories under type
     // vm.typeCategories;
     //Price Array to hold the cost of all options selected
-    vm.itemCreated.price = [];
+    // vm.itemCreated.price = [];
     //store selections that were made by user
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
@@ -142,10 +177,10 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     // keeping intial producttype selection trigger seperate from rest because I reset all of the triggers except this one
     vm.productTypeSelected;
     //store all the selected Options triggers ( triggers in this context identify whether the selected option has been clicked/selected or not)
-    vm.selectedOptionsTriggers = {};
-    vm.selectedOptionsTriggers.flowerSelected;
-    vm.selectedOptionsTriggers.ribbonSelected;
-    vm.selectedOptionsTriggers.fastenerSelected;
+    // vm.selectedOptionsTriggers = {};
+    // vm.selectedOptionsTriggers.flowerSelected;
+    // vm.selectedOptionsTriggers.ribbonSelected;
+    // vm.selectedOptionsTriggers.fastenerSelected;
     //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
     vm.showRibbonColor = true;
 
@@ -158,185 +193,168 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
      These functions are triggered when User Clicks/Selects and Option
      --------------------------------------------------------------------*/
 
-    vm.typeSelected = function (category) {
+    vm.typeSelected = function (type) {
+        if(vm.typeChosen){
+            vm.itemCreated.selectionsMade=[];
+            vm.itemCreated.totalPrice = null;
+            vm.itemCreated.Type = type.Name;
+            //this relates to opening/closing accordion
+            vm.newIndex = null;
+            hideOptions();
+        }
+        vm.typeChosen = _.findWhere(vm.typeChoices.types, {ParentID: type.ID});
+        vm.typeChosen.Name = type.Name;
+        vm.typeChosen.Options[0].show =  true;
+        vm.itemCreated.Type = type.Name;
+        setRequirements(vm.itemCreated);
+
+
         //check to see whether productTypeSelected has been selected or not, if it changes category reset the itemCreatedObject
-        if (vm.productTypeSelected) {
-            //check if if product type has been set to true
-            console.log("hello the product type has been selected and set");
-            vm.itemCreated.type == category.Name ? vm.productTypeSelected = true : resetFinalBuild(category);
+        // if (vm.productTypeSelected) {
+        //     //check if if product type has been set to true
+        //     vm.itemCreated.type == category.Name ? vm.productTypeSelected = true : resetFinalBuild(category);
+        //
+        // }
+        // else {
+        //     setCategories(category)
+        // }
 
-        }
-        else {
-            setCategories(category)
-        }
-
-        //match category id with category id of type choices
-
-        vm.typeChosen = _.findWhere(vm.typeChoices, {ParentID: category.ID});
-    };
-
-    vm.baseFlowerSelected = function (flower) {
-        //when a new flower is added or replaced . it needs to get replaced in the array
-
-        vm.itemCreated.baseFlower = flower.Name;
-        OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
-            .then(function (data) {
-
-                vm.selectionOptions.flowerColorChoice = data.Items;
-                checkRequirementsofType(vm.itemCreated);
-                // $('#collapseTwo').collapse();
-                $('#collapseThree').collapse();
-
-
-            })
-    };
-
-    vm.flowerColorSelected = function (flowerColor) {
-        var model = {
-            price: flowerColor.StandardPriceSchedule.PriceBreaks[0].Price,
-            category: "flowerColor"
-        };
-
-        vm.selectedOptionsTriggers.flowerSelected == undefined || vm.selectedOptionsTriggers.flowerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.selectedOptionsTriggers.flowerSelected = true;
-        vm.itemCreated.flowerColor = flowerColor.Name;
-        vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
-        OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
-            .then(function (data) {
-                console.log(data);
-                vm.selectionOptions.ribbonChoice = data.Items;
-                checkRequirementsofType(vm.itemCreated);
-            });
+        // vm.itemCreated.type = category.Name;
+        // vm.typeCategories = data.Items;
+        // vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
+        // $('#collapseOne').collapse();
+        // look through array of types , match type id
 
     };
 
-    vm.ribbonColorSelected = function (ribbon) {
-        var model = {
-            price: ribbon.StandardPriceSchedule.PriceBreaks[0].Price,
-            category: "ribbon"
-        };
 
-        vm.selectedOptionsTriggers.ribbonSelected == undefined || vm.selectedOptionsTriggers.ribbonSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.selectedOptionsTriggers.ribbonSelected = true;
-        vm.itemCreated.ribbonColor = ribbon.Name;
-        vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
-        OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
-            .then(function (data) {
-                console.log(data);
-                vm.selectionOptions.fastenerOption = data.Items;
-                checkRequirementsofType(vm.itemCreated);
-            });
 
-    };
 
-    vm.fastenerOptionSelected = function (fastener) {
-        var model = {
-            price: fastener.StandardPriceSchedule.PriceBreaks[0].Price,
-            category: "fasteners"
-        };
-
-        vm.selectedOptionsTriggers.fastenerSelected == undefined || vm.selectedOptionsTriggers.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-        vm.selectedOptionsTriggers.fastenerSelected = true;
-        vm.itemCreated.fastenerChoice = fastener.Name;
-        vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
-        checkRequirementsofType(vm.itemCreated);
-    };
+    // vm.baseFlowerSelected = function (flower) {
+    //     //when a new flower is added or replaced . it needs to get replaced in the array
+    //
+    //     vm.itemCreated.baseFlower = flower.Name;
+    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
+    //         .then(function (data) {
+    //
+    //             vm.selectionOptions.flowerColorChoice = data.Items;
+    //             checkRequirementsofType(vm.itemCreated);
+    //             // $('#collapseTwo').collapse();
+    //             $('#collapseThree').collapse();
+    //
+    //
+    //         })
+    // };
+    //
+    // vm.flowerColorSelected = function (flowerColor) {
+    //     var model = {
+    //         price: flowerColor.StandardPriceSchedule.PriceBreaks[0].Price,
+    //         category: "flowerColor"
+    //     };
+    //
+    //     vm.selectedOptionsTriggers.flowerSelected == undefined || vm.selectedOptionsTriggers.flowerSelected == false ? addPriceToTotal(model) : replacePrice(model);
+    //     vm.selectedOptionsTriggers.flowerSelected = true;
+    //     vm.itemCreated.flowerColor = flowerColor.Name;
+    //     vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
+    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
+    //         .then(function (data) {
+    //             vm.selectionOptions.ribbonChoice = data.Items;
+    //             checkRequirementsofType(vm.itemCreated);
+    //         });
+    //
+    // };
+    //
+    // vm.ribbonColorSelected = function (ribbon) {
+    //     var model = {
+    //         price: ribbon.StandardPriceSchedule.PriceBreaks[0].Price,
+    //         category: "ribbon"
+    //     };
+    //
+    //     vm.selectedOptionsTriggers.ribbonSelected == undefined || vm.selectedOptionsTriggers.ribbonSelected == false ? addPriceToTotal(model) : replacePrice(model);
+    //     vm.selectedOptionsTriggers.ribbonSelected = true;
+    //     vm.itemCreated.ribbonColor = ribbon.Name;
+    //     vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
+    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
+    //         .then(function (data) {
+    //             vm.selectionOptions.fastenerOption = data.Items;
+    //             checkRequirementsofType(vm.itemCreated);
+    //         });
+    //
+    // };
+    //
+    // vm.fastenerOptionSelected = function (fastener) {
+    //     var model = {
+    //         price: fastener.StandardPriceSchedule.PriceBreaks[0].Price,
+    //         category: "fasteners"
+    //     };
+    //
+    //     vm.selectedOptionsTriggers.fastenerSelected == undefined || vm.selectedOptionsTriggers.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
+    //     vm.selectedOptionsTriggers.fastenerSelected = true;
+    //     vm.itemCreated.fastenerChoice = fastener.Name;
+    //     vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
+    //     checkRequirementsofType(vm.itemCreated);
+    // };
 
     // adds product chosen to cart
-    vm.addSelection = function ( selection, categoryID ){
-        console.log("this is selection,",selection, "this is category Name",categoryID);
+    vm.addSelection = function (selection, category, $index, choice) {
+
         var chosen = {};
-            chosen.Type = categoryID;
-            chosen.ID = selection.ID;
-            chosen.Name = selection.Name;
-            chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
+        chosen.Type = category.ID;
+        chosen.ID = selection.ID;
+        chosen.Name = selection.Name;
+        chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
+        var link = '#' + category.ID;
+        // chosen.selected=
 
-        var checkIfChosenExists =  _.findIndex(vm.itemCreated.selectionsMade, function(objectType) { return objectType.Type == categoryID });
-        console.log("checkifChosenExist",checkIfChosenExists );
+        var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
+            return objectType.Type == category.ID
+        });
         //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
-       if( checkIfChosenExists > -1){
-           console.log("this type has been selected", categoryID);
-            _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists],chosen);
-           vm.itemCreated.totalPrice = totalPriceSum();
-       }else{
+        if (checkIfChosenExists > -1) {
+            $(link).collapse();
+            _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
+            vm.itemCreated.totalPrice = totalPriceSum();
+            checkRequirementsOfType(vm.itemCreated);
 
-           vm.itemCreated.selectionsMade.push(chosen);
-           vm.itemCreated.totalPrice = totalPriceSum();
-       }
+
+        } else {
+
+            vm.itemCreated.selectionsMade.push(chosen);
+            vm.itemCreated.totalPrice = totalPriceSum();
+            $(link).collapse();
+
+            openNextAccordian($index);
+            checkRequirementsOfType(vm.itemCreated);
+        }
+
+
 
         //check to see if selection has been made
-      //      if so, then clear previous choice and set new one then set initialize variable to true
-      //      else set choice and set initialize variable to true
-      //
+        //      if so, then clear previous choice and set new one then set initialize variable to true
+        //      else set choice and set initialize variable to true
+        //
     };
 
-    /* ------------------------------------------*/
+    function openNextAccordian($index){
+        var maxIndex = vm.typeChosen.Options.length - 1;
+        if(vm.newIndex && vm.newIndex < maxIndex){
+            vm.newIndex ++;
+            vm.typeChosen.Options[vm.newIndex].show = true;
+        }
 
-    // Sets up the categories associated with selected product type
-    function setCategories(category) {
-        var dfd = $q.defer();
-
-        OrderCloud.Me.ListCategories(null, null, null, null, null, {
-                ParentID: category.ID
-            }, 1)
-            //if they change type clear the previously selected data
-            .then(function(data) {
-                vm.productTypeSelected = true;
-                vm.itemCreated.type = category.Name;
-                vm.typeCategories = data.Items;
-                vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
-                console.log("here are your categories", vm.typeCategories);
+        else if (vm.newIndex >= maxIndex){
+            angular.noop()
+        }
+        else{
+            vm.newIndex = $index + 1;
+            vm.typeChosen.Options[vm.newIndex].show = true;
 
 
-                angular.forEach(data.Items, function(){
+        }
 
-
-                        OrderCloud.Me.ListCategories(null, null, null, null, null, {
-                                ParentID: data.Items[0].ID
-                            }, 1)
-                            .then(function(data) {
-                                angular.forEach(data.Items, function(value){
-                                    var selectionTypes = {};
-                                    selectionTypes.ID = value.ID;
-                                    selectionTypes.Name = value.Name;
-                                    OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
-                                        .then(function(data){
-                                            if (data.Items.length > 0){
-                                                selectionTypes.Products = data.Items;
-                                            } else {
-                                                OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
-                                                    .then(function(data){
-                                                            selectionTypes.SubCategories = [];
-
-                                                            angular.forEach(data.Items, function(categoryvalue2) {
-                                                                var subcategoryType = {};
-                                                                subcategoryType.ID = categoryvalue2.ID;
-                                                                subcategoryType.Name = categoryvalue2.Name;
-                                                                selectionTypes.SubCategories.push(subcategoryType);
-                                                                OrderCloud.Me.ListProducts(null, null, null, null, null, categoryvalue2)
-                                                                    .then(function(data){
-                                                                        subcategoryType.Products = data.Items;
-                                                                        dfd.resolve();
-                                                                    });
-                                                            });
-                                                        }
-                                                    )
-                                            }
-                                        })
-                                });
-
-                                vm.selectionOptions.flowerOptions = data.Items;
-                                $('#collapseOne').collapse();
-
-                            })
-                            .catch(function() {
-                            });
-
-                    })
-            });
-
-        return dfd.promise;
     }
+
+    /* ------------------------------------------*/
 
     // triggers whenever a Variable_ Selected Option is Clicked for the first time
     function addPriceToTotal(modelOfProduct) {
@@ -359,7 +377,6 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
 
     // resets Final Create Your Own Product
     function resetFinalBuild(typeSelected) {
-        console.log("Im reseting this built object");
         vm.itemCreated = {
             type: typeSelected.Name,
             price: []
@@ -373,40 +390,81 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
         vm.requirementsMetForMVP = false;
     }
 
-    /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
-     it should be invoked when a required option is selected*/
-    function checkRequirementsofType(finalObject) {
-        switch (finalObject.type) {
+    //Sets up the requirements
+    function setRequirements(finalObject){
+        switch (finalObject.Type) {
             case "Wristlet Corsage":
-                // check if specific requirements exist
-                //  add once updated functionality is merged
-                if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor && finalObject.fastenerChoice) {
-                    vm.requirementsMetForMVP = true;
-                } else {
-                    vm.requirementsMetForMVP = false;
-                }
-                ;
+                // an array of the category ID's
+                finalObject.Requirements = ["BF-Wristlet", "W-Ribbon","W-Fastener"];
                 break;
             case "Pin-On Corsage" :
-                if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor) {
-                    vm.requirementsMetForMVP = true;
-                } else {
-                    vm.requirementsMetForMVP = false;
-                }
-                ;
+                finalObject.Requirements = ["BF-PinOn", "P-Ribbon"];
                 break;
             case "Boutonierre":
-                if (finalObject.baseFlower && finalObject.flowerColor) {
-                    vm.requirementsMetForMVP = true;
-                } else {
-                    vm.requirementsMetForMVP = false;
-                }
-                ;
+                finalObject.Requirements = ["BF-Bout"];
 
                 break;
             default:
                 vm.requirementsMetForMVP = false;
         }
+
+    };
+
+    /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
+     it should be invoked when a required option is selected*/
+    function checkRequirementsOfType(finalObject) {
+
+        var selected = vm.itemCreated.selectionsMade.map(function (product) {
+            return product.Type;
+        });
+
+        var matchingRequirements =_.intersection(finalObject.Requirements,  selected);
+
+         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
+
+        // switch (finalObject.Type) {
+        //     case "Wristlet Corsage":
+        //         // check if specific requirements exist
+        //         //  add once updated functionality is merged
+        //         if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor && finalObject.fastenerChoice) {
+        //             vm.requirementsMetForMVP = true;
+        //         } else {
+        //             vm.requirementsMetForMVP = false;
+        //         }
+        //         ;
+        //         break;
+        //     case "Pin-On Corsage" :
+        //         if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor) {
+        //             vm.requirementsMetForMVP = true;
+        //         } else {
+        //             vm.requirementsMetForMVP = false;
+        //         }
+        //         ;
+        //         break;
+        //     case "Boutonierre":
+        //         if (finalObject.baseFlower && finalObject.flowerColor) {
+        //             vm.requirementsMetForMVP = true;
+        //         } else {
+        //             vm.requirementsMetForMVP = false;
+        //         }
+        //         ;
+        //
+        //         break;
+        //     default:
+        //         vm.requirementsMetForMVP = false;
+        // }
+    }
+
+    function showOptionalAccessories(){
+        vm.requirementsMetForMVP = true;
+        vm.optionalFloralAcc.show = true;
+        vm.optionalEmbellishments.show = true;
+    }
+
+    function hideOptions(){
+        vm.requirementsMetForMVP = false;
+        vm.optionalFloralAcc.show = false;
+        vm.optionalEmbellishments.show = false;
     }
 
 
