@@ -165,33 +165,11 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
 
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
-    //categories under type
-    // vm.typeCategories;
-    //Price Array to hold the cost of all options selected
-    // vm.itemCreated.price = [];
     //store selections that were made by user
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
     vm.selectionOptions = {};
 
-    // keeping intial producttype selection trigger seperate from rest because I reset all of the triggers except this one
-    vm.productTypeSelected;
-    //store all the selected Options triggers ( triggers in this context identify whether the selected option has been clicked/selected or not)
-    // vm.selectedOptionsTriggers = {};
-    // vm.selectedOptionsTriggers.flowerSelected;
-    // vm.selectedOptionsTriggers.ribbonSelected;
-    // vm.selectedOptionsTriggers.fastenerSelected;
-    //Initialize ribbon color to show , it will be hidden depending on which product type is selected.
-    vm.showRibbonColor = true;
-
-
-    // pass in the id of category to get  product type.
-    //set product to selected array, so that it can be displayed
-
-    /*-----------Variable__Selected--------------------------------------------
-     Functions for each specific Choice Made available to the User----------
-     These functions are triggered when User Clicks/Selects and Option
-     --------------------------------------------------------------------*/
 
     vm.typeSelected = function (type) {
         if(vm.typeChosen){
@@ -208,95 +186,10 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
         vm.itemCreated.Type = type.Name;
         setRequirements(vm.itemCreated);
 
-
-        //check to see whether productTypeSelected has been selected or not, if it changes category reset the itemCreatedObject
-        // if (vm.productTypeSelected) {
-        //     //check if if product type has been set to true
-        //     vm.itemCreated.type == category.Name ? vm.productTypeSelected = true : resetFinalBuild(category);
-        //
-        // }
-        // else {
-        //     setCategories(category)
-        // }
-
-        // vm.itemCreated.type = category.Name;
-        // vm.typeCategories = data.Items;
-        // vm.showRibbonColor = ['Pin-On Corsage', 'Wristlet Corsage'].indexOf(category.Name) > -1;
-        // $('#collapseOne').collapse();
-        // look through array of types , match type id
-
     };
 
-
-
-
-    // vm.baseFlowerSelected = function (flower) {
-    //     //when a new flower is added or replaced . it needs to get replaced in the array
-    //
-    //     vm.itemCreated.baseFlower = flower.Name;
-    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, flower.ID)
-    //         .then(function (data) {
-    //
-    //             vm.selectionOptions.flowerColorChoice = data.Items;
-    //             checkRequirementsofType(vm.itemCreated);
-    //             // $('#collapseTwo').collapse();
-    //             $('#collapseThree').collapse();
-    //
-    //
-    //         })
-    // };
-    //
-    // vm.flowerColorSelected = function (flowerColor) {
-    //     var model = {
-    //         price: flowerColor.StandardPriceSchedule.PriceBreaks[0].Price,
-    //         category: "flowerColor"
-    //     };
-    //
-    //     vm.selectedOptionsTriggers.flowerSelected == undefined || vm.selectedOptionsTriggers.flowerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-    //     vm.selectedOptionsTriggers.flowerSelected = true;
-    //     vm.itemCreated.flowerColor = flowerColor.Name;
-    //     vm.itemCreated.flowerPrice = flowerColor.StandardPriceSchedule.PriceBreaks[0].Price;
-    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[1].ID)
-    //         .then(function (data) {
-    //             vm.selectionOptions.ribbonChoice = data.Items;
-    //             checkRequirementsofType(vm.itemCreated);
-    //         });
-    //
-    // };
-    //
-    // vm.ribbonColorSelected = function (ribbon) {
-    //     var model = {
-    //         price: ribbon.StandardPriceSchedule.PriceBreaks[0].Price,
-    //         category: "ribbon"
-    //     };
-    //
-    //     vm.selectedOptionsTriggers.ribbonSelected == undefined || vm.selectedOptionsTriggers.ribbonSelected == false ? addPriceToTotal(model) : replacePrice(model);
-    //     vm.selectedOptionsTriggers.ribbonSelected = true;
-    //     vm.itemCreated.ribbonColor = ribbon.Name;
-    //     vm.itemCreated.ribbonPrice = ribbon.StandardPriceSchedule.PriceBreaks[0].Price;
-    //     OrderCloud.Me.ListProducts(null, null, null, null, null, null, vm.typeCategories[2].ID)
-    //         .then(function (data) {
-    //             vm.selectionOptions.fastenerOption = data.Items;
-    //             checkRequirementsofType(vm.itemCreated);
-    //         });
-    //
-    // };
-    //
-    // vm.fastenerOptionSelected = function (fastener) {
-    //     var model = {
-    //         price: fastener.StandardPriceSchedule.PriceBreaks[0].Price,
-    //         category: "fasteners"
-    //     };
-    //
-    //     vm.selectedOptionsTriggers.fastenerSelected == undefined || vm.selectedOptionsTriggers.fastenerSelected == false ? addPriceToTotal(model) : replacePrice(model);
-    //     vm.selectedOptionsTriggers.fastenerSelected = true;
-    //     vm.itemCreated.fastenerChoice = fastener.Name;
-    //     vm.itemCreated.fastenerPrice = fastener.StandardPriceSchedule.PriceBreaks[0].Price;
-    //     checkRequirementsofType(vm.itemCreated);
-    // };
-
     // adds product chosen to cart
-    vm.addSelection = function (selection, category, $index, choice) {
+    vm.addSelection = function (selection, category, $index) {
 
         var chosen = {};
         chosen.Type = category.ID;
@@ -327,14 +220,38 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
             checkRequirementsOfType(vm.itemCreated);
         }
 
-
-
-        //check to see if selection has been made
-        //      if so, then clear previous choice and set new one then set initialize variable to true
-        //      else set choice and set initialize variable to true
-        //
     };
 
+
+    /*-----------Helper Functions--------------------------------------------
+     Function  that abstract work for other functions----------
+     ----------------------------------------------------------------------*/
+
+    // Takes an array of objects and sums up 1 key property on all the objects in the array
+    // in this case it is price
+    function totalPriceSum() {
+        var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
+            return product.Price;
+        });
+        return corsageTotal.reduce(function (a, b) {
+            return a + b
+        });
+
+    }
+
+    function hideOptions(){
+        vm.requirementsMetForMVP = false;
+        vm.optionalFloralAcc.show = false;
+        vm.optionalEmbellishments.show = false;
+    }
+
+    function showOptionalAccessories(){
+        vm.requirementsMetForMVP = true;
+        vm.optionalFloralAcc.show = true;
+        vm.optionalEmbellishments.show = true;
+    }
+
+    // opens next option once choice is made
     function openNextAccordian($index){
         var maxIndex = vm.typeChosen.Options.length - 1;
         if(vm.newIndex && vm.newIndex < maxIndex){
@@ -352,42 +269,6 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
 
         }
 
-    }
-
-    /* ------------------------------------------*/
-
-    // triggers whenever a Variable_ Selected Option is Clicked for the first time
-    function addPriceToTotal(modelOfProduct) {
-        var array = vm.itemCreated.price;
-        array.push(modelOfProduct);
-        vm.itemCreated.totalPrice = totalPriceSum();
-
-    }
-
-    //this is to be used when Variable_Selected has already been triggered/selected
-    function replacePrice(model) {
-        //find index of item in the array so that it can be replace by the new model/option/product selected
-        var existingItemIndex = _.findIndex(vm.itemCreated.price, function (product) {
-            return product.category == model.category
-        });
-        vm.itemCreated.price[existingItemIndex] = model;
-        vm.itemCreated.totalPrice = totalPriceSum();
-
-    };
-
-    // resets Final Create Your Own Product
-    function resetFinalBuild(typeSelected) {
-        vm.itemCreated = {
-            type: typeSelected.Name,
-            price: []
-        };
-        vm.selectionOptions = {
-            flowerOptions: ""
-        };
-        // go throught the selected Options triggers and set them all to false
-        setTriggersToFalse(vm.selectedOptionsTriggers);
-        setCategories(typeSelected);
-        vm.requirementsMetForMVP = false;
     }
 
     //Sets up the requirements
@@ -417,79 +298,11 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
         var selected = vm.itemCreated.selectionsMade.map(function (product) {
             return product.Type;
         });
-
         var matchingRequirements =_.intersection(finalObject.Requirements,  selected);
-
-         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
-
-        // switch (finalObject.Type) {
-        //     case "Wristlet Corsage":
-        //         // check if specific requirements exist
-        //         //  add once updated functionality is merged
-        //         if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor && finalObject.fastenerChoice) {
-        //             vm.requirementsMetForMVP = true;
-        //         } else {
-        //             vm.requirementsMetForMVP = false;
-        //         }
-        //         ;
-        //         break;
-        //     case "Pin-On Corsage" :
-        //         if (finalObject.baseFlower && finalObject.flowerColor && finalObject.ribbonColor) {
-        //             vm.requirementsMetForMVP = true;
-        //         } else {
-        //             vm.requirementsMetForMVP = false;
-        //         }
-        //         ;
-        //         break;
-        //     case "Boutonierre":
-        //         if (finalObject.baseFlower && finalObject.flowerColor) {
-        //             vm.requirementsMetForMVP = true;
-        //         } else {
-        //             vm.requirementsMetForMVP = false;
-        //         }
-        //         ;
-        //
-        //         break;
-        //     default:
-        //         vm.requirementsMetForMVP = false;
-        // }
-    }
-
-    function showOptionalAccessories(){
-        vm.requirementsMetForMVP = true;
-        vm.optionalFloralAcc.show = true;
-        vm.optionalEmbellishments.show = true;
-    }
-
-    function hideOptions(){
-        vm.requirementsMetForMVP = false;
-        vm.optionalFloralAcc.show = false;
-        vm.optionalEmbellishments.show = false;
+        vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
     }
 
 
-    /*-----------Helper Functions--------------------------------------------
-     Function  that abstract work for other functions----------
-     ----------------------------------------------------------------------*/
-
-    // Takes an array of objects and sums up 1 key property on all the objects in the array
-    // in this case it is price
-    function totalPriceSum() {
-        var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
-            return product.Price;
-        });
-        return corsageTotal.reduce(function (a, b) {
-            return a + b
-        });
-
-    }
-
-    // takes an object that only has boolean values and sets them all to false
-    function setTriggersToFalse(selectedOptionsTriggers) {
-        for (var key in selectedOptionsTriggers) {
-            selectedOptionsTriggers[key] = false;
-        }
-    }
 
 }
 

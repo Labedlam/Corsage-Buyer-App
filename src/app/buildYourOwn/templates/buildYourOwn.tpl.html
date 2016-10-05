@@ -48,7 +48,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div ng-if="buildYourOwn.productTypeSelected == true">-->
                     <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options" ng-if="subcategory.show">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
@@ -77,7 +76,6 @@
                                                 {{product.Name}}
                                             </button>
                                         </uib-tab>
-                                        <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
 
                                     </uib-tabset>
 
@@ -88,38 +86,7 @@
                                                 {{product.Name}}
                                             </button>
                                         </uib-tab>
-                                        <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
                                     </uib-tabset>
-
-                                    <!--<div class="col-lg-2 col-md-2" ng-if='subcategory.Name !== "Base Flower Choices"'-->
-                                         <!--ng-repeat='choice1 in subcategory.SubCategories'>-->
-
-
-
-                                                <!--&lt;!&ndash;Embellishments NESTED ACCORDIAN&ndash;&gt;-->
-                                                <!--<div class="panel-group" id="nestedZZZ" ng-if='subcategory.Name !== "Base Flower Choices"'>-->
-                                                    <!--<div class="panel panel-default" ng-repeat="choice in subcategory.SubCategories">-->
-                                                        <!--<div class="panel-heading" role="tab" id="nestedTwo-headingOne">-->
-                                                            <!--<h4 class="panel-title">-->
-                                                    <!--<span class="collapsed" role="button" data-toggle="collapse"-->
-                                                          <!--data-parent="#nested"-->
-                                                          <!--ng-href="#{{choice.ID}}"-->
-                                                          <!--aria-expanded="false" aria-controls="nestedTwo-collapseOne">-->
-                                                        <!--{{choice.Name}}-->
-                                                    <!--</span>-->
-                                                            <!--</h4>-->
-                                                        <!--</div>-->
-                                                        <!--<div id="{{choice.ID}}" class="panel-collapse collapse" role="tabpanel"-->
-                                                             <!--aria-labelledby="nestedTwo-headingOne">-->
-                                                            <!--<div class="panel-body">-->
-                                                                <!--<div><button class="btn btn-default" ng-repeat="product in choice.Products" ng-click="buildYourOwn.addSelection(product,choice.ID)">{{product.Name}}</button></div>-->
-
-
-                                                            <!--</div>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
                                 </div>
                             </div>
                         </div>
@@ -138,7 +105,6 @@
                         <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel"
                              aria-labelledby="headingSeven">
                             <div class="panel-body">
-                                <!--Embellishments NESTED ACCORDIAN-->
                                 <div class="panel-group" id="nestedTwo">
                                     <div class="panel panel-default" ng-repeat="type in buildYourOwn.optionalEmbellishments.types">
                                         <div class="panel-heading" role="tab" id="nestedTwo-headingOne">
@@ -207,7 +173,7 @@
                                                             {{product.Name}}
                                                         </button>
                                                     </uib-tab>
-                                                    <!--<uib-tab index="1" heading="Vertical 2">Vertical content 2</uib-tab>-->
+
                                                 </uib-tabset>
                                             </div>
                                         </div>
