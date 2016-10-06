@@ -309,7 +309,9 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
     }
 
-
+    vm.isNavCollapsed = false;
+    vm.isCollapsed = true;
+    vm.isCollapsedVertical = false;
 
 }
 

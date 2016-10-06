@@ -24,33 +24,27 @@
 
         </div>
 
-        <div class="row">
+        <!--<div class="row">-->
             <!--Options-->
-            <div class="panel-group col-md-8" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel-group col-md-8">
                 <!--Select Type-->
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                        <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <div class="panel-heading" ng-click="isNavCollapsed = !isNavCollapsed">
+                        <h4>
                             * Select Type
-                            </a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <div class="row">
-                                <!--This is select Type-->
-                                <div class="col-md-4"
-                                     ng-repeat="type in buildYourOwn.categories.Items"
-                                     ng-click="buildYourOwn.typeSelected(type)">
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=400&h=250"
-                                             alt="...">
-                                        <div class="caption">
-                                            <h3>{{type.Name}}</h3>
-                                            <span>Price</span>
-                                        </div>
-                                    </div>
+                    <!--This is select Type-->
+                    <div class="panel-body" uib-collapse="!isNavCollapsed">
+                        <div class="col-md-4"
+                             ng-repeat="type in buildYourOwn.categories.Items"
+                             ng-click="buildYourOwn.typeSelected(type)">
+                            <div class="thumbnail">
+                                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=400&h=250"
+                                     alt="...">
+                                <div class="caption">
+                                    <h3>{{type.Name}}</h3>
+                                    <span>Price</span>
                                 </div>
                             </div>
                         </div>
@@ -58,65 +52,74 @@
                 </div>
 
                 <div class="panel panel-default" ng-repeat="subcategory in buildYourOwn.typeChosen.Options">
-                    <div class="panel-heading" role="tab" id="headingTwo">
-                        <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                {{subcategory.Name}}
-                            </a>
+                    <div class="panel-heading" ng-click="isCollapsed = !isCollapsed">
+                        <h4>
+                            {{subcategory.Name}}
                         </h4>
                     </div>
                     <!--BASE FLOWER CHOICES-->
-                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-2 col-md-2" ng-if="subcategory.Products" ng-repeat="choice in subcategory.Products" ng-click="buildYourOwn.addSelection(choice,subcategory, $parent.$index)">
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                             alt="...">
-                                        <div class="caption">
-                                            <h5>{{choice.Name}}</h5>
-                                            <span>Price</span>
+                    <div class="panel-body" uib-collapse="!isCollapsed">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2" ng-if="subcategory.Products" ng-repeat="choice in subcategory.Products" ng-click="buildYourOwn.addSelection(choice,subcategory, $parent.$index)">
+                                <div class="thumbnail">
+                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                         alt="...">
+                                    <div class="caption">
+                                        <h5>{{choice.Name}}</h5>
+                                        <span>Price</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--ng-if="subcategory.Name == 'Base Flower Choices'"-->
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3"
+                                 ng-repeat="choice in subcategory.SubCategories"
+                                 ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
+                                <div class="thumbnail">
+                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                         alt="...">
+                                    <div class="caption">
+                                        <h5>{{choice.Name}}</h5>
+                                        <span>Price</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="row" ng-if="subcategory.Name !== 'Base Flower Choices'">-->
+                            <!--<div class="col-sm-6 col-md-3"-->
+                                 <!--ng-repeat="choice in subcategory.SubCategories"-->
+                                 <!--ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">-->
+                                <!--<div class="thumbnail">-->
+                                    <!--<img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"-->
+                                         <!--alt="...">-->
+                                    <!--<div class="caption">-->
+                                        <!--<h5>{{choice.Name}}</h5>-->
+                                        <!--<span>Price</span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--THIS FOOTER IS FOR COLOR SWATCHES-->
+                        <div class="panel-footer" uib-collapse="!buildYourOwn.productOptions[subcategory.ID].length">
+                            <div ng-repeat="productOption in buildYourOwn.productOptions[subcategory.ID]">
+                                <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="color-options">
+                                        <div class="color-swatch" style="background-color:{{productOption.xp.Color}};">
+                                            <span class="hover-colorName">{{productOption.Name}}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" ng-if="subcategory.Name == 'Base Flower Choices'" >
-                                <div class="col-sm-6 col-md-3" ng-repeat="choice in subcategory.SubCategories"
-                                     ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                             alt="...">
-                                        <div class="caption">
-                                            <h5>{{choice.Name}}</h5>
-                                            <span>Price</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" ng-if="subcategory.Name !== 'Base Flower Choices'">
-                                <div class="col-sm-6 col-md-3"
-                                     ng-repeat="choice in subcategory.SubCategories"
-                                     ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                             alt="...">
-                                        <div class="caption">
-                                            <h5>{{choice.Name}}</h5>
-                                            <span>Price</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer" uib-collapse="!buildYourOwn.productOptions[subcategory.ID].length">
-                                <div ng-repeat="productOption in buildYourOwn.productOptions[subcategory.ID]">
-                                    <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
-                                    <div class="col-sm-6 col-md-3">
-                                        <div class="coloring">
-                                            <div class="color-swatch" style="background-color:{{productOption.xp.Color}};">
-                                                <span class="hover-color">{{productOption.Name}}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                        </div>
+                        <!--THIS FOOTER IS FOR PRODUCT NAMES-->
+                        <!--HARD CODE THE IDs HERE-->
+                        <div class="panel-footer" uib-collapse="!buildYourOwn.productOptions[subcategory.ID].length">
+                            <div ng-repeat="productOption in buildYourOwn.productOptions[subcategory.ID]">
+                                <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
+                                <div class="col-sm-6 col-md-3">
+                                    <h5>{{productOption.Name}}</h5>
                                 </div>
                             </div>
                         </div>
@@ -127,30 +130,28 @@
 
                 <!--Choose Optional Embellishments-->
                 <div class="panel panel-default">
-                    <div class="panel-heading" roles="tab" id="headingThree">
-                        <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" expanded="true" aria-controls="collapseThree">
-                                Choose Optional Embellishments
-                            </a>
+                    <div class="panel-heading" ng-click="isCollapsed = !isCollapsed">
+                        <h4>
+                            Choose Optional Embellishments
                         </h4>
                     </div>
-                    <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-3"
-                                     ng-repeat="type in buildYourOwn.optionalEmbellishments.types"
-                                     ng-click="buildYourOwn.addSelection(type, subcategory)">
-                                    <!--THIS NG-CLICK IS NOT WORKING-->
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
-                                        <div class="caption">
-                                            <h5>{{type.Name}}</h5>
-                                        </div>
+
+                    <div class="panel-body" uib-collapse="!isCollapsed">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3"
+                                 ng-repeat="type in buildYourOwn.optionalEmbellishments.types"
+                                 ng-click="buildYourOwn.addSelection(type, subcategory)">
+                                <!--THIS NG-CLICK IS NOT WORKING-->
+                                <div class="thumbnail">
+                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
+                                    <div class="caption">
+                                        <h5>{{type.Name}}</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="panel-footer" uib-collapse="!buildYourOwn.addSelection[subcategory.ID].length">
                         <div ng-if="type.Products">
                             <div ng-repeat="product in type.Products" ng-click="buildYourOwn.addSelection(product, type.ID)">
@@ -162,70 +163,55 @@
                 </div>
 
                 <!--ng-if="buildYourOwn.optionalFloralAcc.show"-->
-                <!--Choose Optional Floral Accessories-->
+                <!--FLORAL ACCESSORIES HEADER-->
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingFour">
-                        <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" expanded="true" aria-controls="collapseFour">
-                                Choose Optional Floral Accessories
-                            </a>
+                    <div class="panel-heading" ng-click="isCollapsed = !isCollapsed">
+                        <h4>
+                            Choose Optional Floral Accessories
                         </h4>
                     </div>
-                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                        <div class="panel-body">
-                            <!--Floral Accessories NESTED ACCORDIAN-->
-                            <div class="panel-group" id="nestedEight">
-                                <div class="panel panel-default"
-                                     ng-repeat="type in buildYourOwn.optionalFloralAcc.types">
-                                    <div class="panel-heading" role="tab" id="nestedThree-headingOne">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#nested"
-                                               ng-href="#{{type.ID}}"
-                                               aria-expanded="false" aria-controls="nestedThree-collapseOne">
-                                                {{type.Name}}
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <!--START TABBED NECKLACE TYPES-->
-                                    <div class="panel-body">
-                                        <div ng-if="type.Products">
-                                            <div class="col-sm-6 col-md-3"
-                                                 ng-repeat="product in type.Products"
-                                                 ng-click="buildYourOwn.addSelection(product,type.ID)">
-                                                <div class="thumbnail">
-                                                    <!--<img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">-->
-                                                    <!--<div class="caption">-->
-                                                        <h5>{{product.Name}}</h5>
-                                                    <!--</div>-->
+                    <div class="panel-body" uib-collapse="!isCollapsed">
+                        <!--FLORAL ACCESSORIES TYPES-->
+                        <div class="panel-group">
+                            <div class="panel panel-default"
+                                 ng-repeat="type in buildYourOwn.optionalFloralAcc.types">
+                                <div class="panel-heading" ng-click="isCollapsed = !isCollapsed">
+                                    {{type.Name}}
+                                </div>
+                                <!--INDIVIDUAL PRODUCTS OF FLORAL ACCESSORY TYPES-->
+                                <div class="panel-body" uib-collapse="isCollapsed">
+                                    <div ng-if="type.Products">
+                                        <div class="col-sm-6 col-md-3"
+                                             ng-repeat="product in type.Products"
+                                             ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                            <div class="thumbnail">
+                                                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
+                                                <div class="caption">
+                                                    <h5>{{product.Name}}</h5>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6 col-md-3"
-                                             ng-repeat="subcategory in type.SubCategories">
-                                             <!--NEED AN NG-CLICK HERE-->
-                                             <div class="panel-heading" role="tab" id="headingFive">
-                                                <div class="thumbnail">
-                                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
-                                                    <div class="caption">
-                                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                                                            <h5>{{subcategory.Name}}</h5>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                             </div>
-                                             <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                                                <div class="panel-footer">
-                                                    <div ng-repeat="product in subcategory.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
-                                                        <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
-                                                        {{product.Name}}
-                                                    </div>
-                                                </div>
-                                             </div>
-                                         </div>
                                     </div>
-                                    <!--END TABBED NECKLACE TYPES-->
+                                    <div class="col-sm-6 col-md-3"
+                                         ng-repeat="subcategory in type.SubCategories">
+                                         <!--NEED AN NG-CLICK HERE-->
+                                        <div class="thumbnail">
+                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200" alt="...">
+                                            <div class="caption">
+                                                <h5>{{subcategory.Name}}</h5>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-footer">
+                                            <div ng-repeat="product in subcategory.Products" ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                                <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
+                                                {{product.Name}}
+                                            </div>
+                                        </div>
+
+                                     </div>
                                 </div>
+                                <!--END TABBED NECKLACE TYPES-->
                             </div>
                         </div>
                     </div>
@@ -234,7 +220,7 @@
 
 
             <!--Cart-->
-            <div class="col-md-4">
+            <div class="fixed">
                 <div class="panel-group">
                     <div class="panel panel-default">
                         <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3></div>
@@ -257,7 +243,6 @@
                     </div>
                 </div>
             </div>
-        </div>
 
 
     </div>
