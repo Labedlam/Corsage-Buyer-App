@@ -49,13 +49,15 @@ function CurrentOrderService($q, $localForage, OrderCloud, appname) {
     }
 
     function _set(OrderID) {
+        var dfd = $q.defer();
         $localForage.setItem(StorageName, OrderID)
             .then(function(data) {
-                return data;
+                dfd.resolve(data) ;
             })
             .catch(function(error) {
-                return error;
+                dfd.reject(error) ;
             });
+        return dfd.promise
     }
 
     function _remove() {

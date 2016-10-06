@@ -148,7 +148,7 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories) {
+function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories, CurrentOrder, Order) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
@@ -159,6 +159,7 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     vm.typeChoices = SelectionCategories;
     vm.optionalEmbellishments = OptionalEmbellishments;
     vm.optionalFloralAcc = OptionalFloralAccessories;
+
 
     vm.optionalFloralAcc.show = false;
     vm.optionalEmbellishments.show = false;
@@ -198,6 +199,7 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
             chosen.ID = selection.ID;
             chosen.Name = selection.Name;
             chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
+            chosen.Quantity = 1;
             var link = '#' + category.ID;
             // chosen.selected=
 
@@ -228,11 +230,69 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
 
 
     };
+    
+
+    vm.addToCart = function () {
+        var selections= vm.itemCreated.selectionsMade;
+        var genID = idGenerate();
+        //check if there is an order
+
+        if (Order) {
+            createLineItemXpCorsage(selections, genID, Order);
+        } else {
+            //create an order
+            OrderCloud.Orders.Create({})
+                .then(function (order) {
+                    console.log("here is orderid",order.ID);
+                    CurrentOrder.Set(order.ID)
+                        .then(function(data){
+                            createLineItemXpCorsage(selections, genID, order);
+                    })
+                });
+        }
+    };
+
+    // go though itemCreated.selectionsMade array, create a new line item for each object in that array
+    // Also add the xp.CustomCorsage with the same unique ID for all
+    function createLineItemXpCorsage(productArray, genID, order){
+        var dfd = $q.defer();
+        var queue = [];
+        angular.forEach(productArray, function (product) {
+            var li = {
+                ProductID: product.ID,
+                Quantity: product.Quantity,
+                xp: {customCorsage: genID}
+            };
+            queue.push(OrderCloud.LineItems.Create(order.ID, li) );
+        });
+        $q.all(queue).then(function(data){
+            dfd.resolve();
+            console.log(data);
+
+            $state.go('checkout');
+        });
+        return dfd.promise
+
+    }
+
+    //randomly generate string id
+    function idGenerate() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
 
 
-    /*-----------Helper Functions--------------------------------------------
-     Function  that abstract work for other functions----------
-     ----------------------------------------------------------------------*/
+
+
+
+        /*-----------Helper Functions--------------------------------------------
+         Function  that abstract work for other functions----------
+         ----------------------------------------------------------------------*/
 
     // Takes an array of objects and sums up 1 key property on all the objects in the array
     // in this case it is price

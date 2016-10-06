@@ -106,7 +106,7 @@
                     <div class="panel-footer" uib-collapse="!buildYourOwn.productOptions[subcategory.ID].length">
                             <div ng-repeat="productOption in buildYourOwn.productOptions[subcategory.ID]">
                                 <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
-                                {{productOption.Name}}
+                               <button class="btn btn-default" ng-click="buildYourOwn.addSelection(productOption,subcategory)">{{productOption.Name}} </button>
                             </div>
                     </div>
                 </div>
@@ -237,7 +237,7 @@
                                 <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
                                     currency}}
                                 </div>
-                                <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP">Add to Cart
+                                <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP" ng-click="buildYourOwn.addToCart()">Add to Cart
                                 </button>
                             </div>
                         </div>

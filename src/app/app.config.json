@@ -1,6 +1,6 @@
 {
 	"appname": "Corsage Buyer App",
-	"scope": "BuyerAdmin DevCenterWebHookAdmin FullAccess MeAddressAdmin MeAdmin MeCreditCardAdmin MeXpAdmin",
+	"scope": "OrderReader MeAddressAdmin MeAdmin MeCreditCardAdmin MeXpAdmin",
 	"clientid": "DE1393B0-9D4C-47F1-B3F7-96FC15EA29B7",
 	"buyerid": "CorsageBuyer",
 	"environment": "prod",
