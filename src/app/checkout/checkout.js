@@ -410,16 +410,70 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     $scope.$watch(function() {
         return $scope.order.ID;
     }, function() {
-        LineItemsInit($scope.order.ID)
+        LineItemsInit($scope.order.ID, $scope.Subtotal)
     });
 
     function LineItemsInit(OrderID) {
         OrderCloud.LineItems.List(OrderID)
             .then(function(data) {
-                vm.lineItems = data;
+
+                var grouped  = Underscore.groupBy(data.Items, function(o){
+                    if(o.xp && o.xp.customCorsage){
+                        return o.xp.customCorsage;
+                    }
+                });
+
+                createCorsageKit(grouped);
+
+                function createCorsageKit(){
+                    var dfd =$q.defer();
+                    var arrayOfObjects = [];
+                    var obj;
+                    angular.forEach(grouped, function(group, key){
+                        if(key != "undefined"){
+                            arrayOfObjects.push(obj = {
+                                Product: {Name:'Custom Corsage'},
+                                ProductID: key,
+                                bundledProducts: []
+                            });
+                            angular.forEach(group, function(li){
+                                var Products = {};
+                                Products.ID =li.ProductID;
+                                Products.UnitPrice = li.UnitPrice;
+
+                                obj.Quantity = li.Quantity;
+                                obj.bundledProducts.push(Products);
+
+                            });
+                            obj.UnitPrice =totalPriceSum(obj);
+                            obj.LineTotal = obj.UnitPrice * obj.Quantity;
+
+                        }else{
+                            angular.forEach(group, function(li){
+                                arrayOfObjects.push(li);
+                            });
+
+                        }
+
+                    });
+                    vm.lineItems.Items= arrayOfObjects;
+
+                }
+                console.log(data);
+                console.log("hello line itm",vm.lineItems);
+                // vm.lineItems = arrayOfObjects;
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
                 CheckoutService.StoreLineItems(vm.lineItems.Items);
             });
+        function totalPriceSum(obj) {
+            var UnitPriceCorsageKit = obj.bundledProducts.map(function (product) {
+                return product.UnitPrice;
+            });
+            return UnitPriceCorsageKit.reduce(function (a, b) {
+                return a + b
+            });
+
+        }
     }
 
     vm.pagingfunction = function() {

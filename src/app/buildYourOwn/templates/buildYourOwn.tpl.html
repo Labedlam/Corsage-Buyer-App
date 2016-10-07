@@ -75,20 +75,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" ng-if="subcategory.Name == 'Base Flower Choices'" >
-                            <div class="col-sm-6 col-md-3" ng-repeat="choice in subcategory.SubCategories"
-                                 ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
-                                <div class="thumbnail">
-                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                         alt="...">
-                                    <div class="caption">
-                                        <h5>{{choice.Name}}</h5>
-                                        <span>Price</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" ng-if="subcategory.Name !== 'Base Flower Choices'">
+                        <!--<div class="row" ng-if="subcategory.Name == 'Base Flower Choices'" >-->
+                            <!--<div class="col-sm-6 col-md-3" ng-repeat="choice in subcategory.SubCategories"-->
+                                 <!--ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">-->
+                                <!--<div class="thumbnail">-->
+                                    <!--<img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"-->
+                                         <!--alt="...">-->
+                                    <!--<div class="caption">-->
+                                        <!--<h5>{{choice.Name}}</h5>-->
+                                        <!--<span>Price</span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--ng-if="subcategory.Name !== 'Base Flower Choices'"-->
+                        <div class="row" >
                             <div class="col-sm-6 col-md-3"
                                  ng-repeat="choice in subcategory.SubCategories"
                                  ng-click="buildYourOwn.addSelection(choice, subcategory, $parent.$index)">
@@ -105,7 +106,7 @@
                     </div>
                     <div class="panel-footer" uib-collapse="!buildYourOwn.productOptions[subcategory.ID].length">
                             <div ng-repeat="productOption in buildYourOwn.productOptions[subcategory.ID]">
-                                <div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>
+                                <!--<div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>-->
                                <button class="btn btn-default" ng-click="buildYourOwn.addSelection(productOption,subcategory)">{{productOption.Name}} </button>
                             </div>
                     </div>
@@ -229,6 +230,9 @@
                             <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
                                 {{selection.Type}}:{{selection.Name}}
                                 {{selection.Price | currency}}
+                                <button ng-click="buildYourOwn.removeSelection(selection)" class="btn btn-default">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
                             </div>
 
                             <hr>

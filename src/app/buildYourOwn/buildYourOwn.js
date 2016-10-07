@@ -159,10 +159,8 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
     vm.typeChoices = SelectionCategories;
     vm.optionalEmbellishments = OptionalEmbellishments;
     vm.optionalFloralAcc = OptionalFloralAccessories;
-
-
-    vm.optionalFloralAcc.show = false;
-    vm.optionalEmbellishments.show = false;
+    // vm.optionalFloralAcc.show = false;
+    // vm.optionalEmbellishments.show = false;
     vm.productOptions = {};
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -215,22 +213,27 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
 
 
             } else {
-
                 vm.itemCreated.selectionsMade.push(chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
                 $(link).collapse();
-
                 // openNextAccordian($index);
                 checkRequirementsOfType(vm.itemCreated);
             }
 
         }
-
-
-
-
     };
-    
+
+    vm.removeSelection = function (selection){
+    // find selection in array
+        var selectionIndex = _.findIndex(vm.itemCreated.selectionsMade, function(product){return product.ID == selection.ID});
+        console.log("index of selection", selectionIndex);
+    // remove it
+        vm.itemCreated.selectionsMade.splice(selectionIndex,1);
+
+    // check that minimum requirements are met
+        checkRequirementsOfType(vm.itemCreated)
+    };
+
 
     vm.addToCart = function () {
         var selections= vm.itemCreated.selectionsMade;
@@ -366,6 +369,7 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
             return product.Type;
         });
         var matchingRequirements =_.intersection(finalObject.Requirements,  selected);
+
         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
     }
 
