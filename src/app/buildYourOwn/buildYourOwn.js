@@ -310,8 +310,9 @@ function BuildYourOwnController($q, OrderCloud, Catalog, SelectionCategories, Op
     }
 
     vm.isNavCollapsed = false;
-    vm.isCollapsed = true;
+    vm.isCollapsed = false;
     vm.isCollapsedVertical = false;
+    vm.openContainer = false;
 
 }
 
