@@ -18,3 +18,57 @@
 //  //  /*CSS HERE*/
 //  //}
 //}
+
+@media screen
+and (min-device-width: 1200px)
+and (max-device-width: 1600px) {
+  .instructions {
+    width: 650px; }
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #000;
+  background: #333333;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 15px 0 30px 0;
+}
+
+.hover-colorName {
+  border: 1px solid #ccc;
+  display: none;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 5px;
+  background-color:#fff;
+}
+
+.color-options:hover .hover-colorName {
+  display: inline-block;
+}
+
+.fixed
+{
+  position: fixed;
+  top: 100px;
+  right: 4%;
+  width: 400px;
+}
+
+@media screen
+and (min-device-width: 1200px)
+and (max-device-width: 1600px) {
+  .fixed {
+    position: fixed;
+    width: 30%; }
+}
+
+//@media screen
+//and (max-device-width: 800px) {
+//  .navbar .navbar-default .navbar-fixed-bottom {
+//    }
+//}
