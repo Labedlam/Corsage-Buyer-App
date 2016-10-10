@@ -38,7 +38,7 @@
                     </h4>
                 </div>
                 <!--This is select Type-->
-                <div class="panel-body" uib-collapse="!isNavCollapsed">
+                <div class="panel-body" uib-collapse="isNavCollapsed">
                     <div class="col-md-4"
                          ng-repeat="type in buildYourOwn.categories.Items"
                          ng-click="buildYourOwn.typeSelected(type)">
@@ -218,22 +218,24 @@
 
         <!--SUM OF ITEMS SELECTED-->
         <div class="fixed hidden-xs">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3></div>
-                    <div class="panel-body">
-                        <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
-                            {{selection.Type}}:{{selection.Name}}
-                            {{selection.Price | currency}}
-                        </div>
-
-                        <hr>
-                        <div>
-                            <p>Total: </p>
-                            <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
-                                currency}}
+            <div class="container-fluid">
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3></div>
+                        <div class="panel-body">
+                            <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
+                                {{selection.Type}}:{{selection.Name}}
+                                {{selection.Price | currency}}
                             </div>
-                            <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP" ng-click="buildYourOwn.addToCart()">Add to Cart</button>
+
+                            <hr>
+                            <div>
+                                <p>Total: </p>
+                                <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
+                                    currency}}
+                                </div>
+                                <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP" ng-click="buildYourOwn.addToCart()">Add to Cart</button>
+                            </div>
                         </div>
                     </div>
                 </div>
