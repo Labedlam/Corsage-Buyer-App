@@ -73,6 +73,7 @@ function productGeneratorConfig($stateProvider) {
                 OptionalEmbellishments: function ($q, OrderCloud) {
                     var dfd = $q.defer();
                     var optionalEmbellishments = {};
+                    optionalEmbellishments.ID = "OpEmb";
                     optionalEmbellishments.types = [];
 
                     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpEmb"}, 1)
@@ -154,13 +155,17 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
     // every time you select an option populate the next required or available options
 
     var vm = this;
+    // for uib Collapse if it is true it hides the content
+    vm.showType = false;
+
+
     vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
     vm.typeChoices = SelectionCategories;
     vm.optionalEmbellishments = OptionalEmbellishments;
     vm.optionalFloralAcc = OptionalFloralAccessories;
-    // vm.optionalFloralAcc.show = false;
-    // vm.optionalEmbellishments.show = false;
+    vm.optionalFloralAcc.show = false;
+    vm.optionalEmbellishments.show = false;
     vm.productOptions = {};
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -182,31 +187,57 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
         vm.typeChosen = _.findWhere(vm.typeChoices.types, {ParentID: type.ID});
         vm.typeChosen.Name = type.Name;
         vm.typeChosen.Options[0].show =  true;
+        vm.showType = true;
         vm.itemCreated.Type = type.Name;
         setRequirements(vm.itemCreated);
+        vm.optionalFloralAcc.show = true;
+        vm.optionalEmbellishments.show = true;
 
     };
 
     // adds product chosen to cart
-    vm.addSelection = function (selection, category, $index, productArray) {
-        if (selection.Products) {
-            vm.productOptions[category.ID] = selection.Products;
-        } else{
+    vm.addSelection = function (selection, category, depth) {
+        console.log("this is object being passed through function",selection, "this is category passed in function", category);
+
+        if(selection && selection.Products && (depth == 1) ){
+            vm.productOptions[category.ID] =  {
+                Products : selection.Products
+            }
+        }
+
+        else if( selection && selection.Products && (depth >1) ){
+            console.log("depth 2");
+            // if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
+            //             delete vm.productOptions[category.ID][selection.ID];
+            //         }
+            //         else {
+                        if (!vm.productOptions[category.ID]) {
+                            vm.productOptions[category.ID] = {};
+                            vm.productOptions[category.ID][selection.ID] = selection;
+                        } else{
+                            vm.productOptions[category.ID][selection.ID] = selection;
+                        }
+
+                    // }
+
+        }
+
+        else{
             var chosen = {};
             chosen.Type = category.ID;
             chosen.ID = selection.ID;
             chosen.Name = selection.Name;
             chosen.Price = selection.StandardPriceSchedule.PriceBreaks[0].Price;
             chosen.Quantity = 1;
-            var link = '#' + category.ID;
-            // chosen.selected=
+            chosen.Show = false;
+
+
 
             var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
                 return objectType.Type == category.ID
             });
             //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
             if (checkIfChosenExists > -1) {
-                $(link).collapse();
                 _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
                 checkRequirementsOfType(vm.itemCreated);
@@ -215,7 +246,7 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
             } else {
                 vm.itemCreated.selectionsMade.push(chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
-                $(link).collapse();
+
                 // openNextAccordian($index);
                 checkRequirementsOfType(vm.itemCreated);
             }
@@ -231,7 +262,10 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
         vm.itemCreated.selectionsMade.splice(selectionIndex,1);
 
     // check that minimum requirements are met
-        checkRequirementsOfType(vm.itemCreated)
+        checkRequirementsOfType(vm.itemCreated);
+
+    // update total price
+        vm.itemCreated.totalPrice = totalPriceSum();
     };
 
 
@@ -373,10 +407,6 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
     }
 
-    vm.isNavCollapsed = false;
-    vm.isCollapsed = false;
-    vm.isCollapsedVertical = false;
-    vm.openContainer = false;
 
 }
 
