@@ -134,6 +134,47 @@ function productGeneratorConfig($stateProvider) {
                         });
                     return dfd.promise;
                 },
+                Specs: function($q, OrderCloud) {
+                    //free base ribbon products
+                    // hard coding one ribbon product in product assignment call because the same spec is assigned to all the products
+                    var specQueue = [];
+                    var dfd = $q.defer();
+
+                    OrderCloud.Specs.ListProductAssignments(null, "HunterRibbon")
+                        .then(function(data) {
+                            angular.forEach(data.Items, function(assignment) {
+                                specQueue.push(OrderCloud.Specs.Get(assignment.SpecID));
+                            });
+                            $q.all(specQueue)
+                                .then(function(result) {
+                                    var specOptionsQueue = [];
+                                    angular.forEach(result, function(spec) {
+                                        spec.Value = spec.DefaultValue;
+                                        spec.OptionID = spec.DefaultOptionID;
+                                        spec.Options = [];
+                                        if (spec.OptionCount) {
+                                            specOptionsQueue.push((function() {
+                                                var d = $q.defer();
+                                                OrderCloud.Specs.ListOptions(spec.ID, null, 1, spec.OptionCount)
+                                                    .then(function(optionData) {
+                                                        spec.Options = optionData.Items;
+                                                        d.resolve();
+                                                    });
+                                                return d.promise;
+                                            })());
+                                        }
+                                    });
+                                    $q.all(specOptionsQueue).then(function() {
+                                        dfd.resolve(result);
+                                    });
+                                });
+                        })
+                        .catch(function(response) {
+
+                        });
+                    return dfd.promise;
+                },
+
                 Order: function ($q, CurrentOrder) {
                     var dfd = $q.defer();
                     CurrentOrder.Get()
@@ -149,7 +190,7 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories, CurrentOrder, Order) {
+function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories, CurrentOrder, Order, Specs) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
@@ -157,8 +198,8 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
     var vm = this;
     // for uib Collapse if it is true it hides the content
     vm.showType = false;
-
-
+    var baseRibbonSpec = Specs[0];
+    console.log("this is spec",Specs[0]);
     vm.categories = Catalog;
     vm.requirementsMetForMVP = false;
     vm.typeChoices = SelectionCategories;
@@ -207,10 +248,10 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
 
         else if( selection && selection.Products && (depth >1) ){
             console.log("depth 2");
-            // if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
-            //             delete vm.productOptions[category.ID][selection.ID];
-            //         }
-            //         else {
+            if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
+                        delete vm.productOptions[category.ID][selection.ID];
+                    }
+                    else {
                         if (!vm.productOptions[category.ID]) {
                             vm.productOptions[category.ID] = {};
                             vm.productOptions[category.ID][selection.ID] = selection;
@@ -218,7 +259,7 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
                             vm.productOptions[category.ID][selection.ID] = selection;
                         }
 
-                    // }
+                    }
 
         }
 
@@ -279,6 +320,7 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
         var genID = idGenerate();
         //check if there is an order
 
+
         if (Order) {
             createLineItemXpCorsage(selections, genID, Order);
         } else {
@@ -305,6 +347,18 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
                 Quantity: product.Quantity,
                 xp: {customCorsage: genID}
             };
+
+            if( product.Type ==  "W-Ribbon"|| product.Type == "P-Ribbon"){
+             li.Specs = [
+                 {
+                     SpecID: baseRibbonSpec.ID,
+                     OptionID:baseRibbonSpec.Options[0].ID, // Assuming that the spec option with -100 percent Markdown is 1st in array
+                     Value:"Base Ribbon"
+                 }
+             ];
+                
+                console.log("here is thing", Specs);
+            }
             queue.push(OrderCloud.LineItems.Create(order.ID, li) );
         });
         $q.all(queue).then(function(data){
