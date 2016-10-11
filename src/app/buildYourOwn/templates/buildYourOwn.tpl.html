@@ -76,8 +76,8 @@
                     </div>
                 </div>
                 <!--Categories with Products -->
-                <!--uib-collapse="buildYourOwn.itemCreated.selectionsMade[$index].Show"-->
-                <div class="panel-body">
+                <!---->
+                <div class="panel-body" uib-collapse="buildYourOwn.itemCreated.selectionsMade[$index].Show">
                     <div class="row">
                         <div class="col-lg-2 col-md-4" ng-if="subcategory.Products"
                              ng-repeat="choice in subcategory.Products"
@@ -97,7 +97,7 @@
                     <!--uib-collapse="buildYourOwn.productOptions[subcategory.ID].Products.Show && buildYourOwn.itemCreated.selectionsMade[$index].Show "-->
 
                     <!--base flower subcategories-->
-                    <div class="row" ng-if="subcategory.Name == 'Base Flower Choices'">
+                    <div class="row" ng-if="subcategory.Name == 'Base Flower Choices'" ui-collapse="">
                         <div class="col-sm-6 col-md-4"
                              ng-repeat="choice in subcategory.SubCategories track by $index"
                              ng-click="buildYourOwn.addSelection(choice,subcategory,1)">
@@ -213,7 +213,7 @@
 
         </div>
 
-        <!--FLORAL ACCESSORIES HEADER-->
+        <!--Choose Optional Floral Accessories-->
         <div class="panel panel-default" ng-if="buildYourOwn.optionalFloralAcc.show">
             <div class="panel-heading" ng-click="isCollapsedVertical = !isCollapsedVertical">
                 <h4>
@@ -233,7 +233,7 @@
                             <div ng-if="type.Products">
                                 <div class="col-sm-6 col-md-3"
                                      ng-repeat="product in type.Products"
-                                     ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                     ng-click="buildYourOwn.addSelection(product,type)">
                                     <div class="thumbnail">
                                         <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
                                              alt="...">
@@ -245,20 +245,19 @@
                             </div>
                             <div class="col-sm-6 col-md-3"
                                  ng-repeat="subcategory in type.SubCategories">
-                                <!--NEED AN NG-CLICK HERE-->
-                                <div class="thumbnail">
+                                <div class="thumbnail" ng-click="buildYourOwn.addSelection(product,type)">
                                     <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
                                          alt="...">
                                     <div class="caption">
-                                        <h5>{{subcategory.Name}}</h5>
+                                        <h5>{{subcategory.Name}}ooo</h5>
                                     </div>
                                 </div>
 
                                 <div class="panel-footer">
                                     <div ng-repeat="product in subcategory.Products"
-                                         ng-click="buildYourOwn.addSelection(product,type.ID)">
+                                         ng-click="buildYourOwn.addSelection(product,type)">
                                         <!--<div ng-include="'common/templates/' + subcategory.xp.productTemplate + '.tpl.html'"></div>-->
-                                        {{product.Name}}
+                                        <button class="btn btn-default"> {{product.Name}}</button>
                                     </div>
                                 </div>
 
@@ -270,7 +269,9 @@
             </div>
         </div>
     </div>
-    <!--SUM OF ITEMS SELECTED-->
+
+
+    <!--Custom Corsage Queue-->
     <div class="fixed hidden-xs">
         <div class="panel-group">
             <div class="panel panel-default">
@@ -309,7 +310,7 @@
         </div>
     </div>
 
-    <!--SUM OF ITEMS SELECTED ON XS-->
+    <!--Custom Corsage Queue XS-->
     <nav class="navbar navbar-default navbar-fixed-bottom visible-xs" ng-click="openContainer = !openContainer">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -327,18 +328,31 @@
             <div class="collapse navbar-collapse" uib-collapse="!openContainer">
                 <ul class="nav navbar-nav">
                     <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
-                        <li>{{selection.Type}}:{{selection.Name}}</li>
-                        <li>{{selection.Price | currency}}</li>
-                        <li role="separator" class="divider"></li>
-                        <li>Total:
-                            <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
-                                currency}}
-                            </div>
-                        </li>
+
+                        <div class="col-md-8">
+                            {{selection.Type}}:{{selection.Name}}
+
+                        </div>
+                        <div class="col-md-2">
+                            {{selection.Price | currency}}
+                        </div>
+                        <div class="col-md-2">
+                            <i class="fa fa-remove" ng-click="buildYourOwn.removeSelection(selection)"></i>
+                        </div>
                     </div>
                 </ul>
                 <form class="navbar-form navbar-left">
-                    <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP">Add to Cart</button>
+                    <div>
+                        <p>Total: </p>
+                        <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
+                            currency}}
+                        </div>
+                        <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP"
+                                ng-click="buildYourOwn.addToCart()">Add to Cart
+                        </button>
+                    </div>
+
+                    <!--<button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP" ng-click="buildYourOwn.addToCart()">Add to Cart</button>-->
                 </form>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

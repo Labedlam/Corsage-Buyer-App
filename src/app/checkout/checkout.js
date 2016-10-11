@@ -345,11 +345,15 @@ function CheckoutLineItemsListDirective() {
 function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr, OrderCloud, LineItemHelpers, CheckoutService, CurrentOrder) {
     var vm = this;
     vm.lineItems = {};
-    vm.UpdateQuantity = LineItemHelpers.UpdateQuantity;
     vm.UpdateShipping = LineItemHelpers.UpdateShipping;
     vm.setCustomShipping = LineItemHelpers.CustomShipping;
     vm.RemoveItem = LineItemHelpers.RemoveItem;
     //vm.calculatingTax = false;
+    
+    vm.UpdateQuantities = function(order, lineItem){
+        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.UpdateCustomXpQuantity(order,lineItem) : LineItemHelpers.UpdateQuantity(order, lineItem);
+    };
+
 
     $scope.$on('LineItemAddressUpdated', function(event, LineItemID, address) {
         //vm.calculatingTax = true;
@@ -416,7 +420,8 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     function LineItemsInit(OrderID) {
         OrderCloud.LineItems.List(OrderID)
             .then(function(data) {
-
+                
+                //group items based off of same xp string id
                 var grouped  = Underscore.groupBy(data.Items, function(o){
                     if(o.xp && o.xp.customCorsage){
                         return o.xp.customCorsage;
@@ -426,7 +431,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
                 createCorsageKit(grouped);
 
                 function createCorsageKit(){
-                    var dfd =$q.defer();
+                    
                     var arrayOfObjects = [];
                     var obj;
                     angular.forEach(grouped, function(group, key){
@@ -440,6 +445,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
                                 var Products = {};
                                 Products.ID =li.ProductID;
                                 Products.UnitPrice = li.UnitPrice;
+                                Products.LineItemID = li.ID;
 
                                 obj.Quantity = li.Quantity;
                                 obj.bundledProducts.push(Products);
@@ -461,7 +467,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
                 }
                 console.log(data);
                 console.log("hello line itm",vm.lineItems);
-                // vm.lineItems = arrayOfObjects;
+                
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
                 CheckoutService.StoreLineItems(vm.lineItems.Items);
             });

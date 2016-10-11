@@ -8,6 +8,8 @@ function LineItemFactory($rootScope, $q, $state, $uibModal, Underscore, OrderClo
         SpecConvert: _specConvert,
         RemoveItem: _removeItem,
         UpdateQuantity: _updateQuantity,
+        //if there is a line item with multiple lineItems bund
+        UpdateCustomXpQuantity: _updateCustomXpQuantity,
         GetProductInfo: _getProductInfo,
         CustomShipping: _customShipping,
         UpdateShipping: _updateShipping,
@@ -64,6 +66,23 @@ function LineItemFactory($rootScope, $q, $state, $uibModal, Underscore, OrderClo
                     $rootScope.$broadcast('OC:UpdateOrder', Order.ID);
                     $rootScope.$broadcast('OC:UpdateLineItem',Order);
                 });
+        }
+    }
+    function _updateCustomXpQuantity(Order, LineItem) {
+        console.log("order",Order, "LineItem", LineItem);
+        //get line item id for each product
+        var queue = [];
+
+        if(LineItem.Quantity > 0){
+            angular.forEach(LineItem.bundledProducts,function(product){
+                queue.push(OrderCloud.LineItems.Patch(Order.ID, product.LineItemID, {Quantity: LineItem.Quantity}));
+            });
+            $q.all(queue)
+                .then(function(data){
+                        console.log("here is what is returned from queue",data);
+                        $rootScope.$broadcast('OC:UpdateOrder', Order.ID);
+                        $rootScope.$broadcast('OC:UpdateLineItem',Order);
+                        });
         }
     }
 

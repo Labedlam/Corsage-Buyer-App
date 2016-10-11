@@ -231,7 +231,10 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
             chosen.Quantity = 1;
             chosen.Show = false;
 
-
+            // if required ribbon - price is free
+            if( chosen.Type ==  "W-Ribbon"|| chosen.Type == "P-Ribbon"){
+                chosen.Price = 0;
+            }
 
             var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
                 return objectType.Type == category.ID
@@ -249,6 +252,8 @@ function BuildYourOwnController($q, $state, OrderCloud, Catalog, SelectionCatego
 
                 // openNextAccordian($index);
                 checkRequirementsOfType(vm.itemCreated);
+
+                console.log("here is cc queue", vm.itemCreated.selectionsMade);
             }
 
         }

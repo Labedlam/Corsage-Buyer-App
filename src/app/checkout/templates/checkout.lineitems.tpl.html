@@ -18,7 +18,7 @@
             <tr ng-repeat-start="lineItem in checkoutLI.lineItems.Items track by $index" class="item_info">
                 <td>
                     <form class="form-group" name="{{'lineitem_' + $index + '_quantity'}}">
-                        <input tabindex="{{$index + 1}}" type="number" ng-change="checkoutLI.UpdateQuantity(order, lineItem)" class="form-control text-center" ng-model="lineItem.Quantity">
+                        <input tabindex="{{$index + 1}}" type="number" ng-change="checkoutLI.UpdateQuantities(order, lineItem)" class="form-control text-center" ng-model="lineItem.Quantity">
                     </form>
                 </td>
                 <td>
