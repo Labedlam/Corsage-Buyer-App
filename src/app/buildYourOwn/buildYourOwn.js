@@ -99,71 +99,6 @@ function productGeneratorConfig($stateProvider) {
                     console.log("this is optionArray",optionsArray);
                     return optionsArray;
                 },
-
-                // OptionalEmbellishments: function ($q, OrderCloud) {
-                //     var dfd = $q.defer();
-                //     var optionalEmbellishments = {};
-                //     optionalEmbellishments.ID = "OpEmb";
-                //     optionalEmbellishments.types = [];
-                //
-                //     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpEmb"}, 1)
-                //         .then(function (data) {
-                //             angular.forEach(data.Items, function (value, key) {
-                //                 var selectionTypes = {};
-                //                 selectionTypes.ID = value.ID;
-                //                 selectionTypes.Name = value.Name;
-                //                 optionalEmbellishments.types.push(selectionTypes);
-                //                 //list products associate with this specific value(category)
-                //                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
-                //                     .then(function (data) {
-                //                         selectionTypes.Products = data.Items;
-                //                         dfd.resolve(optionalEmbellishments);
-                //                     });
-                //             });
-                //
-                //         });
-                //     return dfd.promise;
-                // },
-                // OptionalFloralAccessories: function ($q, OrderCloud) {
-                //     var dfd = $q.defer();
-                //     var optionalFloralAccessories = {};
-                //     optionalFloralAccessories.types = [];
-                //     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpFloralAcc"}, 1)
-                //         .then(function (data) {
-                //             angular.forEach(data.Items, function (value, key) {
-                //                 var selectionTypes = {};
-                //                 selectionTypes.ID = value.ID;
-                //                 selectionTypes.Name = value.Name;
-                //                 optionalFloralAccessories.types.push(selectionTypes);
-                //                 //list products associate with this specific value(category) and check it they have products, if so add the array  to products key
-                //                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
-                //                     .then(function (data) {
-                //                         if (data.Items.length > 0) {
-                //                             selectionTypes.Products = data.Items;
-                //
-                //                         } else {
-                //                             OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
-                //                                 .then(function (data) {
-                //                                     selectionTypes.SubCategories = [];
-                //
-                //                                     angular.forEach(data.Items, function (categoryvalue1, key1) {
-                //                                         var subCategoryType = {};
-                //                                         subCategoryType.ID = categoryvalue1.ID;
-                //                                         subCategoryType.Name = categoryvalue1.Name;
-                //                                         selectionTypes.SubCategories.push(subCategoryType);
-                //                                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, categoryvalue1.ID)
-                //                                             .then(function (data) {
-                //                                                 subCategoryType.Products = data.Items;
-                //                                                 dfd.resolve(optionalFloralAccessories);
-                //                                             })
-                //                                     });
-                //                                 });
-                //                         }
-                //                     });
-                //             });
-                //         });
-                //     return dfd.promise;
-                // },
                 Specs: function($q, OrderCloud) {
                     //free base ribbon products
                     // hard coding one ribbon product in product assignment call because the same spec is assigned to all the products
@@ -227,8 +162,11 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     var vm = this;
     //Gets spec for base ribbon which should be free
     var baseRibbonSpec = Specs[0];
-    // for uib Collapse if it is true it hides the content
+    
+    //NOTE: for uib Collapse if it is true it hides the content (Sets first panel Open when page loads)
     vm.showType = false;
+
+
 
     vm.categories = OptionsAvailableForAllTypes;
     vm.requirementsMetForMVP = false;
@@ -242,17 +180,15 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     //store all the possible options
     vm.selectionOptions = {};
 
-
+    // pop
     vm.setCollapse = function(type){
-        console.log("hi im changing nav collapse");
+      
         if(!vm[type.ID]){
             vm[type.ID] = {};
-            vm[type.ID].isNavCollapsed = false;
+            vm[type.ID].isNavCollapsed = true;
         }else{
             vm[type.ID].isNavCollapsed = ! vm[type.ID].isNavCollapsed;
         }
-
-
     };
 
 
@@ -260,6 +196,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
 
     vm.typeSelected = function (type) {
+
         if(vm.typeChosen){
             vm.itemCreated.selectionsMade=[];
             vm.itemCreated.totalPrice = null;
@@ -268,58 +205,95 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             vm.newIndex = null;
             hideOptions();
         }
+        //set type chosen
         vm.typeChosen = _.findWhere(vm.categories, {ParentID: type.ParentID});
         vm.typeChosen.Name = type.Name;
-        vm.typeChosen.Options[0].show =  true;
+
+        //collapses type header
         vm.showType = true;
+        //sets 1st choice(Base Flower Choices)body to open
+        vm[type.Options[0].ID] = {};
+        vm[type.Options[0].ID].isNavCollapsed= true;
+
         vm.itemCreated.Type = type.Name;
         setRequirements(vm.itemCreated);
 
     };
+    vm.innerIndex = 0;
+    vm.outerIndex = 0;
 
     // adds product chosen to cart
-    vm.addSelection = function (selection, category, depth) {
+    vm.addSelection = function (selection, category, index, parentArray,outerIndex) {
         console.log("this is object being passed through function",selection, "this is category passed in function", category);
+        console.log("index", index);
+        console.log("parentArray",parentArray);
+        console.log("outerIndex", outerIndex);
+        // if(selection && selection.Products && (depth == 1) ){
+        //     vm.productOptions[category.ID] =  {
+        //         Products : selection.Products
+        //     }
+        // }
+        //
+        // else if( selection && selection.Products && (depth >1) ){
+        //     console.log("depth 2");
+        //     if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
+        //                 delete vm.productOptions[category.ID][selection.ID];
+        //             }
+        //             else {
+        //                 if (!vm.productOptions[category.ID]) {
+        //                     vm.productOptions[category.ID] = {};
+        //                     vm.productOptions[category.ID][selection.ID] = selection;
+        //                 } else{
+        //                     vm.productOptions[category.ID][selection.ID] = selection;
+        //                 }
+        //
+        //             }
+        //
+        // }
+        // else
 
-        if(selection && selection.Products && (depth == 1) ){
-            vm.productOptions[category.ID] =  {
-                Products : selection.Products
+         vm.openNextHeader =function (array ,index ){
+
+            if(!vm[array[index + 1].ID]){
+                vm[array[index + 1].ID] = {};
+                vm[array[index + 1].ID].isNavCollapsed = true;
+                console.log()
+                console.log("yolo",vm[array[index+1].ID]);
+                // vm[[parentArray[outerIndex+1]].ID].isNavCollapsed = ! vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
+                vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+
+            }else{
+                // vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+                vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
             }
-        }
 
-        else if( selection && selection.Products && (depth >1) ){
-            console.log("depth 2");
-            if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
-                        delete vm.productOptions[category.ID][selection.ID];
-                    }
-                    else {
-                        if (!vm.productOptions[category.ID]) {
-                            vm.productOptions[category.ID] = {};
-                            vm.productOptions[category.ID][selection.ID] = selection;
-                        } else{
-                            vm.productOptions[category.ID][selection.ID] = selection;
-                        }
-
-                    }
-
-        }
-        else if(selection.Products){
+        };
+            if(selection.Products && category.Name == "Base Flower Choices"){
             console.log("hey I'm an option")
 
             vm.baseFlowerChosen = {};
             vm.baseFlowerChosen.Products = selection.Products;
             vm.baseFlowerChosen.Name = "Colors";
-            vm.baseFlowerChosen.ID = category.ID;
+            vm.baseFlowerChosen.ID = category.ID + "Color";
 
             var checkIfChosenExists = _.findIndex(vm.typeChosen.Options, function (objectType) {
                 return objectType.Name == vm.baseFlowerChosen.Name;
+
             });
 
             if(checkIfChosenExists > -1){
                 _.extend(vm.typeChosen.Options[checkIfChosenExists], vm.baseFlowerChosen);
+                vm.openNextHeader(parentArray, outerIndex);
+                // vm[category.ID].isNavCollapsed = ! vm[category.ID].isNavCollapsed;
+                // vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed = !vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
 
             }else{
-                vm.typeChosen.Options.splice(1,0,vm.baseFlowerChosen)
+                vm.typeChosen.Options.splice(1,0,vm.baseFlowerChosen);
+                console.log( "wghat are you",  parentArray[outerIndex+1]);
+                vm.openNextHeader(parentArray, outerIndex);
+
+                // vm[[parentArray[(index+1)]].ID].isNavCollapsed = !vm[[parentArray[(index+1)]].ID].isNavCollapsed;
+
             }
 
         }
@@ -347,10 +321,12 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                 _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
                 checkRequirementsOfType(vm.itemCreated);
+                vm.openNextHeader(parentArray, outerIndex);
             } else {
                 vm.itemCreated.selectionsMade.push(chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
                 checkRequirementsOfType(vm.itemCreated);
+                vm.openNextHeader(parentArray, outerIndex);
 
                 console.log("here is cc queue", vm.itemCreated.selectionsMade);
             }
@@ -499,13 +475,13 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         switch (finalObject.Type) {
             case "Wristlet Corsage":
                 // an array of the category ID's
-                finalObject.Requirements = ["BF-Wristlet", "W-Ribbon","W-Fastener"];
+                finalObject.Requirements = ["BF-WristletColor", "W-Ribbon","W-Fastener"];
                 break;
             case "Pin-On Corsage" :
-                finalObject.Requirements = ["BF-PinOn", "P-Ribbon"];
+                finalObject.Requirements = ["BF-PinOnColor", "P-Ribbon"];
                 break;
             case "Boutonierre":
-                finalObject.Requirements = ["BF-Bout"];
+                finalObject.Requirements = ["BF-BoutColor"];
 
                 break;
             default:
