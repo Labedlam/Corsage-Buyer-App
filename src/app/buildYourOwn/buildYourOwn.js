@@ -29,6 +29,7 @@ function productGeneratorConfig($stateProvider) {
                                 var selectionType = {};
                                 selectionType.Options = [];
                                 selectionType.ParentID = value.ID;
+                                selectionType.Name = value.Name;
                                 selections.types.push(selectionType);
                                 //get the list of categories
                                 angular.forEach(data.Items, function (v, k) {
@@ -70,70 +71,99 @@ function productGeneratorConfig($stateProvider) {
                     });
                     return dfd.promise;
                 },
-                OptionalEmbellishments: function ($q, OrderCloud) {
-                    var dfd = $q.defer();
-                    var optionalEmbellishments = {};
-                    optionalEmbellishments.ID = "OpEmb";
-                    optionalEmbellishments.types = [];
+                OptionsAvailableForAllTypes: function(SelectionCategories){
+                    //take optional categories available to all types and set them as options for each type
+                    //find optionalEmbellishments  and Optional floral Accessories
+                    var optionsArray = SelectionCategories.types;
+                    console.log("Here is SelectionCategories",SelectionCategories.types);
+                    var removed = [];
+                    var optEmbAndAccessories = ["OpEmb", "OpFloralAcc"];
 
-                    OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpEmb"}, 1)
-                        .then(function (data) {
-                            angular.forEach(data.Items, function (value, key) {
-                                var selectionTypes = {};
-                                selectionTypes.ID = value.ID;
-                                selectionTypes.Name = value.Name;
-                                optionalEmbellishments.types.push(selectionTypes);
-                                //list products associate with this specific value(category)
-                                OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
-                                    .then(function (data) {
-                                        selectionTypes.Products = data.Items;
-                                        dfd.resolve(optionalEmbellishments);
-                                    });
-                            });
+                    //take those object out of the selection array
+                    angular.forEach(optEmbAndAccessories, function(value){
 
-                        });
-                    return dfd.promise;
+                        var index = _.findIndex(optionsArray, function(option){return option.ParentID == value});
+                        removed.push((optionsArray.splice(index,1))[0]);
+                    });
+
+                    //set name on optional categories
+                    removed[0].Name = "Optional Embellishments";
+                    removed[1].Name = "Optional Floral Accessories";
+
+                    //store copies of them in type options array
+                    console.log("this is options array", optionsArray);
+                    angular.forEach(optionsArray,function(value){
+                        value.Options = value.Options.concat(removed);
+
+                    });
+                    console.log("this is optionArray",optionsArray);
+                    return optionsArray;
                 },
-                OptionalFloralAccessories: function ($q, OrderCloud) {
-                    var dfd = $q.defer();
-                    var optionalFloralAccessories = {};
-                    optionalFloralAccessories.types = [];
-                    OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpFloralAcc"}, 1)
-                        .then(function (data) {
-                            angular.forEach(data.Items, function (value, key) {
-                                var selectionTypes = {};
-                                selectionTypes.ID = value.ID;
-                                selectionTypes.Name = value.Name;
-                                optionalFloralAccessories.types.push(selectionTypes);
-                                //list products associate with this specific value(category) and check it they have products, if so add the array  to products key
-                                OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
-                                    .then(function (data) {
-                                        if (data.Items.length > 0) {
-                                            selectionTypes.Products = data.Items;
 
-                                        } else {
-                                            OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
-                                                .then(function (data) {
-                                                    selectionTypes.SubCategories = [];
-
-                                                    angular.forEach(data.Items, function (categoryvalue1, key1) {
-                                                        var subCategoryType = {};
-                                                        subCategoryType.ID = categoryvalue1.ID;
-                                                        subCategoryType.Name = categoryvalue1.Name;
-                                                        selectionTypes.SubCategories.push(subCategoryType);
-                                                        OrderCloud.Me.ListProducts(null, null, null, null, null, null, categoryvalue1.ID)
-                                                            .then(function (data) {
-                                                                subCategoryType.Products = data.Items;
-                                                                dfd.resolve(optionalFloralAccessories);
-                                                            })
-                                                    });
-                                                });
-                                        }
-                                    });
-                            });
-                        });
-                    return dfd.promise;
-                },
+                // OptionalEmbellishments: function ($q, OrderCloud) {
+                //     var dfd = $q.defer();
+                //     var optionalEmbellishments = {};
+                //     optionalEmbellishments.ID = "OpEmb";
+                //     optionalEmbellishments.types = [];
+                //
+                //     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpEmb"}, 1)
+                //         .then(function (data) {
+                //             angular.forEach(data.Items, function (value, key) {
+                //                 var selectionTypes = {};
+                //                 selectionTypes.ID = value.ID;
+                //                 selectionTypes.Name = value.Name;
+                //                 optionalEmbellishments.types.push(selectionTypes);
+                //                 //list products associate with this specific value(category)
+                //                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
+                //                     .then(function (data) {
+                //                         selectionTypes.Products = data.Items;
+                //                         dfd.resolve(optionalEmbellishments);
+                //                     });
+                //             });
+                //
+                //         });
+                //     return dfd.promise;
+                // },
+                // OptionalFloralAccessories: function ($q, OrderCloud) {
+                //     var dfd = $q.defer();
+                //     var optionalFloralAccessories = {};
+                //     optionalFloralAccessories.types = [];
+                //     OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: "OpFloralAcc"}, 1)
+                //         .then(function (data) {
+                //             angular.forEach(data.Items, function (value, key) {
+                //                 var selectionTypes = {};
+                //                 selectionTypes.ID = value.ID;
+                //                 selectionTypes.Name = value.Name;
+                //                 optionalFloralAccessories.types.push(selectionTypes);
+                //                 //list products associate with this specific value(category) and check it they have products, if so add the array  to products key
+                //                 OrderCloud.Me.ListProducts(null, null, null, null, null, null, value.ID)
+                //                     .then(function (data) {
+                //                         if (data.Items.length > 0) {
+                //                             selectionTypes.Products = data.Items;
+                //
+                //                         } else {
+                //                             OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
+                //                                 .then(function (data) {
+                //                                     selectionTypes.SubCategories = [];
+                //
+                //                                     angular.forEach(data.Items, function (categoryvalue1, key1) {
+                //                                         var subCategoryType = {};
+                //                                         subCategoryType.ID = categoryvalue1.ID;
+                //                                         subCategoryType.Name = categoryvalue1.Name;
+                //                                         selectionTypes.SubCategories.push(subCategoryType);
+                //                                         OrderCloud.Me.ListProducts(null, null, null, null, null, null, categoryvalue1.ID)
+                //                                             .then(function (data) {
+                //                                                 subCategoryType.Products = data.Items;
+                //                                                 dfd.resolve(optionalFloralAccessories);
+                //                                             })
+                //                                     });
+                //                                 });
+                //                         }
+                //                     });
+                //             });
+                //         });
+                //     return dfd.promise;
+                // },
                 Specs: function($q, OrderCloud) {
                     //free base ribbon products
                     // hard coding one ribbon product in product assignment call because the same spec is assigned to all the products
@@ -174,7 +204,6 @@ function productGeneratorConfig($stateProvider) {
                         });
                     return dfd.promise;
                 },
-
                 Order: function ($q, CurrentOrder) {
                     var dfd = $q.defer();
                     CurrentOrder.Get()
@@ -190,23 +219,21 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories, OptionalEmbellishments, OptionalFloralAccessories, CurrentOrder, Order, Specs) {
+function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories , OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
 
     var vm = this;
+    //Gets spec for base ribbon which should be free
+    var baseRibbonSpec = Specs[0];
     // for uib Collapse if it is true it hides the content
     vm.showType = false;
-    var baseRibbonSpec = Specs[0];
-    console.log("this is spec",Specs[0]);
-    vm.categories = Catalog;
+
+    vm.categories = OptionsAvailableForAllTypes;
     vm.requirementsMetForMVP = false;
-    vm.typeChoices = SelectionCategories;
-    vm.optionalEmbellishments = OptionalEmbellishments;
-    vm.optionalFloralAcc = OptionalFloralAccessories;
-    vm.optionalFloralAcc.show = false;
-    vm.optionalEmbellishments.show = false;
+    // vm.typeChoices = SelectionCategories;
+
     vm.productOptions = {};
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -214,6 +241,22 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
     vm.selectionOptions = {};
+
+
+    vm.setCollapse = function(type){
+        console.log("hi im changing nav collapse");
+        if(!vm[type.ID]){
+            vm[type.ID] = {};
+            vm[type.ID].isNavCollapsed = false;
+        }else{
+            vm[type.ID].isNavCollapsed = ! vm[type.ID].isNavCollapsed;
+        }
+
+
+    };
+
+
+
 
 
     vm.typeSelected = function (type) {
@@ -225,14 +268,12 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             vm.newIndex = null;
             hideOptions();
         }
-        vm.typeChosen = _.findWhere(vm.typeChoices.types, {ParentID: type.ID});
+        vm.typeChosen = _.findWhere(vm.categories, {ParentID: type.ParentID});
         vm.typeChosen.Name = type.Name;
         vm.typeChosen.Options[0].show =  true;
         vm.showType = true;
         vm.itemCreated.Type = type.Name;
         setRequirements(vm.itemCreated);
-        vm.optionalFloralAcc.show = true;
-        vm.optionalEmbellishments.show = true;
 
     };
 
@@ -262,8 +303,29 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                     }
 
         }
+        else if(selection.Products){
+            console.log("hey I'm an option")
+
+            vm.baseFlowerChosen = {};
+            vm.baseFlowerChosen.Products = selection.Products;
+            vm.baseFlowerChosen.Name = "Colors";
+            vm.baseFlowerChosen.ID = category.ID;
+
+            var checkIfChosenExists = _.findIndex(vm.typeChosen.Options, function (objectType) {
+                return objectType.Name == vm.baseFlowerChosen.Name;
+            });
+
+            if(checkIfChosenExists > -1){
+                _.extend(vm.typeChosen.Options[checkIfChosenExists], vm.baseFlowerChosen);
+
+            }else{
+                vm.typeChosen.Options.splice(1,0,vm.baseFlowerChosen)
+            }
+
+        }
 
         else{
+            console.log("hellaoooo ", category.ID);
             var chosen = {};
             chosen.Type = category.ID;
             chosen.ID = selection.ID;
@@ -285,13 +347,9 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                 _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
                 checkRequirementsOfType(vm.itemCreated);
-
-
             } else {
                 vm.itemCreated.selectionsMade.push(chosen);
                 vm.itemCreated.totalPrice = totalPriceSum();
-
-                // openNextAccordian($index);
                 checkRequirementsOfType(vm.itemCreated);
 
                 console.log("here is cc queue", vm.itemCreated.selectionsMade);
@@ -409,14 +467,11 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
     function hideOptions(){
         vm.requirementsMetForMVP = false;
-        vm.optionalFloralAcc.show = false;
-        vm.optionalEmbellishments.show = false;
+
     }
 
     function showOptionalAccessories(){
         vm.requirementsMetForMVP = true;
-        vm.optionalFloralAcc.show = true;
-        vm.optionalEmbellishments.show = true;
     }
 
     // opens next option once choice is made
@@ -462,6 +517,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
      it should be invoked when a required option is selected*/
     function checkRequirementsOfType(finalObject) {
+        console.log("Im working");
 
         var selected = vm.itemCreated.selectionsMade.map(function (product) {
             return product.Type;
