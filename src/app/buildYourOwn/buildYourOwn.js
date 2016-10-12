@@ -356,7 +356,6 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                      Value:"Base Ribbon"
                  }
              ];
-                
                 console.log("here is thing", Specs);
             }
             queue.push(OrderCloud.LineItems.Create(order.ID, li) );
@@ -393,12 +392,18 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     // Takes an array of objects and sums up 1 key property on all the objects in the array
     // in this case it is price
     function totalPriceSum() {
-        var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
-            return product.Price;
-        });
-        return corsageTotal.reduce(function (a, b) {
-            return a + b
-        });
+        if(vm.itemCreated.selectionsMade.length > 0){
+
+            var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
+                return product.Price;
+            });
+            return corsageTotal.reduce(function (a, b) {
+                return a + b
+            });
+        }else {
+            return null;
+        }
+
 
     }
 

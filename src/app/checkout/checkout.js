@@ -347,11 +347,15 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     vm.lineItems = {};
     vm.UpdateShipping = LineItemHelpers.UpdateShipping;
     vm.setCustomShipping = LineItemHelpers.CustomShipping;
-    vm.RemoveItem = LineItemHelpers.RemoveItem;
     //vm.calculatingTax = false;
     
+    vm.RemoveItems = function (order, lineItem){
+        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.RemoveBundledLineItems(order,lineItem) : LineItemHelpers.RemoveItem(order, lineItem);
+    };
+    
+    
     vm.UpdateQuantities = function(order, lineItem){
-        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.UpdateCustomXpQuantity(order,lineItem) : LineItemHelpers.UpdateQuantity(order, lineItem);
+        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.UpdateBundledLineItems(order,lineItem) : LineItemHelpers.UpdateQuantity(order, lineItem);
     };
 
 
