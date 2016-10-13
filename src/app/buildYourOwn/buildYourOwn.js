@@ -71,19 +71,20 @@ function productGeneratorConfig($stateProvider) {
                     });
                     return dfd.promise;
                 },
-                OptionsAvailableForAllTypes: function(SelectionCategories){
+                OptionsAvailableForAllTypes: function (SelectionCategories) {
                     //take optional categories available to all types and set them as options for each type
                     //find optionalEmbellishments  and Optional floral Accessories
                     var optionsArray = SelectionCategories.types;
-                    console.log("Here is SelectionCategories",SelectionCategories.types);
                     var removed = [];
                     var optEmbAndAccessories = ["OpEmb", "OpFloralAcc"];
 
                     //take those object out of the selection array
-                    angular.forEach(optEmbAndAccessories, function(value){
+                    angular.forEach(optEmbAndAccessories, function (value) {
 
-                        var index = _.findIndex(optionsArray, function(option){return option.ParentID == value});
-                        removed.push((optionsArray.splice(index,1))[0]);
+                        var index = _.findIndex(optionsArray, function (option) {
+                            return option.ParentID == value
+                        });
+                        removed.push((optionsArray.splice(index, 1))[0]);
                     });
 
                     //set name on optional categories
@@ -92,36 +93,36 @@ function productGeneratorConfig($stateProvider) {
 
                     //store copies of them in type options array
                     console.log("this is options array", optionsArray);
-                    angular.forEach(optionsArray,function(value){
+                    angular.forEach(optionsArray, function (value) {
                         value.Options = value.Options.concat(removed);
 
                     });
-                    console.log("this is optionArray",optionsArray);
+                    console.log("this is optionArray", optionsArray);
                     return optionsArray;
                 },
-                Specs: function($q, OrderCloud) {
+                Specs: function ($q, OrderCloud) {
                     //free base ribbon products
                     // hard coding one ribbon product in product assignment call because the same spec is assigned to all the products
                     var specQueue = [];
                     var dfd = $q.defer();
 
                     OrderCloud.Specs.ListProductAssignments(null, "HunterRibbon")
-                        .then(function(data) {
-                            angular.forEach(data.Items, function(assignment) {
+                        .then(function (data) {
+                            angular.forEach(data.Items, function (assignment) {
                                 specQueue.push(OrderCloud.Specs.Get(assignment.SpecID));
                             });
                             $q.all(specQueue)
-                                .then(function(result) {
+                                .then(function (result) {
                                     var specOptionsQueue = [];
-                                    angular.forEach(result, function(spec) {
+                                    angular.forEach(result, function (spec) {
                                         spec.Value = spec.DefaultValue;
                                         spec.OptionID = spec.DefaultOptionID;
                                         spec.Options = [];
                                         if (spec.OptionCount) {
-                                            specOptionsQueue.push((function() {
+                                            specOptionsQueue.push((function () {
                                                 var d = $q.defer();
                                                 OrderCloud.Specs.ListOptions(spec.ID, null, 1, spec.OptionCount)
-                                                    .then(function(optionData) {
+                                                    .then(function (optionData) {
                                                         spec.Options = optionData.Items;
                                                         d.resolve();
                                                     });
@@ -129,12 +130,12 @@ function productGeneratorConfig($stateProvider) {
                                             })());
                                         }
                                     });
-                                    $q.all(specOptionsQueue).then(function() {
+                                    $q.all(specOptionsQueue).then(function () {
                                         dfd.resolve(result);
                                     });
                                 });
                         })
-                        .catch(function(response) {
+                        .catch(function (response) {
 
                         });
                     return dfd.promise;
@@ -154,24 +155,18 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories , OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
+function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories, OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
-
     var vm = this;
     //Gets spec for base ribbon which should be free
     var baseRibbonSpec = Specs[0];
-    
     //NOTE: for uib Collapse if it is true it hides the content (Sets first panel Open when page loads)
     vm.showType = false;
-
-
-
     vm.categories = OptionsAvailableForAllTypes;
     vm.requirementsMetForMVP = false;
     // vm.typeChoices = SelectionCategories;
-
     vm.productOptions = {};
     //TODO: change name itemCreated to FinalBuildObject(something more clear about what the object is)
     vm.itemCreated = {};
@@ -180,29 +175,22 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     //store all the possible options
     vm.selectionOptions = {};
 
-    // pop
-    vm.setCollapse = function(type){
-      
-        if(!vm[type.ID]){
+    // set initial collapse
+    vm.setCollapse = function (type) {
+        if (!vm[type.ID]) {
             vm[type.ID] = {};
             vm[type.ID].isNavCollapsed = true;
-        }else{
-            vm[type.ID].isNavCollapsed = ! vm[type.ID].isNavCollapsed;
+        } else {
+            vm[type.ID].isNavCollapsed = !vm[type.ID].isNavCollapsed;
         }
     };
 
-
-
-
-
     vm.typeSelected = function (type) {
-
-        if(vm.typeChosen){
-            vm.itemCreated.selectionsMade=[];
+        //reset Corsage Queue
+        if (vm.typeChosen) {
+            vm.itemCreated.selectionsMade = [];
             vm.itemCreated.totalPrice = null;
             vm.itemCreated.Type = type.Name;
-            //this relates to opening/closing accordion
-            vm.newIndex = null;
             hideOptions();
         }
         //set type chosen
@@ -213,93 +201,37 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         vm.showType = true;
         //sets 1st choice(Base Flower Choices)body to open
         vm[type.Options[0].ID] = {};
-        vm[type.Options[0].ID].isNavCollapsed= true;
+        vm[type.Options[0].ID].isNavCollapsed = true;
 
         vm.itemCreated.Type = type.Name;
         setRequirements(vm.itemCreated);
 
     };
-    vm.innerIndex = 0;
-    vm.outerIndex = 0;
 
-    // adds product chosen to cart
-    vm.addSelection = function (selection, category, index, parentArray,outerIndex) {
-        console.log("this is object being passed through function",selection, "this is category passed in function", category);
-        console.log("index", index);
-        console.log("parentArray",parentArray);
+
+    // adds product chosen to Corsage Queue
+    vm.addSelection = function (selection, category, parentArray, outerIndex) {
+        console.log("this is object being passed through function", selection, "this is category passed in function", category);
+        console.log("parentArray", parentArray);
         console.log("outerIndex", outerIndex);
-        // if(selection && selection.Products && (depth == 1) ){
-        //     vm.productOptions[category.ID] =  {
-        //         Products : selection.Products
-        //     }
-        // }
-        //
-        // else if( selection && selection.Products && (depth >1) ){
-        //     console.log("depth 2");
-        //     if (vm.productOptions[category.ID] && vm.productOptions[category.ID][selection.ID]) {
-        //                 delete vm.productOptions[category.ID][selection.ID];
-        //             }
-        //             else {
-        //                 if (!vm.productOptions[category.ID]) {
-        //                     vm.productOptions[category.ID] = {};
-        //                     vm.productOptions[category.ID][selection.ID] = selection;
-        //                 } else{
-        //                     vm.productOptions[category.ID][selection.ID] = selection;
-        //                 }
-        //
-        //             }
-        //
-        // }
-        // else
 
-         vm.openNextHeader =function (array ,index ){
 
-            if(!vm[array[index + 1].ID]){
-                vm[array[index + 1].ID] = {};
-                vm[array[index + 1].ID].isNavCollapsed = true;
-                console.log()
-                console.log("yolo",vm[array[index+1].ID]);
-                // vm[[parentArray[outerIndex+1]].ID].isNavCollapsed = ! vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
-                vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
 
-            }else{
-                // vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
-                vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
-            }
-
-        };
-            if(selection.Products && category.Name == "Base Flower Choices"){
-            console.log("hey I'm an option")
+        if (selection.Products && category.Name == "Base Flower Choices") {
 
             vm.baseFlowerChosen = {};
             vm.baseFlowerChosen.Products = selection.Products;
             vm.baseFlowerChosen.Name = "Colors";
             vm.baseFlowerChosen.ID = category.ID + "Color";
 
-            var checkIfChosenExists = _.findIndex(vm.typeChosen.Options, function (objectType) {
-                return objectType.Name == vm.baseFlowerChosen.Name;
-
-            });
-
-            if(checkIfChosenExists > -1){
-                _.extend(vm.typeChosen.Options[checkIfChosenExists], vm.baseFlowerChosen);
-                vm.openNextHeader(parentArray, outerIndex);
-                // vm[category.ID].isNavCollapsed = ! vm[category.ID].isNavCollapsed;
-                // vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed = !vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
-
-            }else{
-                vm.typeChosen.Options.splice(1,0,vm.baseFlowerChosen);
-                console.log( "wghat are you",  parentArray[outerIndex+1]);
-                vm.openNextHeader(parentArray, outerIndex);
-
-                // vm[[parentArray[(index+1)]].ID].isNavCollapsed = !vm[[parentArray[(index+1)]].ID].isNavCollapsed;
-
-            }
+            checkAndSetObjectBaseFlower(vm.typeChosen.Options,vm.baseFlowerChosen, parentArray, outerIndex)
 
         }
+        else if(selection.Products){
+            angular.noop();
+        }
+        else {
 
-        else{
-            console.log("hellaoooo ", category.ID);
             var chosen = {};
             chosen.Type = category.ID;
             chosen.ID = selection.ID;
@@ -309,48 +241,70 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             chosen.Show = false;
 
             // if required ribbon - price is free
-            if( chosen.Type ==  "W-Ribbon"|| chosen.Type == "P-Ribbon"){
+            if (chosen.Type == "W-Ribbon" || chosen.Type == "P-Ribbon") {
                 chosen.Price = 0;
             }
-
-            var checkIfChosenExists = _.findIndex(vm.itemCreated.selectionsMade, function (objectType) {
-                return objectType.Type == category.ID
-            });
-            //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
-            if (checkIfChosenExists > -1) {
-                _.extend(vm.itemCreated.selectionsMade[checkIfChosenExists], chosen);
-                vm.itemCreated.totalPrice = totalPriceSum();
-                checkRequirementsOfType(vm.itemCreated);
-                vm.openNextHeader(parentArray, outerIndex);
-            } else {
-                vm.itemCreated.selectionsMade.push(chosen);
-                vm.itemCreated.totalPrice = totalPriceSum();
-                checkRequirementsOfType(vm.itemCreated);
-                vm.openNextHeader(parentArray, outerIndex);
-
-                console.log("here is cc queue", vm.itemCreated.selectionsMade);
-            }
+            
+            checkAndSetProduct(vm.itemCreated.selectionsMade, chosen, parentArray, outerIndex);
+            vm.itemCreated.totalPrice = totalPriceSum();
+            checkRequirementsOfType(vm.itemCreated);
 
         }
     };
 
-    vm.removeSelection = function (selection){
-    // find selection in array
-        var selectionIndex = _.findIndex(vm.itemCreated.selectionsMade, function(product){return product.ID == selection.ID});
-        console.log("index of selection", selectionIndex);
-    // remove it
-        vm.itemCreated.selectionsMade.splice(selectionIndex,1);
 
-    // check that minimum requirements are met
+    //For BaseFlower : checks to see if object exist with in specified array, otherwise places that object into the specified array
+    //categoryArray & categoryIndex are  used to help determine which option to uncollapse in Category choices
+    function checkAndSetObjectBaseFlower (array, object, categoryArray, categoryIndex){
+        var checkIfChosenExists = _.findIndex(array, function (objectType) {
+            return objectType.Name == object.Name;
+        });
+        if (checkIfChosenExists > -1) {
+            _.extend(array[checkIfChosenExists], object);
+             openNextHeader(categoryArray, categoryIndex);
+        } else {
+            array.splice(1, 0, object);
+            openNextHeader(categoryArray, categoryIndex);
+        }
+    };
+    
+    
+    function checkAndSetProduct(array, object, categoryArray, categoryIndex){
+
+        var checkIfChosenExists = _.findIndex(array, function (objectType) {
+            return objectType.Type == object.Type
+        });
+        //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
+        if (checkIfChosenExists > -1) {
+            _.extend(array[checkIfChosenExists], object);
+            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
+        } else {
+            vm.itemCreated.selectionsMade.push(object);
+            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
+
+        }
+        
+    }
+    
+
+    vm.removeSelection = function (selection) {
+        // find selection in array
+        var selectionIndex = _.findIndex(vm.itemCreated.selectionsMade, function (product) {
+            return product.ID == selection.ID
+        });
+        console.log("index of selection", selectionIndex);
+        // remove it
+        vm.itemCreated.selectionsMade.splice(selectionIndex, 1);
+
+        // check that minimum requirements are met
         checkRequirementsOfType(vm.itemCreated);
 
-    // update total price
+        // update total price
         vm.itemCreated.totalPrice = totalPriceSum();
     };
 
-
     vm.addToCart = function () {
-        var selections= vm.itemCreated.selectionsMade;
+        var selections = vm.itemCreated.selectionsMade;
         var genID = idGenerate();
         //check if there is an order
 
@@ -361,18 +315,18 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             //create an order
             OrderCloud.Orders.Create({})
                 .then(function (order) {
-                    console.log("here is orderid",order.ID);
+                    console.log("here is orderid", order.ID);
                     CurrentOrder.Set(order.ID)
-                        .then(function(data){
+                        .then(function (data) {
                             createLineItemXpCorsage(selections, genID, order);
-                    })
+                        })
                 });
         }
     };
 
     // go though itemCreated.selectionsMade array, create a new line item for each object in that array
     // Also add the xp.CustomCorsage with the same unique ID for all
-    function createLineItemXpCorsage(productArray, genID, order){
+    function createLineItemXpCorsage(productArray, genID, order) {
         var dfd = $q.defer();
         var queue = [];
         angular.forEach(productArray, function (product) {
@@ -382,19 +336,19 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                 xp: {customCorsage: genID}
             };
 
-            if( product.Type ==  "W-Ribbon"|| product.Type == "P-Ribbon"){
-             li.Specs = [
-                 {
-                     SpecID: baseRibbonSpec.ID,
-                     OptionID:baseRibbonSpec.Options[0].ID, // Assuming that the spec option with -100 percent Markdown is 1st in array
-                     Value:"Base Ribbon"
-                 }
-             ];
+            if (product.Type == "W-Ribbon" || product.Type == "P-Ribbon") {
+                li.Specs = [
+                    {
+                        SpecID: baseRibbonSpec.ID,
+                        OptionID: baseRibbonSpec.Options[0].ID, // Assuming that the spec option with -100 percent Markdown is 1st in array
+                        Value: "Base Ribbon"
+                    }
+                ];
                 console.log("here is thing", Specs);
             }
-            queue.push(OrderCloud.LineItems.Create(order.ID, li) );
+            queue.push(OrderCloud.LineItems.Create(order.ID, li));
         });
-        $q.all(queue).then(function(data){
+        $q.all(queue).then(function (data) {
             dfd.resolve();
             console.log(data);
 
@@ -409,24 +363,52 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        for( var i=0; i < 5; i++ )
+        for (var i = 0; i < 5; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
     }
 
 
+    // open next header
+    function openNextHeader(array, index) {
+
+        if (!vm[array[index + 1].ID]) {
+            vm[array[index + 1].ID] = {};
+            vm[array[index + 1].ID].isNavCollapsed = true;
+
+            console.log("yolo", vm[array[index + 1].ID]);
+            // vm[[parentArray[outerIndex+1]].ID].isNavCollapsed = ! vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
+            vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+
+        }
+
+        else if((vm[array[index].ID].isNavCollapsed == true) && (vm[array[index + 1].ID].isNavCollapsed == false)){
+            console.log("both closed")
+            vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+            vm[array[index + 1].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+        }
+        else if(vm[array[index].ID].isNavCollapsed == true){
+            vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+            // vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
+        }
+        else {
+            console.log("hello");
+            vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
+            vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
+        }
+
+    };
 
 
-
-        /*-----------Helper Functions--------------------------------------------
-         Function  that abstract work for other functions----------
-         ----------------------------------------------------------------------*/
+    /*-----------Helper Functions--------------------------------------------
+     Function  that abstract work for other functions----------
+     ----------------------------------------------------------------------*/
 
     // Takes an array of objects and sums up 1 key property on all the objects in the array
     // in this case it is price
     function totalPriceSum() {
-        if(vm.itemCreated.selectionsMade.length > 0){
+        if (vm.itemCreated.selectionsMade.length > 0) {
 
             var corsageTotal = vm.itemCreated.selectionsMade.map(function (product) {
                 return product.Price;
@@ -434,48 +416,28 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             return corsageTotal.reduce(function (a, b) {
                 return a + b
             });
-        }else {
+        } else {
             return null;
         }
 
 
     }
 
-    function hideOptions(){
+    function hideOptions() {
         vm.requirementsMetForMVP = false;
 
     }
 
-    function showOptionalAccessories(){
+    function showOptionalAccessories() {
         vm.requirementsMetForMVP = true;
     }
-
-    // opens next option once choice is made
-    function openNextAccordian($index){
-        var maxIndex = vm.typeChosen.Options.length - 1;
-        if(vm.newIndex && vm.newIndex < maxIndex){
-            vm.newIndex ++;
-            vm.typeChosen.Options[vm.newIndex].show = true;
-        }
-
-        else if (vm.newIndex >= maxIndex){
-            angular.noop()
-        }
-        else{
-            vm.newIndex = $index + 1;
-            vm.typeChosen.Options[vm.newIndex].show = true;
-
-
-        }
-
-    }
-
+    
     //Sets up the requirements
-    function setRequirements(finalObject){
+    function setRequirements(finalObject) {
         switch (finalObject.Type) {
             case "Wristlet Corsage":
                 // an array of the category ID's
-                finalObject.Requirements = ["BF-WristletColor", "W-Ribbon","W-Fastener"];
+                finalObject.Requirements = ["BF-WristletColor", "W-Ribbon", "W-Fastener"];
                 break;
             case "Pin-On Corsage" :
                 finalObject.Requirements = ["BF-PinOnColor", "P-Ribbon"];
@@ -498,7 +460,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         var selected = vm.itemCreated.selectionsMade.map(function (product) {
             return product.Type;
         });
-        var matchingRequirements =_.intersection(finalObject.Requirements,  selected);
+        var matchingRequirements = _.intersection(finalObject.Requirements, selected);
 
         vm.itemCreated.Requirements.length == matchingRequirements.length ? showOptionalAccessories() : vm.requirementsMetForMVP = false;
     }
