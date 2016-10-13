@@ -276,14 +276,14 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
 
 
         if (Order) {
-            createLineItemXpCorsage(selections, genID, Order);
+            createLineItemXpCorsage(selections, genID, Order, vm.itemCreated.Type);
         } else {
             //create an order
             OrderCloud.Orders.Create({})
                 .then(function (order) {
                     CurrentOrder.Set(order.ID)
                         .then(function (data) {
-                            createLineItemXpCorsage(selections, genID, order);
+                            createLineItemXpCorsage(selections, genID, order, vm.itemCreated.Type);
                         })
                 });
         }
@@ -329,14 +329,14 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
 
     // go though itemCreated.selectionsMade array, create a new line item for each object in that array
     // Also add the xp.CustomCorsage with the same unique ID for all
-    function createLineItemXpCorsage(productArray, genID, order) {
+    function createLineItemXpCorsage(productArray, genID, order, type) {
         var dfd = $q.defer();
         var queue = [];
         angular.forEach(productArray, function (product) {
             var li = {
                 ProductID: product.ID,
                 Quantity: product.Quantity,
-                xp: {customCorsage: genID}
+                xp: {customCorsage: genID, type: type}
             };
 
             if (product.Type == "W-Ribbon" || product.Type == "P-Ribbon") {

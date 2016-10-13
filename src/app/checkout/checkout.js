@@ -424,7 +424,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     function LineItemsInit(OrderID) {
         OrderCloud.LineItems.List(OrderID)
             .then(function(data) {
-                
+                console.log("This is data ", data);
                 //group items based off of same xp string id
                 var grouped  = Underscore.groupBy(data.Items, function(o){
                     if(o.xp && o.xp.customCorsage){
@@ -469,8 +469,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
                     vm.lineItems.Items= arrayOfObjects;
 
                 }
-                console.log(data);
-                console.log("hello line itm",vm.lineItems);
+
                 
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
                 CheckoutService.StoreLineItems(vm.lineItems.Items);
