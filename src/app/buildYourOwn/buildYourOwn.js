@@ -173,6 +173,8 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
     vm.itemCreated.selectionsMade = [];
     //store all the possible options
     vm.selectionOptions = {};
+    //custom corsage queue display
+    vm.customQueueDisplay = false;
 
     // set initial collapse
     vm.setCollapse = function (type) {
@@ -198,6 +200,9 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
 
         //collapses type header
         vm.showType = true;
+
+        //open custom corsage queue
+        vm.customQueueDisplay = true;
         //sets 1st choice(Base Flower Choices)body to open
         vm[type.Options[0].ID] = {};
         vm[type.Options[0].ID].isNavCollapsed = true;
