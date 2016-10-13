@@ -25,116 +25,57 @@
 
         </div>
 
-
-        <!--Options-->
-        <div class="panel-group col-md-8">
-            <!--Select Type-->
-            <div class="panel panel-default">
-                <div class="panel-heading" ng-click="buildYourOwn.showType = !buildYourOwn.showType">
-                    <div class="row">
-                        <div class="col-md-10">
-                            * Select Type
-                        </div>
-                        <div class="col-md-2">
-                            {{buildYourOwn.itemCreated.Type}}
-                        </div>
-
-                    </div>
-                </div>
-
-                <!--This is select Type Body-->
-                <div class="panel-body" uib-collapse="buildYourOwn.showType">
-                    <div class="col-md-4"
-                         ng-repeat="type in buildYourOwn.categories"
-                         ng-click="buildYourOwn.typeSelected(type)">
-                        <div class="thumbnail">
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=400&h=250"
-                                 alt="...">
-                            <div class="caption">
-                                <h3>{{type.Name}}</h3>
-                                <span>Price</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-
-
-                <div class="panel-body">
-
-                    <div class="panel panel-default" ng-repeat="type in buildYourOwn.typeChosen.Options"
-                         ng-init="outerIndex = $index">
-                        <div class="panel-heading" ng-click="buildYourOwn.setCollapse(type)">
-                            {{type.Name}}{{outerIndex}}
-                        </div>
-                        <div class="panel-body" uib-collapse="!buildYourOwn[type.ID].isNavCollapsed">
-
-                            <!-- BASE PRODUCT CHOICES-->
-                            <div ng-if="type.Products">
-                                <div class="col-md-3" ng-repeat="product in type.Products"
-                                     ng-click="buildYourOwn.addSelection(product, type, buildYourOwn.typeChosen.Options, $parent.$index)">
-                                    <div class="thumbnail">
-                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                             alt="...">
-                                        <div class="caption">
-                                            <h5>{{product.Name}}</h5>
-                                        </div>
-                                    </div>
+        <div class="row">
+            <!--Options-->
+            <div class="col-lg-8">
+                <div class="panel-group">
+                    <!--Select Type-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading" ng-click="buildYourOwn.showType = !buildYourOwn.showType">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    * Select Type
                                 </div>
-                            </div>
+                                <div class="col-md-2">
+                                    {{buildYourOwn.itemCreated.Type}}
+                                </div>
 
-                            <!--FLOWER CHOICE SUBCATEGORY-->
+                            </div>
+                        </div>
+
+                        <!--This is select Type Body-->
+                        <div class="panel-body" uib-collapse="buildYourOwn.showType">
                             <div class="col-md-4"
-                                 ng-repeat="subcategory in type.SubCategories"
-                                 ng-if="type.Name == 'Base Flower Choices'">
-                                <div class="thumbnail"
-                                     ng-click="buildYourOwn.addSelection(subcategory,type,buildYourOwn.typeChosen.Options, outerIndex)">
-                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                 ng-repeat="type in buildYourOwn.categories"
+                                 ng-click="buildYourOwn.typeSelected(type)">
+                                <div class="thumbnail">
+                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=400&h=250"
                                          alt="...">
                                     <div class="caption">
-                                        <h5>{{subcategory.Name}}</h5>
+                                        <h3>{{type.Name}}</h3>
+                                        <span>Price</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!--OPTIONAL ADD ON SUBCATEGORY-->
-                            <div class="panel panel-default"
-                                 ng-repeat="subcategory in type.SubCategories"
-                                 ng-init="optionalAddOn = $index"
-                                 ng-if="type.Name !== 'Base Flower Choices'">
-                                <div class="panel-heading" ng-click="buildYourOwn.setCollapse(subcategory)">
-                                    <h4>{{subcategory.Name}}</h4>
-                                </div>
-                                <div class="panel-body" uib-collapse="!buildYourOwn[subcategory.ID].isNavCollapsed">
-                                    <div ng-if="subcategory.Products">
-                                        <div class="col-md-3"
-                                             ng-repeat="product in subcategory.Products"
-                                             ng-click="buildYourOwn.addSelection(product, subcategory )">
-                                            <div class="thumbnail">
-                                                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                                     alt="...">
-                                                <div class="caption">
-                                                    <h5>{{product.Name}}</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="panel panel-default">
 
-                            <!--OPTIONAL FOR ALL TYPES-->
-                            <div class="panel panel-default" ng-repeat="option in type.Options">
-                                <!--ng-if="type.Name !== 'Base Flower Choices'"-->
-                                <div class="panel-heading" ng-click="buildYourOwn.setCollapse(option)">
-                                    <h4>{{option.Name}}</h4>
+
+                        <div class="panel-body">
+
+                            <div class="panel panel-default" ng-repeat="type in buildYourOwn.typeChosen.Options"
+                                 ng-init="outerIndex = $index">
+                                <div class="panel-heading" ng-click="buildYourOwn.setCollapse(type)">
+                                    {{type.Name}}{{outerIndex}}
                                 </div>
-                                <div class="panel-body" uib-collapse="!buildYourOwn[option.ID].isNavCollapsed">
-                                    <!--Products that are on First level Of Categories-->
-                                    <div ng-if="option.Products">
-                                        <div class="col-md-3" ng-repeat="product in option.Products"
-                                             ng-click="buildYourOwn.addSelection(product, option)">
+                                <div class="panel-body" uib-collapse="!buildYourOwn[type.ID].isNavCollapsed">
+
+                                    <!-- BASE PRODUCT CHOICES-->
+                                    <div ng-if="type.Products">
+                                        <div class="col-md-3" ng-repeat="product in type.Products"
+                                             ng-click="buildYourOwn.addSelection(product, type, buildYourOwn.typeChosen.Options, $parent.$index)">
                                             <div class="thumbnail">
                                                 <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
                                                      alt="...">
@@ -145,29 +86,94 @@
                                         </div>
                                     </div>
 
-                                    <div ng-if="option.SubCategories">
-                                        <div class="panel panel-default"
-                                             ng-repeat="category in option.SubCategories"
-                                             ng-click="buildYourOwn.addSelection(category, option,$index)">
-                                            <div class="panel-heading" ng-click="buildYourOwn.setCollapse(category)">
-                                                <h4>{{category.Name}}</h4>
+                                    <!--FLOWER CHOICE SUBCATEGORY-->
+                                    <div class="col-md-4"
+                                         ng-repeat="subcategory in type.SubCategories"
+                                         ng-if="type.Name == 'Base Flower Choices'">
+                                        <div class="thumbnail"
+                                             ng-click="buildYourOwn.addSelection(subcategory,type,buildYourOwn.typeChosen.Options, outerIndex)">
+                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                                 alt="...">
+                                            <div class="caption">
+                                                <h5>{{subcategory.Name}}</h5>
                                             </div>
-                                            <div class="panel-body"
-                                                 uib-collapse="!buildYourOwn[category.ID].isNavCollapsed">
-                                                <div ng-if="category.Products">
-                                                    <div class="col-md-3"
-                                                         ng-repeat="product in category.Products"
-                                                         ng-click="buildYourOwn.addSelection(product, category)">
-                                                        <div class="thumbnail">
-                                                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
-                                                                 alt="...">
-                                                            <div class="caption">
-                                                                <h5>{{product.Name}}</h5>
+                                        </div>
+                                    </div>
+
+                                    <!--OPTIONAL ADD ON SUBCATEGORY-->
+                                    <div class="panel panel-default"
+                                         ng-repeat="subcategory in type.SubCategories"
+                                         ng-init="optionalAddOn = $index"
+                                         ng-if="type.Name !== 'Base Flower Choices'">
+                                        <div class="panel-heading" ng-click="buildYourOwn.setCollapse(subcategory)">
+                                            <h4>{{subcategory.Name}}</h4>
+                                        </div>
+                                        <div class="panel-body"
+                                             uib-collapse="!buildYourOwn[subcategory.ID].isNavCollapsed">
+                                            <div ng-if="subcategory.Products">
+                                                <div class="col-md-3"
+                                                     ng-repeat="product in subcategory.Products"
+                                                     ng-click="buildYourOwn.addSelection(product, subcategory )">
+                                                    <div class="thumbnail">
+                                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                                             alt="...">
+                                                        <div class="caption">
+                                                            <h5>{{product.Name}}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--OPTIONAL FOR ALL TYPES-->
+                                    <div class="panel panel-default" ng-repeat="option in type.Options">
+                                        <!--ng-if="type.Name !== 'Base Flower Choices'"-->
+                                        <div class="panel-heading" ng-click="buildYourOwn.setCollapse(option)">
+                                            <h4>{{option.Name}}</h4>
+                                        </div>
+                                        <div class="panel-body" uib-collapse="!buildYourOwn[option.ID].isNavCollapsed">
+                                            <!--Products that are on First level Of Categories-->
+                                            <div ng-if="option.Products">
+                                                <div class="col-md-3" ng-repeat="product in option.Products"
+                                                     ng-click="buildYourOwn.addSelection(product, option)">
+                                                    <div class="thumbnail">
+                                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                                             alt="...">
+                                                        <div class="caption">
+                                                            <h5>{{product.Name}}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div ng-if="option.SubCategories">
+                                                <div class="panel panel-default"
+                                                     ng-repeat="category in option.SubCategories"
+                                                     ng-click="buildYourOwn.addSelection(category, option,$index)">
+                                                    <div class="panel-heading"
+                                                         ng-click="buildYourOwn.setCollapse(category)">
+                                                        <h4>{{category.Name}}</h4>
+                                                    </div>
+                                                    <div class="panel-body"
+                                                         uib-collapse="!buildYourOwn[category.ID].isNavCollapsed">
+                                                        <div ng-if="category.Products">
+                                                            <div class="col-md-3"
+                                                                 ng-repeat="product in category.Products"
+                                                                 ng-click="buildYourOwn.addSelection(product, category)">
+                                                                <div class="thumbnail">
+                                                                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=placeholder&w=200&h=200"
+                                                                         alt="...">
+                                                                    <div class="caption">
+                                                                        <h5>{{product.Name}}</h5>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -178,11 +184,12 @@
             </div>
 
             <!--Custom Corsage Queue-->
-            <div class="fixed hidden-xs">
+            <div class="col-lg-4">
                 <div class="panel-group">
                     <div class="panel panel-default">
 
-                        <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3></div>
+                        <div class="panel-heading"><h3>Build Your Own: {{buildYourOwn.typeChosen.Name}}</h3>
+                        </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
@@ -194,17 +201,16 @@
                                         {{selection.Price | currency}}
                                     </div>
                                     <div class="col-md-2">
-                                        <i class="fa fa-remove" ng-click="buildYourOwn.removeSelection(selection)"></i>
+                                        <i class="fa fa-remove"
+                                           ng-click="buildYourOwn.removeSelection(selection)"></i>
                                     </div>
                                 </div>
-
                             </div>
-
-
                             <hr>
                             <div>
                                 <p>Total: </p>
-                                <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
+                                <div ng-if="buildYourOwn.itemCreated.totalPrice">
+                                    {{buildYourOwn.itemCreated.totalPrice |
                                     currency}}
                                 </div>
                                 <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP"
@@ -215,54 +221,5 @@
                     </div>
                 </div>
             </div>
-
-            <!--Custom Corsage Queue XS-->
-            <nav class="navbar navbar-default navbar-fixed-bottom visible-xs" ng-click="openContainer = !openContainer">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed">
-                            <span class="sr-only"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand">Build Your Own: {{buildYourOwn.typeChosen.Name}}</a>
-                    </div>
-
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" uib-collapse="!openContainer">
-                        <ul class="nav navbar-nav">
-                            <div ng-repeat="selection in buildYourOwn.itemCreated.selectionsMade">
-
-                                <div class="col-md-8">
-                                    {{selection.Type}}:{{selection.Name}}
-
-                                </div>
-                                <div class="col-md-2">
-                                    {{selection.Price | currency}}
-                                </div>
-                                <div class="col-md-2">
-                                    <i class="fa fa-remove" ng-click="buildYourOwn.removeSelection(selection)"></i>
-                                </div>
-                            </div>
-                        </ul>
-                        <form class="navbar-form navbar-left">
-                            <div>
-                                <p>Total: </p>
-                                <div ng-if="buildYourOwn.itemCreated.totalPrice">{{buildYourOwn.itemCreated.totalPrice |
-                                    currency}}
-                                </div>
-                                <button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP"
-                                        ng-click="buildYourOwn.addToCart()">Add to Cart
-                                </button>
-                            </div>
-
-                            <!--<button class="btn btn-success" ng-if="buildYourOwn.requirementsMetForMVP" ng-click="buildYourOwn.addToCart()">Add to Cart</button>-->
-                        </form>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
-
         </div>
 </article>
