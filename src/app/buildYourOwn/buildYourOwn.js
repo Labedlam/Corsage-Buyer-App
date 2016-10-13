@@ -21,8 +21,9 @@ function productGeneratorConfig($stateProvider) {
                     var dfd = $q.defer();
                     var selections = {};
                     selections.types = [];
+                    var queue =[]
                     //go through each type (Wrislet Corsage, Pin on, BOut) and
-                    angular.forEach(Catalog.Items, function (value, key) {
+                    angular.forEach(Catalog.Items, function (value) {
 
                         OrderCloud.Me.ListCategories(null, null, null, null, null, {ParentID: value.ID}, 1)
                             .then(function (data) {
@@ -153,7 +154,7 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog, SelectionCategories, OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
+function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
@@ -182,7 +183,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             vm[type.ID].isNavCollapsed = !vm[type.ID].isNavCollapsed;
         }
     };
-
+    // first type chosen, resets type if already chosen
     vm.typeSelected = function (type) {
         //reset Corsage Queue
         if (vm.typeChosen) {
@@ -283,6 +284,10 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         }
     };
 
+    /*-----------Helper Functions--------------------------------------------
+     Function  that abstract work for other functions----------
+     ----------------------------------------------------------------------*/
+
     //For BaseFlower : checks to see if object exist with in specified array, otherwise places that object into the specified array
     // if selected category has flower color choices , set object into options array
     //categoryArray & categoryIndex are  used to help determine which option to uncollapse in Category choices
@@ -360,7 +365,6 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         return text;
     }
 
-
     // open next header in array
     // accounts for multiple scenarios
     function openNextHeader(array, index) {
@@ -384,11 +388,6 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
     };
 
-
-    /*-----------Helper Functions--------------------------------------------
-     Function  that abstract work for other functions----------
-     ----------------------------------------------------------------------*/
-
     // Takes an array of objects and sums up 1 key property on all the objects in the array
     // in this case it is price
     function totalPriceSum() {
@@ -406,6 +405,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
 
     }
+
 
     function hideOptions() {
         vm.requirementsMetForMVP = false;

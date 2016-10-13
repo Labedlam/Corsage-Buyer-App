@@ -475,7 +475,7 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
                 CheckoutService.StoreLineItems(vm.lineItems.Items);
             });
-        function totalPriceSum(obj) {
+            function totalPriceSum(obj) {
             var UnitPriceCorsageKit = obj.bundledProducts.map(function (product) {
                 return product.UnitPrice;
             });
