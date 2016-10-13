@@ -92,12 +92,10 @@ function productGeneratorConfig($stateProvider) {
                     removed[1].Name = "Optional Floral Accessories";
 
                     //store copies of them in type options array
-                    console.log("this is options array", optionsArray);
                     angular.forEach(optionsArray, function (value) {
                         value.Options = value.Options.concat(removed);
 
                     });
-                    console.log("this is optionArray", optionsArray);
                     return optionsArray;
                 },
                 Specs: function ($q, OrderCloud) {
@@ -211,11 +209,9 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
     // adds product chosen to Corsage Queue
     vm.addSelection = function (selection, category, parentArray, outerIndex) {
-        console.log("this is object being passed through function", selection, "this is category passed in function", category);
-        console.log("parentArray", parentArray);
-        console.log("outerIndex", outerIndex);
-
-
+        // console.log("this is object being passed through function", selection, "this is category passed in function", category);
+        // console.log("parentArray", parentArray);
+        // console.log("outerIndex", outerIndex);
 
         if (selection.Products && category.Name == "Base Flower Choices") {
 
@@ -252,47 +248,11 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
         }
     };
 
-
-    //For BaseFlower : checks to see if object exist with in specified array, otherwise places that object into the specified array
-    //categoryArray & categoryIndex are  used to help determine which option to uncollapse in Category choices
-    function checkAndSetObjectBaseFlower (array, object, categoryArray, categoryIndex){
-        var checkIfChosenExists = _.findIndex(array, function (objectType) {
-            return objectType.Name == object.Name;
-        });
-        if (checkIfChosenExists > -1) {
-            _.extend(array[checkIfChosenExists], object);
-             openNextHeader(categoryArray, categoryIndex);
-        } else {
-            array.splice(1, 0, object);
-            openNextHeader(categoryArray, categoryIndex);
-        }
-    };
-    
-    
-    function checkAndSetProduct(array, object, categoryArray, categoryIndex){
-
-        var checkIfChosenExists = _.findIndex(array, function (objectType) {
-            return objectType.Type == object.Type
-        });
-        //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
-        if (checkIfChosenExists > -1) {
-            _.extend(array[checkIfChosenExists], object);
-            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
-        } else {
-            vm.itemCreated.selectionsMade.push(object);
-            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
-
-        }
-        
-    }
-    
-
     vm.removeSelection = function (selection) {
         // find selection in array
         var selectionIndex = _.findIndex(vm.itemCreated.selectionsMade, function (product) {
             return product.ID == selection.ID
         });
-        console.log("index of selection", selectionIndex);
         // remove it
         vm.itemCreated.selectionsMade.splice(selectionIndex, 1);
 
@@ -315,7 +275,6 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
             //create an order
             OrderCloud.Orders.Create({})
                 .then(function (order) {
-                    console.log("here is orderid", order.ID);
                     CurrentOrder.Set(order.ID)
                         .then(function (data) {
                             createLineItemXpCorsage(selections, genID, order);
@@ -323,6 +282,40 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                 });
         }
     };
+
+    //For BaseFlower : checks to see if object exist with in specified array, otherwise places that object into the specified array
+    // if selected category has flower color choices , set object into options array
+    //categoryArray & categoryIndex are  used to help determine which option to uncollapse in Category choices
+    function checkAndSetObjectBaseFlower (array, object, categoryArray, categoryIndex){
+        var checkIfChosenExists = _.findIndex(array, function (objectType) {
+            return objectType.Name == object.Name;
+        });
+        if (checkIfChosenExists > -1) {
+            _.extend(array[checkIfChosenExists], object);
+            openNextHeader(categoryArray, categoryIndex);
+        } else {
+            array.splice(1, 0, object);
+            openNextHeader(categoryArray, categoryIndex);
+        }
+    };
+
+    //checks to see if object exist with in specified array, otherwise places that object into the specified array
+    function checkAndSetProduct(array, object, categoryArray, categoryIndex){
+
+        var checkIfChosenExists = _.findIndex(array, function (objectType) {
+            return objectType.Type == object.Type
+        });
+        //look through array of selections made, if there is a object with a key Type that match the categoryId it will return true
+        if (checkIfChosenExists > -1) {
+            _.extend(array[checkIfChosenExists], object);
+            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
+        } else {
+            vm.itemCreated.selectionsMade.push(object);
+            categoryArray && categoryIndex ? openNextHeader(categoryArray, categoryIndex) : angular.noop();
+
+        }
+
+    }
 
     // go though itemCreated.selectionsMade array, create a new line item for each object in that array
     // Also add the xp.CustomCorsage with the same unique ID for all
@@ -344,13 +337,11 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
                         Value: "Base Ribbon"
                     }
                 ];
-                console.log("here is thing", Specs);
             }
             queue.push(OrderCloud.LineItems.Create(order.ID, li));
         });
         $q.all(queue).then(function (data) {
             dfd.resolve();
-            console.log(data);
 
             $state.go('checkout');
         });
@@ -370,30 +361,23 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     }
 
 
-    // open next header
+    // open next header in array
+    // accounts for multiple scenarios
     function openNextHeader(array, index) {
 
         if (!vm[array[index + 1].ID]) {
             vm[array[index + 1].ID] = {};
             vm[array[index + 1].ID].isNavCollapsed = true;
-
-            console.log("yolo", vm[array[index + 1].ID]);
-            // vm[[parentArray[outerIndex+1]].ID].isNavCollapsed = ! vm[[parentArray[(outerIndex+1)]].ID].isNavCollapsed;
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
-
         }
-
         else if((vm[array[index].ID].isNavCollapsed == true) && (vm[array[index + 1].ID].isNavCollapsed == false)){
-            console.log("both closed")
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
             vm[array[index + 1].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
         }
         else if(vm[array[index].ID].isNavCollapsed == true){
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
-            // vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
         }
         else {
-            console.log("hello");
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
             vm[array[index + 1].ID].isNavCollapsed = !vm[array[index + 1].ID].isNavCollapsed;
         }
@@ -430,7 +414,7 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
 
     function showOptionalAccessories() {
         vm.requirementsMetForMVP = true;
-    }
+     }
     
     //Sets up the requirements
     function setRequirements(finalObject) {
@@ -455,8 +439,6 @@ function BuildYourOwnController($q, $state, OrderCloud, LineItemHelpers, Catalog
     /*Switch case to check a specific Type and verify all requirements are met for MVP (minimal viable product) to be added to cart
      it should be invoked when a required option is selected*/
     function checkRequirementsOfType(finalObject) {
-        console.log("Im working");
-
         var selected = vm.itemCreated.selectionsMade.map(function (product) {
             return product.Type;
         });
