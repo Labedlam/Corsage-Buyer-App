@@ -7,11 +7,7 @@ function LineItemFactory($rootScope, $q, $state, $uibModal, Underscore, OrderClo
     return {
         SpecConvert: _specConvert,
         RemoveItem: _removeItem,
-        //if there is a line Item with mulitple LineItems associated with it
-        RemoveBundledLineItems : _removeBundledLineItems,
         UpdateQuantity: _updateQuantity,
-        //if there is a line item with multiple lineItems bund
-        UpdateBundledLineItems: _updateBundledLineItems,
         GetProductInfo: _getProductInfo,
         CustomShipping: _customShipping,
         UpdateShipping: _updateShipping,
@@ -60,31 +56,7 @@ function LineItemFactory($rootScope, $q, $state, $uibModal, Underscore, OrderClo
                     });
             });
     }
-
-    function _removeBundledLineItems(Order, LineItem) {
-        var queue = [];
-
-        angular.forEach(LineItem.bundledProducts, function (product) {
-            queue.push(OrderCloud.LineItems.Delete(Order.ID, product.LineItemID))
-        });
-        $q.all(queue)
-            .then(function () {
-                // If all line items are removed delete the order.
-                OrderCloud.LineItems.List(Order.ID)
-                    .then(function (data) {
-                        if (!data.Items.length) {
-                            CurrentOrder.Remove();
-                            OrderCloud.Orders.Delete(Order.ID).then(function () {
-                                $state.reload();
-                                $rootScope.$broadcast('OC:RemoveOrder');
-                            });
-                        }
-                        else {
-                            $state.reload();
-                        }
-                    });
-            });
-    }
+    
 
     function _updateQuantity(Order, LineItem) {
         if (LineItem.Quantity > 0) {
@@ -95,21 +67,7 @@ function LineItemFactory($rootScope, $q, $state, $uibModal, Underscore, OrderClo
                 });
         }
     }
-    function _updateBundledLineItems(Order, LineItem) {
-        var queue = [];
-
-        if(LineItem.Quantity > 0){
-            angular.forEach(LineItem.bundledProducts,function(product){
-                queue.push(OrderCloud.LineItems.Patch(Order.ID, product.LineItemID, {Quantity: LineItem.Quantity}));
-            });
-            $q.all(queue)
-                .then(function(data){
-                        console.log("here is what is returned from queue",data);
-                        $rootScope.$broadcast('OC:UpdateOrder', Order.ID);
-                        $rootScope.$broadcast('OC:UpdateLineItem',Order);
-                        });
-        }
-    }
+    
 
     function _getProductInfo(LineItems) {
         var li = LineItems.Items || LineItems;

@@ -1,7 +1,9 @@
 angular.module('orderCloud')
     .config(productGeneratorConfig)
     .controller('BuildYourOwnCtrl', BuildYourOwnController)
+    .factory('BundleLineItemsByXp', BundleLineItemsByXp)
 ;
+
 
 function productGeneratorConfig($stateProvider) {
     $stateProvider
@@ -21,7 +23,7 @@ function productGeneratorConfig($stateProvider) {
                     var dfd = $q.defer();
                     var selections = {};
                     selections.types = [];
-                    var queue =[]
+                    var queue = []
                     //go through each type (Wrislet Corsage, Pin on, BOut) and
                     angular.forEach(Catalog.Items, function (value) {
 
@@ -154,7 +156,7 @@ function productGeneratorConfig($stateProvider) {
         });
 }
 
-function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
+function BuildYourOwnController($state, $q, OrderCloud, OptionsAvailableForAllTypes, CurrentOrder, Order, Specs) {
     // select type
     // based off selection show the required options
     // every time you select an option populate the next required or available options
@@ -226,10 +228,10 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
             vm.baseFlowerChosen.Name = "Colors";
             vm.baseFlowerChosen.ID = category.ID + "Color";
 
-            checkAndSetObjectBaseFlower(vm.typeChosen.Options,vm.baseFlowerChosen, parentArray, outerIndex)
+            checkAndSetObjectBaseFlower(vm.typeChosen.Options, vm.baseFlowerChosen, parentArray, outerIndex)
 
         }
-        else if(selection.Products){
+        else if (selection.Products) {
             angular.noop();
         }
         else {
@@ -246,7 +248,7 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
             if (chosen.Type == "W-Ribbon" || chosen.Type == "P-Ribbon") {
                 chosen.Price = 0;
             }
-            
+
             checkAndSetProduct(vm.itemCreated.selectionsMade, chosen, parentArray, outerIndex);
             vm.itemCreated.totalPrice = totalPriceSum();
             checkRequirementsOfType(vm.itemCreated);
@@ -296,7 +298,7 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
     //For BaseFlower : checks to see if object exist with in specified array, otherwise places that object into the specified array
     // if selected category has flower color choices , set object into options array
     //categoryArray & categoryIndex are  used to help determine which option to uncollapse in Category choices
-    function checkAndSetObjectBaseFlower (array, object, categoryArray, categoryIndex){
+    function checkAndSetObjectBaseFlower(array, object, categoryArray, categoryIndex) {
         var checkIfChosenExists = _.findIndex(array, function (objectType) {
             return objectType.Name == object.Name;
         });
@@ -310,7 +312,7 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
     };
 
     //checks to see if object exist with in specified array, otherwise places that object into the specified array
-    function checkAndSetProduct(array, object, categoryArray, categoryIndex){
+    function checkAndSetProduct(array, object, categoryArray, categoryIndex) {
 
         var checkIfChosenExists = _.findIndex(array, function (objectType) {
             return objectType.Type == object.Type
@@ -379,11 +381,11 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
             vm[array[index + 1].ID].isNavCollapsed = true;
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
         }
-        else if((vm[array[index].ID].isNavCollapsed == true) && (vm[array[index + 1].ID].isNavCollapsed == false)){
+        else if ((vm[array[index].ID].isNavCollapsed == true) && (vm[array[index + 1].ID].isNavCollapsed == false)) {
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
             vm[array[index + 1].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
         }
-        else if(vm[array[index].ID].isNavCollapsed == true){
+        else if (vm[array[index].ID].isNavCollapsed == true) {
             vm[array[index].ID].isNavCollapsed = !vm[array[index].ID].isNavCollapsed;
         }
         else {
@@ -419,8 +421,8 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
 
     function showOptionalAccessories() {
         vm.requirementsMetForMVP = true;
-     }
-    
+    }
+
     //Sets up the requirements
     function setRequirements(finalObject) {
         switch (finalObject.Type) {
@@ -455,3 +457,123 @@ function BuildYourOwnController($q, $state, OrderCloud, OptionsAvailableForAllTy
 
 }
 
+
+function BundleLineItemsByXp($rootScope, $state, $q, OrderCloud, LineItemHelpers, CheckoutService) {
+    var lineItems = [];
+    return {
+        BundleLineItemsWithXp: _bundleLineItemsWithXp,
+        //if there is a line Item with mulitple LineItems associated with it
+        RemoveBundledLineItems: _removeBundledLineItems,
+        //if there is a line item with multiple lineItems bundled by 
+        UpdateBundledLineItems: _updateBundledLineItems
+    };
+    //pass in the data received from a lineitem call, pass in the xp value you are looking for as string
+    // gives back lineItems Object that returns back an array of lineitems that are bundle by xp and array of lineItems that are not
+    function _bundleLineItemsWithXp(lineItems, xpName) {
+        var parsedLineItems = {};
+        var grouped = _.groupBy(lineItems, function (o) {
+            if (o.xp && o.xp[xpName]) {
+                return o.xp[xpName];
+            }
+        });
+        console.log("this is grouped", grouped);
+        createBundledLineItems(grouped);
+
+        function createBundledLineItems(groupedObject) {
+            console.log("this is grouped object", groupedObject);
+            parsedLineItems.bundledLineItems = [];
+            parsedLineItems.nonBundledLineItems = [];
+            var obj;
+            angular.forEach(groupedObject, function (array, key) {
+                if (key != "undefined") {
+                    parsedLineItems.bundledLineItems.push(obj = {
+                        bundledProducts: []
+                    });
+                    angular.forEach(array, function (li) {
+                        var Products = {};
+                        Products.ID = li.ProductID;
+                        Products.UnitPrice = li.UnitPrice;
+                        Products.LineItemID = li.ID;
+
+                        obj.Product = {Name: li.xp.type};
+                        obj[xpName] = key;
+                        obj.Quantity = li.Quantity;
+                        obj.bundledProducts.push(Products);
+
+                    });
+                    obj.UnitPrice = totalPriceSum(obj);
+                    obj.LineTotal = obj.UnitPrice * obj.Quantity;
+
+                } else {
+                    angular.forEach(array, function (li) {
+                        parsedLineItems.nonBundledLineItems.push(li);
+                    });
+
+                }
+
+            });
+            console.log("this is parsed lineItem", parsedLineItems);
+
+            function totalPriceSum(obj) {
+                var UnitPriceBundledLineItem = obj.bundledProducts.map(function (product) {
+                    return product.UnitPrice;
+                });
+                return UnitPriceBundledLineItem.reduce(function (a, b) {
+                    return a + b
+
+                });
+            };
+        }
+
+        return parsedLineItems
+
+    };
+    function _removeBundledLineItems(Order, LineItem) {
+        var queue = [];
+
+        angular.forEach(LineItem.bundledProducts, function (product) {
+            queue.push(OrderCloud.LineItems.Delete(Order.ID, product.LineItemID))
+        });
+        $q.all(queue)
+            .then(function () {
+                // If all line items are removed delete the order.
+                OrderCloud.LineItems.List(Order.ID)
+                    .then(function (data) {
+                        if (!data.Items.length) {
+                            CurrentOrder.Remove();
+                            OrderCloud.Orders.Delete(Order.ID).then(function () {
+                                $state.reload();
+                                $rootScope.$broadcast('OC:RemoveOrder');
+                            });
+                        }
+                        else {
+                            $state.reload();
+                        }
+                    });
+            });
+    }
+
+    function _updateBundledLineItems(Order, LineItem) {
+        var queue = [];
+
+        if (LineItem.Quantity > 0) {
+            angular.forEach(LineItem.bundledProducts, function (product) {
+                queue.push(OrderCloud.LineItems.Patch(Order.ID, product.LineItemID, {Quantity: LineItem.Quantity}));
+            });
+            $q.all(queue)
+                .then(function (data) {
+                    OrderCloud.LineItems.List(Order.ID)
+                        .then(function(data) {
+                            var parsedLineItems = _bundleLineItemsWithXp(data.Items , "customCorsage");
+                            LineItemHelpers.GetProductInfo(parsedLineItems.nonBundledLineItems);
+                            CheckoutService.StoreLineItems(parsedLineItems.nonBundledLineItems);
+                            data.Items = parsedLineItems.bundledLineItems.concat(parsedLineItems.nonBundledLineItems);
+                            $rootScope.$broadcast('OC:UpdateOrder', Order.ID);
+                            $rootScope.$broadcast('OC:UpdateLineItemsHasBundle', data.Items);
+                        });
+
+
+                });
+        }
+    }
+}

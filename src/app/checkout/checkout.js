@@ -342,7 +342,7 @@ function CheckoutLineItemsListDirective() {
     };
 }
 
-function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr, OrderCloud, LineItemHelpers, CheckoutService, CurrentOrder) {
+function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr, OrderCloud, LineItemHelpers, BundleLineItemsByXp, CheckoutService, CurrentOrder) {
     var vm = this;
     vm.lineItems = {};
     vm.UpdateShipping = LineItemHelpers.UpdateShipping;
@@ -350,12 +350,12 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     //vm.calculatingTax = false;
     
     vm.RemoveItems = function (order, lineItem){
-        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.RemoveBundledLineItems(order,lineItem) : LineItemHelpers.RemoveItem(order, lineItem);
+        lineItem.bundledProducts  ? BundleLineItemsByXp.RemoveBundledLineItems(order,lineItem) : LineItemHelpers.RemoveItem(order, lineItem);
     };
     
     
     vm.UpdateQuantities = function(order, lineItem){
-        lineItem.Product.Name = "Custom Corsage" ? LineItemHelpers.UpdateBundledLineItems(order,lineItem) : LineItemHelpers.UpdateQuantity(order, lineItem);
+        lineItem.bundledProducts ? BundleLineItemsByXp.UpdateBundledLineItems(order,lineItem) : LineItemHelpers.UpdateQuantity(order, lineItem);
     };
 
 
@@ -424,66 +424,34 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
     function LineItemsInit(OrderID) {
         OrderCloud.LineItems.List(OrderID)
             .then(function(data) {
-                console.log("This is data ", data);
-                //group items based off of same xp string id
-                var grouped  = Underscore.groupBy(data.Items, function(o){
-                    if(o.xp && o.xp.customCorsage){
-                        return o.xp.customCorsage;
-                    }
-                });
+                var  parsedLineItems = BundleLineItemsByXp.BundleLineItemsWithXp(data.Items , "customCorsage");
+                console.log("This is service being returned ", parsedLineItems);
 
-                createCorsageKit(grouped);
+                LineItemHelpers.GetProductInfo(parsedLineItems.nonBundledLineItems);
+                CheckoutService.StoreLineItems(parsedLineItems.nonBundledLineItems);
 
-                function createCorsageKit(){
-                    
-                    var arrayOfObjects = [];
-                    var obj;
-                    angular.forEach(grouped, function(group, key){
-                        if(key != "undefined"){
-                            arrayOfObjects.push(obj = {
-                                Product: {Name:'Custom Corsage'},
-                                ProductID: key,
-                                bundledProducts: []
-                            });
-                            angular.forEach(group, function(li){
-                                var Products = {};
-                                Products.ID =li.ProductID;
-                                Products.UnitPrice = li.UnitPrice;
-                                Products.LineItemID = li.ID;
-
-                                obj.Quantity = li.Quantity;
-                                obj.bundledProducts.push(Products);
-
-                            });
-                            obj.UnitPrice =totalPriceSum(obj);
-                            obj.LineTotal = obj.UnitPrice * obj.Quantity;
-
-                        }else{
-                            angular.forEach(group, function(li){
-                                arrayOfObjects.push(li);
-                            });
-
-                        }
-
-                    });
-                    vm.lineItems.Items= arrayOfObjects;
-
-                }
-
-                
-                LineItemHelpers.GetProductInfo(vm.lineItems.Items);
-                CheckoutService.StoreLineItems(vm.lineItems.Items);
-            });
-            function totalPriceSum(obj) {
-            var UnitPriceCorsageKit = obj.bundledProducts.map(function (product) {
-                return product.UnitPrice;
-            });
-            return UnitPriceCorsageKit.reduce(function (a, b) {
-                return a + b
+                vm.lineItems.Items =  parsedLineItems.bundledLineItems.concat(parsedLineItems.nonBundledLineItems);
             });
 
-        }
     }
+
+    $rootScope.$on('OC:UpdateLineItemsHasBundle', function(event,lineItems){
+        vm.lineItems.Items= lineItems
+    });
+    
+    $rootScope.$on('OC:UpdateLineItem', function(event,Order) {
+        OrderCloud.LineItems.List(Order.ID)
+            .then(function(data) {
+                var  parsedLineItems = BundleLineItemsByXp.BundleLineItemsWithXp(data.Items , "customCorsage");
+                console.log("This is service being returned ", parsedLineItems);
+
+                LineItemHelpers.GetProductInfo(parsedLineItems.nonBundledLineItems);
+                CheckoutService.StoreLineItems(parsedLineItems.nonBundledLineItems);
+
+                vm.lineItems.Items =  parsedLineItems.bundledLineItems.concat(parsedLineItems.nonBundledLineItems);
+            });
+    });
+
 
     vm.pagingfunction = function() {
         if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
@@ -499,6 +467,8 @@ function CheckoutLineItemsController($rootScope, $scope, $q, Underscore, toastr,
         }
         else return null;
     };
+
+
 }
 //function TaxService($http, OrderCloud, $exceptionHandler) {
 //    return {Calculate: Calculate};
