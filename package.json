@@ -75,5 +75,7 @@
     "selenium-webdriver": "^2.52.0",
     "yargs": "^3.32.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-core": "^2.5.2"
+  }
 }
